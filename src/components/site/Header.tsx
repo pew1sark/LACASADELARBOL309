@@ -38,7 +38,7 @@ export function Header() {
             <Icon name="home" className="size-4.5" />
           </span>
           <span className="leading-tight">
-            <span className="block font-display text-[0.95rem] font-semibold">
+            <span className="block font-display text-[0.95rem] font-semibold leading-snug">
               {settings?.business_name ?? 'La Casa del Árbol 309'}
             </span>
             <span className="block text-[0.68rem] font-medium uppercase tracking-[0.14em] text-bark-500">
@@ -56,9 +56,13 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <LinkButton to="/reservar" size="sm" className="hidden sm:inline-flex">
-            Consultar disponibilidad
-          </LinkButton>
+          {/* El envoltorio controla la visibilidad: aplicar `hidden` sobre el
+              botón chocaría con su propia utilidad de display. */}
+          <span className="hidden sm:contents">
+            <LinkButton to="/reservar" size="sm">
+              Consultar disponibilidad
+            </LinkButton>
+          </span>
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Abrir menú"
