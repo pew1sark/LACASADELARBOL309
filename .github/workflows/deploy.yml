@@ -1,11 +1,14 @@
 name: Compilar y publicar
 
-# GitHub Pages está configurado como "Deploy from a branch" (main, raíz), así
-# que este workflow compila el sitio y deja el resultado en la raíz del
-# repositorio. El código fuente vive en app/.
+# El sitio se publica por dos vías, porque la configuración de Pages del
+# repositorio ha cambiado de modo y conviene que funcione en cualquiera:
 #
-# Si algún día cambias Pages a "GitHub Actions" en Settings → Pages, conviene
-# volver al flujo con actions/deploy-pages y dejar de versionar el compilado.
+#  1. Se deja el compilado en la raíz de main  -> sirve el modo "Deploy from a
+#     branch" (main, /), que es el que está activo hoy.
+#  2. Se sube como artefacto y se despliega    -> sirve el modo "GitHub Actions".
+#
+# El paso 2 puede fallar si Pages está en modo rama; por eso no interrumpe el
+# resto del flujo.
 
 on:
   push:
@@ -14,10 +17,12 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: publicar
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   publicar:
@@ -51,3 +56,18 @@ jobs:
             git commit -m "Publicar sitio compilado [skip ci]"
             git push
           fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  desplegar:
+    needs: publicar
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
