@@ -121,10 +121,27 @@ src/
 ├── lib/               Supabase, formatos, WhatsApp, analítica, errores
 └── pages/
     ├── Home · Reservar · Estado
-    └── admin/         Panel: inicio, reservas, calendario, clientes,
-                       paquetes y configuración
+    └── admin/         Panel: inicio, puesta en marcha, reservas, calendario,
+                       clientes, paquetes y configuración
 supabase/migrations/   Esquema, API pública, RLS y datos iniciales
 ```
+
+---
+
+## Puesta en marcha
+
+El panel abre con una pestaña **Puesta en marcha**: siete secciones que llevan a
+reemplazar los datos de ejemplo por los reales (identidad, contacto, reglas,
+horarios, precios, datos bancarios y fotos).
+
+No es una lista de tareas decorativa: compara lo guardado contra los valores
+exactos con los que se cargó la base de datos. Si guardas una sección dejando el
+WhatsApp de ejemplo, queda registrada como revisada pero **no** como completa, y
+te dice qué falta. Las tres secciones marcadas *Imprescindible* son las que
+rompen la venta si quedan sin llenar: sin WhatsApp real nadie puede escribirte,
+y sin datos bancarios nadie puede pagarte.
+
+Mientras queden secciones pendientes, el inicio del panel muestra un aviso.
 
 ---
 

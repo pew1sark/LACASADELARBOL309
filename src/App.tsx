@@ -20,6 +20,7 @@ const AdminConfiguracion = lazy(() => import('./pages/admin/Configuracion'))
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'))
 const AdminLogin = lazy(() => import('./pages/admin/Login'))
 const AdminPaquetes = lazy(() => import('./pages/admin/Paquetes'))
+const AdminPuestaEnMarcha = lazy(() => import('./pages/admin/PuestaEnMarcha'))
 const AdminReservas = lazy(() => import('./pages/admin/Reservas'))
 
 function ScrollToTop() {
@@ -60,6 +61,7 @@ export default function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="puesta-en-marcha" element={<AdminPuestaEnMarcha />} />
               <Route path="reservas" element={<AdminReservas />} />
               <Route path="calendario" element={<AdminCalendario />} />
               <Route path="clientes" element={<AdminClientes />} />

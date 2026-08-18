@@ -40,6 +40,7 @@ export interface Settings {
   currency: string
   cancellation_policy: string | null
   hero_image_url: string | null
+  setup_steps: string[]
 }
 
 export interface SettingsPayment {

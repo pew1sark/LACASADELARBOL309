@@ -7,12 +7,14 @@ import { relativeTime } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
 import type { NotificationRow } from '../../lib/types'
 
-const NAV: { to: string; label: string; icon: IconName; end?: boolean }[] = [
+// `short` se usa en la barra inferior del móvil, donde no cabe el texto largo.
+const NAV: { to: string; label: string; short?: string; icon: IconName; end?: boolean }[] = [
   { to: '/admin', label: 'Inicio', icon: 'chart', end: true },
+  { to: '/admin/puesta-en-marcha', label: 'Puesta en marcha', short: 'Empezar', icon: 'sparkles' },
   { to: '/admin/reservas', label: 'Reservas', icon: 'list' },
-  { to: '/admin/calendario', label: 'Calendario', icon: 'calendar' },
+  { to: '/admin/calendario', label: 'Calendario', short: 'Agenda', icon: 'calendar' },
   { to: '/admin/clientes', label: 'Clientes', icon: 'users' },
-  { to: '/admin/paquetes', label: 'Paquetes', icon: 'gift' },
+  { to: '/admin/paquetes', label: 'Paquetes', short: 'Packs', icon: 'gift' },
   { to: '/admin/configuracion', label: 'Ajustes', icon: 'settings' },
 ]
 
@@ -102,13 +104,13 @@ export default function AdminLayout() {
             to={n.to}
             end={n.end}
             className={({ isActive }) =>
-              `flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[0.65rem] font-semibold transition ${
+              `flex min-w-0 flex-1 flex-col items-center gap-0.5 px-0.5 py-2.5 text-[0.62rem] font-semibold transition ${
                 isActive ? 'text-leaf-700' : 'text-bark-500'
               }`
             }
           >
             <Icon name={n.icon} className="size-5" />
-            {n.label}
+            <span className="w-full truncate text-center">{n.short ?? n.label}</span>
           </NavLink>
         ))}
       </nav>

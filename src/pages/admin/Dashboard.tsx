@@ -78,6 +78,24 @@ export default function Dashboard() {
         </p>
       </header>
 
+      {settings && (settings.setup_steps?.length ?? 0) < 7 && (
+        <Link to="/admin/puesta-en-marcha" className="block">
+          <Card className="flex items-center gap-4 border-sun-400/50 p-4 transition hover:shadow-lift">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-sun-100 text-sun-600">
+              <Icon name="sparkles" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold">Termina la puesta en marcha</span>
+              <span className="block text-sm text-bark-500">
+                Tu sitio está en línea con datos de ejemplo. Faltan{' '}
+                {7 - (settings.setup_steps?.length ?? 0)} de 7 secciones.
+              </span>
+            </span>
+            <Icon name="chevronRight" className="size-5 shrink-0 text-bark-500" />
+          </Card>
+        </Link>
+      )}
+
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Stat icon="bell" label="Solicitudes pendientes" value={String(pending.length)} tone="amber" to="/admin/reservas?estado=PENDING" />
         <Stat icon="money" label="Por cobrar" value={money(owed)} tone="blue" to="/admin/reservas?estado=AWAITING_PAYMENT" />
