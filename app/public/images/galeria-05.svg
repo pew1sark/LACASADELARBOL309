@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Cocina de apoyo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DEEAF3"/><stop offset="100%" stop-color="#B9D2E6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="1035" cy="250" r="225" fill="#2F5A7D" opacity="0.22"/><circle cx="750" cy="278" r="209" fill="#2F5A7D" opacity="0.14"/><circle cx="468" cy="375" r="248" fill="#2F5A7D" opacity="0.25"/><circle cx="570" cy="211" r="148" fill="#2F5A7D" opacity="0.21"/><circle cx="413" cy="229" r="137" fill="#2F5A7D" opacity="0.27"/>
+  <path d="M0 702 Q 300 630 600 684 T 1200 648 L 1200 900 L 0 900 Z" fill="#2F5A7D" opacity="0.22"/>
+  <rect x="578.4" y="378" width="43.199999999999996" height="360" rx="14.4" fill="#2F5A7D" opacity="0.45"/>
+  <path d="M468 414 h 264 l -24 -81 h -216 Z" fill="#2F5A7D" opacity="0.55"/>
+  <rect x="480" y="414" width="240" height="117" rx="9.6" fill="#2F5A7D" opacity="0.4"/>
+  <circle cx="600" cy="472.5" r="25.2" fill="#DEEAF3" opacity="0.75"/>
+  <text x="600" y="837" font-family="Inter, system-ui, sans-serif" font-size="50"
+        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">COCINA DE APOYO</text>
+</svg>

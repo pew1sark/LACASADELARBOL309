@@ -2,10 +2,17 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-// El base path permite publicar tanto en un subdirectorio de GitHub Pages
-// (/LACASADELARBOL309/) como en un dominio propio (/).
+// El código fuente vive en app/ para que la raíz del repositorio pueda alojar
+// el sitio ya compilado: GitHub Pages sirve esta rama directamente.
+// Ver scripts/publicar-en-raiz.sh
 export default defineConfig(() => ({
+  root: 'app',
   base: process.env.VITE_BASE_PATH ?? '/',
+  envDir: '..',
   plugins: [react(), tailwindcss()],
-  build: { outDir: 'dist', sourcemap: false },
+  build: {
+    outDir: '../dist',
+    emptyOutDir: true,
+    sourcemap: false,
+  },
 }))

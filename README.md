@@ -95,22 +95,34 @@ Para dar acceso al panel a otra persona, sigue `supabase/crear_administrador.sql
 
 ## Publicación
 
-El workflow `.github/workflows/deploy.yml` compila y publica en GitHub Pages en
-cada push a `main`. Antes del primer despliegue hay que activarlo una vez:
+Vive en `https://pew1sark.github.io/LACASADELARBOL309/`.
 
-**Settings → Pages → Source: GitHub Actions**
+GitHub Pages está configurado como **Deploy from a branch** (`main`, raíz), es
+decir sirve la raíz del repositorio tal cual. Por eso:
 
-Queda en `https://pew1sark.github.io/LACASADELARBOL309/`.
+- el **código fuente** vive en `app/` (Vite usa `root: 'app'`),
+- la **raíz** guarda el sitio ya compilado (`index.html`, `assets/`, `images/`).
 
-Con dominio propio: cambia `VITE_BASE_PATH` a `/` en el workflow, crea
-`public/CNAME` con el dominio y apúntalo en Settings → Pages.
+En cada push a `main`, el workflow compila y confirma el resultado en la raíz
+con `[skip ci]` para no reciclarse. Para publicar a mano:
+
+```bash
+VITE_BASE_PATH=/LACASADELARBOL309/ npm run build
+./scripts/publicar-en-raiz.sh
+git add -A && git commit -m "Publicar sitio" && git push
+```
+
+Si prefieres no versionar el compilado, cambia en **Settings → Pages** la fuente
+a **GitHub Actions** y vuelve al workflow con `actions/deploy-pages`.
+
+Con dominio propio: cambia `VITE_BASE_PATH` a `/` y agrega un archivo `CNAME`.
 
 ---
 
 ## Estructura
 
 ```
-src/
+app/src/
 ├── components/
 │   ├── ui/            Botones, tarjetas, campos, modales, iconos
 │   ├── site/          Secciones de la landing
@@ -124,6 +136,7 @@ src/
     └── admin/         Panel: inicio, puesta en marcha, reservas, calendario,
                        clientes, paquetes y configuración
 supabase/migrations/   Esquema, API pública, RLS y datos iniciales
+scripts/               Generador de imágenes y publicación en la raíz
 ```
 
 ---
@@ -187,6 +200,6 @@ desde el primer día.
 
 ## Imágenes
 
-Las imágenes de `public/images/` son marcadores de posición generados con
+Las imágenes de `app/public/images/` son marcadores de posición generados con
 `node scripts/gen-placeholders.mjs`. Para usar fotos reales, súbelas a un
 servicio de imágenes y pega la URL en el panel (paquetes, galería y portada).

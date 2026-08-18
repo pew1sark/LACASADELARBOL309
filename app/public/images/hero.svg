@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="La Casa del Árbol 309">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6E7D2"/><stop offset="100%" stop-color="#E2C9A6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="751" cy="392" r="249" fill="#5A3E2B" opacity="0.25"/><circle cx="280" cy="209" r="229" fill="#5A3E2B" opacity="0.16"/><circle cx="972" cy="352" r="188" fill="#5A3E2B" opacity="0.16"/><circle cx="212" cy="305" r="175" fill="#5A3E2B" opacity="0.17"/><circle cx="273" cy="252" r="284" fill="#5A3E2B" opacity="0.14"/>
+  <path d="M0 780 Q 400 700 800 760 T 1600 720 L 1600 1000 L 0 1000 Z" fill="#5A3E2B" opacity="0.22"/>
+  <rect x="771.2" y="420" width="57.599999999999994" height="400" rx="19.2" fill="#5A3E2B" opacity="0.45"/>
+  <path d="M624 460 h 352 l -32 -90 h -288 Z" fill="#5A3E2B" opacity="0.55"/>
+  <rect x="640" y="460" width="320" height="130" rx="12.8" fill="#5A3E2B" opacity="0.4"/>
+  <circle cx="800" cy="525" r="28" fill="#F6E7D2" opacity="0.75"/>
+  <text x="800" y="930" font-family="Inter, system-ui, sans-serif" font-size="55"
+        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">LA CASA DEL ÁRBOL 309</text>
+</svg>

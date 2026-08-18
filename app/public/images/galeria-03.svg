@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Terraza">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DCEBDC"/><stop offset="100%" stop-color="#B7D5BC"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="1078" cy="204" r="155" fill="#2F6B45" opacity="0.14"/><circle cx="987" cy="239" r="250" fill="#2F6B45" opacity="0.16"/><circle cx="728" cy="164" r="179" fill="#2F6B45" opacity="0.27"/><circle cx="518" cy="343" r="190" fill="#2F6B45" opacity="0.19"/><circle cx="746" cy="328" r="215" fill="#2F6B45" opacity="0.13"/>
+  <path d="M0 702 Q 300 630 600 684 T 1200 648 L 1200 900 L 0 900 Z" fill="#2F6B45" opacity="0.22"/>
+  <rect x="578.4" y="378" width="43.199999999999996" height="360" rx="14.4" fill="#2F6B45" opacity="0.45"/>
+  <path d="M468 414 h 264 l -24 -81 h -216 Z" fill="#2F6B45" opacity="0.55"/>
+  <rect x="480" y="414" width="240" height="117" rx="9.6" fill="#2F6B45" opacity="0.4"/>
+  <circle cx="600" cy="472.5" r="25.2" fill="#DCEBDC" opacity="0.75"/>
+  <text x="600" y="837" font-family="Inter, system-ui, sans-serif" font-size="50"
+        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">TERRAZA</text>
+</svg>

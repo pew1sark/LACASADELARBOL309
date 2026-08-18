@@ -2,7 +2,7 @@
 // Reemplázalas por fotografías reales desde el panel de administración.
 import { writeFileSync, mkdirSync } from 'node:fs'
 
-mkdirSync('public/images', { recursive: true })
+mkdirSync('app/public/images', { recursive: true })
 
 const svg = ({ w, h, from, to, accent, label, seed }) => {
   const r = (n) => {
@@ -63,11 +63,11 @@ const files = [
 
 files.forEach(([name, label, w, h, p], i) => {
   const [from, to, accent] = palettes[p]
-  writeFileSync(`public/images/${name}.svg`, svg({ w, h, from, to, accent, label, seed: i + 1 }))
+  writeFileSync(`app/public/images/${name}.svg`, svg({ w, h, from, to, accent, label, seed: i + 1 }))
 })
 
 // Favicon
-writeFileSync('public/favicon.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+writeFileSync('app/public/favicon.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#2F6B45"/>
   <circle cx="32" cy="24" r="15" fill="#4E9E68"/>
   <circle cx="20" cy="30" r="10" fill="#3F8556"/>

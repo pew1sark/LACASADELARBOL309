@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Pack Particular">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDE4F5"/><stop offset="100%" stop-color="#D3C1E6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="700" fill="url(#bg)"/>
+  <circle cx="695" cy="300" r="189" fill="#6B4E8F" opacity="0.12"/><circle cx="127" cy="169" r="175" fill="#6B4E8F" opacity="0.23"/><circle cx="529" cy="281" r="169" fill="#6B4E8F" opacity="0.21"/><circle cx="295" cy="208" r="134" fill="#6B4E8F" opacity="0.12"/><circle cx="375" cy="263" r="160" fill="#6B4E8F" opacity="0.28"/>
+  <path d="M0 546 Q 250 489.99999999999994 500 532 T 1000 504 L 1000 700 L 0 700 Z" fill="#6B4E8F" opacity="0.22"/>
+  <rect x="482" y="294" width="36" height="280" rx="12" fill="#6B4E8F" opacity="0.45"/>
+  <path d="M390 322 h 220 l -20 -63 h -180 Z" fill="#6B4E8F" opacity="0.55"/>
+  <rect x="400" y="322" width="200" height="91" rx="8" fill="#6B4E8F" opacity="0.4"/>
+  <circle cx="500" cy="367.5" r="19.6" fill="#EDE4F5" opacity="0.75"/>
+  <text x="500" y="651" font-family="Inter, system-ui, sans-serif" font-size="39"
+        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">PACK PARTICULAR</text>
+</svg>

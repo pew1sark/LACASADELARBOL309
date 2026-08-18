@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Pack Infantil">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FDF0D5"/><stop offset="100%" stop-color="#F5D99B"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="700" fill="url(#bg)"/>
+  <circle cx="601" cy="153" r="115" fill="#B8802A" opacity="0.15"/><circle cx="491" cy="276" r="127" fill="#B8802A" opacity="0.22"/><circle cx="646" cy="290" r="118" fill="#B8802A" opacity="0.21"/><circle cx="341" cy="242" r="130" fill="#B8802A" opacity="0.20"/><circle cx="719" cy="217" r="128" fill="#B8802A" opacity="0.24"/>
+  <path d="M0 546 Q 250 489.99999999999994 500 532 T 1000 504 L 1000 700 L 0 700 Z" fill="#B8802A" opacity="0.22"/>
+  <rect x="482" y="294" width="36" height="280" rx="12" fill="#B8802A" opacity="0.45"/>
+  <path d="M390 322 h 220 l -20 -63 h -180 Z" fill="#B8802A" opacity="0.55"/>
+  <rect x="400" y="322" width="200" height="91" rx="8" fill="#B8802A" opacity="0.4"/>
+  <circle cx="500" cy="367.5" r="19.6" fill="#FDF0D5" opacity="0.75"/>
+  <text x="500" y="651" font-family="Inter, system-ui, sans-serif" font-size="39"
+        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">PACK INFANTIL</text>
+</svg>
