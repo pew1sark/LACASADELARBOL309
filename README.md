@@ -103,8 +103,14 @@ decir sirve la raíz del repositorio tal cual. Por eso:
 - el **código fuente** vive en `app/` (Vite usa `root: 'app'`),
 - la **raíz** guarda el sitio ya compilado (`index.html`, `assets/`, `images/`).
 
-En cada push a `main`, el workflow compila y confirma el resultado en la raíz
-con `[skip ci]` para no reciclarse. Para publicar a mano:
+En cada push a `main`, el workflow compila y confirma el resultado en la raíz.
+Su commit lleva la marca de omisión de CI para no reciclarse a sí mismo.
+
+> **Cuidado:** GitHub lee esa marca en el mensaje completo del commit, cuerpo
+> incluido. Si la escribes dentro de una explicación, ese push no construirá
+> nada y el sitio no se actualizará.
+
+Para publicar a mano:
 
 ```bash
 VITE_BASE_PATH=/LACASADELARBOL309/ npm run build
