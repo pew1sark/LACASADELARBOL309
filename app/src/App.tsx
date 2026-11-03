@@ -6,9 +6,9 @@ import { WhatsAppFab } from './components/site/WhatsAppFab'
 import { AuthProvider } from './hooks/useAuth'
 import { SiteDataProvider } from './hooks/useSiteData'
 import { ToastProvider } from './hooks/useToast'
-import Estado from './pages/Estado'
+const Estado = lazy(() => import('./pages/Estado'))
 import Home from './pages/Home'
-import Reservar from './pages/Reservar'
+const Reservar = lazy(() => import('./pages/Reservar'))
 import { LoadingBlock } from './components/ui/Primitives'
 
 // El panel de administración se carga aparte: la landing pública no paga

@@ -9,6 +9,41 @@ administración permite responder una solicitud en dos clics.
 
 ---
 
+## Landing para Meta Ads
+
+La portada está pensada para recibir tráfico de anuncios y convertirlo en
+conversaciones de WhatsApp con la cotización ya armada:
+
+1. **Hero con cotizador rápido**: el visitante elige qué celebra y cuántos
+   invitados, y baja directo a la agenda con eso precargado.
+2. **Agenda integrada (`#agendar`)**: 4 pasos — evento y paquete, fecha y
+   horario, invitados y extras, datos — con la cotización y el abono
+   calculados en vivo. No sale de la página.
+3. **WhatsApp**: al enviar, la solicitud se registra en Supabase y se abre
+   WhatsApp con el mensaje completo (código, paquete, fecha, extras, total,
+   abono y campaña de origen). El cliente solo presiona *Enviar*.
+
+Enlaces útiles para los anuncios:
+
+| Enlace | Qué hace |
+| --- | --- |
+| `/?utm_source=facebook&utm_campaign=NOMBRE` | Registra la campaña; aparece en el mensaje de WhatsApp y en las notas de la reserva |
+| `/#agendar` | Abre el landing directamente en la agenda |
+| `/reservar?paquete=pack-infantil` | Agenda con un paquete ya elegido (`evento=`, `invitados=` también sirven) |
+
+**Si Supabase no responde** (más de 3,5 s), el landing usa el catálogo de
+`app/src/lib/fallback.ts` y la disponibilidad se calcula desde los horarios:
+la cotización igual llega completa a WhatsApp, nunca se pierde un cliente.
+
+El número que recibe las cotizaciones es `VITE_WHATSAPP_NUMBER` (por defecto
+`56954737249`); si en el panel queda el número de ejemplo, se ignora.
+
+Meta Pixel: define `VITE_META_PIXEL_ID`. Se envían `ViewContent` (paquete),
+`InitiateCheckout` (inicio de agenda), `Lead` + `Schedule` (solicitud enviada)
+y `Contact` (clic en WhatsApp) — usa **Lead** como evento de optimización.
+
+---
+
 ## Cómo funciona una reserva
 
 ```

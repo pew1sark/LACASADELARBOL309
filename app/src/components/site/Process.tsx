@@ -2,18 +2,18 @@ import { Icon, type IconName } from '../ui/Icon'
 import { Section } from '../ui/Primitives'
 
 const STEPS: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'calendar', title: 'Elige fecha y horario', text: 'Revisa el calendario en línea y selecciona el bloque que más te acomode.' },
-  { icon: 'clipboard', title: 'Envía tu solicitud', text: 'Completa tus datos en dos minutos. No pagas nada en este paso.' },
-  { icon: 'check', title: 'Confirmamos disponibilidad', text: 'Te escribimos por WhatsApp para confirmar tu fecha y horario.' },
-  { icon: 'money', title: 'Abonas y queda reservado', text: 'Con el abono bloqueamos la fecha solo para ti. Listo para celebrar.' },
+  { icon: 'clipboard', title: 'Arma tu cotización', text: 'Elige evento, paquete y extras. Ves el total al instante, aquí mismo.' },
+  { icon: 'calendar', title: 'Elige fecha y horario', text: 'El calendario te muestra solo los días y bloques que están libres.' },
+  { icon: 'check', title: 'Llega a WhatsApp', text: 'Tu cotización nos llega completa por WhatsApp y confirmamos el mismo día.' },
+  { icon: 'money', title: 'Abonas y es tuya', text: 'Con el abono bloqueamos la fecha solo para ti. ¡A celebrar!' },
 ]
 
 export function Process() {
   return (
     <Section
       eyebrow="Cómo funciona"
-      title="Reservar es simple"
-      subtitle="Cuatro pasos, sin llamadas eternas ni formularios interminables."
+      title="De anuncio a fecha reservada en minutos"
+      subtitle="Sin llamadas eternas ni esperar respuesta para saber el precio."
       tone="leaf"
     >
       <ol className="grid gap-6 md:grid-cols-4">

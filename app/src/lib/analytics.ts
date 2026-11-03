@@ -18,13 +18,23 @@ export type TrackEvent =
   | 'whatsapp_clicked'
   | 'reservation_confirmed'
   | 'status_checked'
+  | 'quote_cta_clicked'
 
 export function track(event: TrackEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === 'undefined') return
   window.dataLayer?.push({ event, ...params })
   window.gtag?.('event', event, params)
-  if (event === 'reservation_submitted') window.fbq?.('track', 'Lead', params)
-  if (event === 'whatsapp_clicked') window.fbq?.('track', 'Contact', params)
+  // Eventos estándar de Meta: son los que se pueden optimizar en Ads Manager.
+  const META: Partial<Record<TrackEvent, string>> = {
+    view_package: 'ViewContent',
+    reservation_started: 'InitiateCheckout',
+    reservation_submitted: 'Lead',
+    whatsapp_clicked: 'Contact',
+  }
+  const standard = META[event]
+  if (standard) window.fbq?.('track', standard, params)
+  else window.fbq?.('trackCustom', event, params)
+  if (event === 'reservation_submitted') window.fbq?.('track', 'Schedule', params)
   if (import.meta.env.DEV) console.debug('[track]', event, params)
 }
 

@@ -1,15 +1,14 @@
-import { useNavigate } from 'react-router-dom'
 import { useSiteData } from '../../hooks/useSiteData'
 import { asset } from '../../lib/asset'
 import { money } from '../../lib/format'
 import { track } from '../../lib/analytics'
+import { startQuote } from '../../lib/quote'
 import { openWhatsApp, packageMessage } from '../../lib/whatsapp'
 import { Icon, WhatsAppIcon } from '../ui/Icon'
 import { Badge, Button, Section } from '../ui/Primitives'
 
 export function Packages() {
   const { packages, settings } = useSiteData()
-  const navigate = useNavigate()
   if (!packages.length) return null
 
   return (
@@ -23,7 +22,7 @@ export function Packages() {
         {packages.map((pkg) => (
           <article
             key={pkg.id}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-bark-900/8 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+            className="group flex flex-col overflow-hidden rounded-3xl border border-bark-900/8 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
           >
             <div className="relative aspect-[10/7] overflow-hidden">
               <img
@@ -70,11 +69,11 @@ export function Packages() {
                 <Button
                   full
                   onClick={() => {
-                    track('view_package', { package: pkg.slug })
-                    navigate(`/reservar?paquete=${pkg.slug}`)
+                    track('view_package', { package: pkg.slug, content_name: pkg.name, value: pkg.price, currency: 'CLP' })
+                    startQuote({ packageSlug: pkg.slug }, `package:${pkg.slug}`)
                   }}
                 >
-                  Reservar este pack
+                  Cotizar con este pack
                 </Button>
                 <Button
                   full

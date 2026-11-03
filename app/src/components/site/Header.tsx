@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSiteData } from '../../hooks/useSiteData'
 import { Icon } from '../ui/Icon'
-import { LinkButton } from '../ui/Primitives'
+import { startQuote } from '../../lib/quote'
+import { Button } from '../ui/Primitives'
 
 const NAV = [
-  { href: '/#eventos', label: 'Eventos' },
-  { href: '/#paquetes', label: 'Paquetes' },
-  { href: '/#galeria', label: 'El lugar' },
-  { href: '/#preguntas', label: 'Preguntas' },
+  { href: '#eventos', label: 'Eventos' },
+  { href: '#paquetes', label: 'Paquetes' },
+  { href: '#galeria', label: 'El lugar' },
+  { href: '#preguntas', label: 'Preguntas' },
 ]
 
 export function Header() {
@@ -16,6 +17,13 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const home = pathname === '/'
+  const href = (h: string) => (home ? h : `${import.meta.env.BASE_URL}${h}`)
+  const cta = () => {
+    setOpen(false)
+    startQuote({}, 'header', navigate)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -29,7 +37,7 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'border-b border-bark-900/8 bg-cream-50/90 backdrop-blur-md' : 'bg-transparent'
+        scrolled ? 'border-b border-bark-900/8 bg-cream-50/90 shadow-soft backdrop-blur-md' : 'border-b border-transparent bg-cream-50'
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-18">
@@ -49,7 +57,7 @@ export function Header() {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV.map((n) => (
-            <a key={n.href} href={n.href} className="text-sm font-medium text-bark-700 transition hover:text-leaf-700">
+            <a key={n.href} href={href(n.href)} className="text-sm font-medium text-bark-700 transition hover:text-leaf-700">
               {n.label}
             </a>
           ))}
@@ -59,9 +67,9 @@ export function Header() {
           {/* El envoltorio controla la visibilidad: aplicar `hidden` sobre el
               botón chocaría con su propia utilidad de display. */}
           <span className="hidden sm:contents">
-            <LinkButton to="/reservar" size="sm">
-              Consultar disponibilidad
-            </LinkButton>
+            <Button size="sm" onClick={cta}>
+              Cotizar ahora
+            </Button>
           </span>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -80,16 +88,16 @@ export function Header() {
             {NAV.map((n) => (
               <a
                 key={n.href}
-                href={n.href}
+                href={href(n.href)}
                 onClick={() => setOpen(false)}
                 className="border-b border-bark-900/5 py-3.5 text-[0.95rem] font-medium last:border-0"
               >
                 {n.label}
               </a>
             ))}
-            <LinkButton to="/reservar" full className="my-3">
-              Consultar disponibilidad
-            </LinkButton>
+            <Button full className="my-3" onClick={cta}>
+              Cotizar y agendar
+            </Button>
           </nav>
         </div>
       )}

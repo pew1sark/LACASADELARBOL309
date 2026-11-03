@@ -33,3 +33,11 @@ export function friendlyError(error: unknown): string {
   if (raw.includes('Invalid login credentials')) return 'Correo o contraseña incorrectos.'
   return raw || 'Ocurrió un error inesperado. Inténtalo nuevamente.'
 }
+
+/** true si la base rechazó la solicitud por una regla de negocio (fecha,
+ *  horario, capacidad…). Cualquier otro error es de conexión o de servidor:
+ *  en ese caso la solicitud se envía igual por WhatsApp. */
+export function isBusinessError(error: unknown): boolean {
+  const raw = (error as { message?: string })?.message ?? String(error ?? '')
+  return Object.keys(MESSAGES).some((k) => raw.includes(k)) || raw.includes('reservations_no_overlap')
+}
