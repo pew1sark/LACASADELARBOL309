@@ -16,6 +16,8 @@ export interface SubmittedReservation {
   guests: number
   package_name: string | null
   package_price: number
+  price_lines?: { label: string; value: number }[]
+  weekend?: boolean
   total_amount: number
   deposit: number
   addons: { name: string; quantity: number; subtotal: number }[]
@@ -54,6 +56,7 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
         eventType: r.eventTypeName,
         packageName: r.package_name,
         packagePrice: r.package_price,
+        priceLines: r.price_lines,
         dateISO: r.event_date,
         slotName: r.slot_name,
         start: r.start_time,
@@ -118,7 +121,10 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
           </div>
           <dl className="divide-y divide-bark-900/8 text-sm">
             {r.eventTypeName && <Row label="Evento" value={r.eventTypeName} />}
-            {r.package_name && <Row label="Paquete" value={`${r.package_name} · ${money(r.package_price)}`} />}
+            {r.package_name && (
+              <Row label={r.weekend ? 'Paquete (fin de semana)' : 'Paquete'} value={`${r.package_name} · ${money(r.package_price)}`} />
+            )}
+            {r.price_lines?.map((l) => <Row key={l.label} label={`+ ${l.label}`} value={money(l.value)} />)}
             <Row label="Fecha" value={longDate(r.event_date)} />
             {r.slot_name && <Row label="Horario" value={`${r.slot_name} · ${r.start_time} — ${r.end_time}`} />}
             <Row label="Invitados" value={`${r.guests} personas`} />

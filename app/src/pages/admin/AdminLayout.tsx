@@ -14,7 +14,7 @@ const NAV: { to: string; label: string; short?: string; icon: IconName; end?: bo
   { to: '/admin/reservas', label: 'Reservas', icon: 'list' },
   { to: '/admin/calendario', label: 'Calendario', short: 'Agenda', icon: 'calendar' },
   { to: '/admin/clientes', label: 'Clientes', icon: 'users' },
-  { to: '/admin/paquetes', label: 'Paquetes', short: 'Packs', icon: 'gift' },
+  { to: '/admin/paquetes', label: 'Precios y servicios', short: 'Precios', icon: 'money' },
   { to: '/admin/configuracion', label: 'Ajustes', icon: 'settings' },
 ]
 

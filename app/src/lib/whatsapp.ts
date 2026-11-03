@@ -51,6 +51,7 @@ export function requestMessage(input: {
   total: number
   addons?: { name: string; quantity: number; subtotal: number }[] | string[]
   packagePrice?: number
+  priceLines?: { label: string; value: number }[]
   deposit?: number
   phone?: string
   notes?: string
@@ -66,6 +67,7 @@ export function requestMessage(input: {
   if (input.eventType) lines.push(`*Evento:* ${input.eventType}`)
   if (input.packageName)
     lines.push(`*Paquete:* ${input.packageName}${input.packagePrice ? ` (${shortMoney(input.packagePrice)})` : ''}`)
+  for (const l of input.priceLines ?? []) lines.push(`  + ${l.label}: ${shortMoney(l.value)}`)
   lines.push(`*Fecha:* ${longDate(input.dateISO)}`)
   if (input.slotName) lines.push(`*Horario:* ${input.slotName} (${input.start} — ${input.end})`)
   lines.push(`*Invitados:* ${input.guests}`)

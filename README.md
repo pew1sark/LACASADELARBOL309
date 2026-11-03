@@ -121,8 +121,11 @@ protegidas por RLS; es correcto que estén versionadas).
 
 ### Base de datos
 
-Las migraciones están en `supabase/migrations/` y ya se encuentran aplicadas en
-el proyecto. Para recrear el esquema desde cero, ejecútalas en orden.
+Proyecto Supabase: **ANIMA COMPANY** (`ucwvtiteftajllfnzyvz`).
+
+Las migraciones están en `supabase/migrations/`. Para recrear el esquema desde
+cero, ejecútalas en orden (la de precios detallados es
+`20261103000000_pricing_detail.sql`).
 
 Para dar acceso al panel a otra persona, sigue `supabase/crear_administrador.sql`.
 
@@ -196,6 +199,28 @@ rompen la venta si quedan sin llenar: sin WhatsApp real nadie puede escribirte,
 y sin datos bancarios nadie puede pagarte.
 
 Mientras queden secciones pendientes, el inicio del panel muestra un aviso.
+
+---
+
+## Precios y servicios (panel)
+
+`/admin/paquetes` es el editor del catálogo, solo para administradores (la
+escritura la protege RLS: solo usuarios en `admin_users`):
+
+- **Paquetes**: crear, duplicar, ordenar, ocultar y eliminar. Por paquete:
+  precio base, precio de fin de semana, invitados incluidos, valor por invitado
+  adicional, capacidad, duración, etiqueta, imagen y lista de servicios
+  incluidos (ordenable). Muestra una vista previa del precio.
+- **Extras**: precio, unidad, por invitado, cantidad máxima y categoría.
+- **Horarios**: hora de inicio y término, días disponibles y recargo.
+- **Tipos de evento**: nombre, enlace (`?evento=`), descripción e imagen.
+- **Reglas de precio**: días de fin de semana, % de abono, capacidad,
+  anticipación mínima y horizonte de la agenda.
+- **Simulador**: arma una cotización de prueba con la configuración actual.
+
+El total que ve el cliente usa `app/src/lib/pricing.ts`; el que queda en la
+reserva lo calcula la base (`public.package_quote`) con la misma fórmula, y se
+guarda el desglose en `reservations.pricing_detail`.
 
 ---
 
