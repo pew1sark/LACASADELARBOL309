@@ -1,0 +1,1 @@
+const E={PENDING:"Solicitud recibida",AWAITING_PAYMENT:"Pendiente de pago",CONFIRMED:"Confirmada",COMPLETED:"Completada",CANCELLED:"Cancelada",REJECTED:"Rechazada"},a={PENDING:"amber",AWAITING_PAYMENT:"blue",CONFIRMED:"green",COMPLETED:"gray",CANCELLED:"red",REJECTED:"red"};export{E as S,a};
