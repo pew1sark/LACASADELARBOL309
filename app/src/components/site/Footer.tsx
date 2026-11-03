@@ -13,6 +13,11 @@ export function Footer() {
           <div>
             <p className="font-display text-2xl text-cream-50">{settings?.business_name}</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed">{settings?.tagline}</p>
+            {settings?.whatsapp && (
+              <a href={`https://wa.me/${settings.whatsapp}`} target="_blank" rel="noreferrer noopener" className="mt-3 inline-block text-sm font-semibold text-cream-50 hover:text-sun-400">
+                WhatsApp +{settings.whatsapp.replace(/^(\d{2})(\d)(\d{4})(\d{4})$/, '$1 $2 $3 $4')}
+              </a>
+            )}
             <div className="mt-5 flex gap-3">
               {settings?.instagram_url && (
                 <a href={settings.instagram_url} target="_blank" rel="noreferrer noopener" aria-label="Instagram"
@@ -65,10 +70,10 @@ export function Footer() {
           <div>
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-sun-400">Reservas</p>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/reservar" className="transition hover:text-cream-50">Consultar disponibilidad</Link></li>
+              <li><a href={`${import.meta.env.BASE_URL}#agendar`} className="transition hover:text-cream-50">Cotizar y agendar</a></li>
               <li><Link to="/estado" className="transition hover:text-cream-50">Ver estado de mi solicitud</Link></li>
-              <li><a href="/#paquetes" className="transition hover:text-cream-50">Paquetes y precios</a></li>
-              <li><a href="/#preguntas" className="transition hover:text-cream-50">Preguntas frecuentes</a></li>
+              <li><a href={`${import.meta.env.BASE_URL}#paquetes`} className="transition hover:text-cream-50">Paquetes y precios</a></li>
+              <li><a href={`${import.meta.env.BASE_URL}#preguntas`} className="transition hover:text-cream-50">Preguntas frecuentes</a></li>
             </ul>
           </div>
         </div>

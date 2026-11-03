@@ -1,7 +1,8 @@
 import { useSiteData } from '../../hooks/useSiteData'
 import { genericMessage, openWhatsApp } from '../../lib/whatsapp'
 import { Icon, WhatsAppIcon } from '../ui/Icon'
-import { Button, LinkButton } from '../ui/Primitives'
+import { startQuote } from '../../lib/quote'
+import { Button } from '../ui/Primitives'
 
 export function FinalCta() {
   const { settings } = useSiteData()
@@ -14,13 +15,13 @@ export function FinalCta() {
           <div className="relative mx-auto max-w-2xl">
             <h2 className="text-3xl leading-tight md:text-4xl">¿Ya tienes una fecha en mente?</h2>
             <p className="mt-4 text-cream-200">
-              Consulta la disponibilidad en línea y envía tu solicitud. Te respondemos el mismo día y
-              no pagas nada hasta confirmar.
+              Arma tu cotización en un minuto y recíbela en WhatsApp. Te respondemos el mismo día y no
+              pagas nada hasta confirmar.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <LinkButton to="/reservar" variant="secondary" size="lg">
-                Consultar disponibilidad <Icon name="arrowRight" className="size-4.5" />
-              </LinkButton>
+              <Button variant="secondary" size="lg" onClick={() => startQuote({}, 'final_cta')}>
+                Cotizar mi evento <Icon name="arrowRight" className="size-4.5" />
+              </Button>
               <Button
                 variant="whatsapp"
                 size="lg"

@@ -1,10 +1,9 @@
 import { longDate, shortMoney } from './format'
 import { track } from './analytics'
-
-const clean = (n?: string | null) => (n ?? '').replace(/[^0-9]/g, '')
+import { resolveWhatsApp } from './fallback'
 
 export function waLink(phone: string | null | undefined, message: string): string {
-  const number = clean(phone)
+  const number = resolveWhatsApp(phone)
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }
 
@@ -14,7 +13,16 @@ export function openWhatsApp(
   source: string,
 ): void {
   track('whatsapp_clicked', { source })
-  window.open(waLink(phone, message), '_blank', 'noopener,noreferrer')
+  const win = window.open(waLink(phone, message), '_blank', 'noopener,noreferrer')
+  // Algunos navegadores internos (Instagram, Facebook) bloquean pestañas nuevas.
+  if (!win) window.location.href = waLink(phone, message)
+}
+
+/** Envía al cliente a WhatsApp en la misma pestaña. Se usa después de una
+ *  operación asíncrona, cuando los navegadores bloquean window.open. */
+export function goToWhatsApp(phone: string | null | undefined, message: string, source: string): void {
+  track('whatsapp_clicked', { source })
+  window.location.href = waLink(phone, message)
 }
 
 export const genericMessage = (business: string) =>
@@ -41,22 +49,40 @@ export function requestMessage(input: {
   end?: string | null
   guests: number
   total: number
-  addons?: string[]
+  addons?: { name: string; quantity: number; subtotal: number }[] | string[]
+  packagePrice?: number
+  deposit?: number
+  phone?: string
+  notes?: string
+  source?: string | null
 }): string {
   const lines = [
-    `Hola ${input.business} 👋 Acabo de enviar una solicitud de reserva.`,
+    `Hola ${input.business} 👋 Quiero agendar mi evento. Esta es mi cotización:`,
     '',
     `*Código:* ${input.code}`,
     `*Nombre:* ${input.name}`,
   ]
+  if (input.phone) lines.push(`*Teléfono:* ${input.phone}`)
   if (input.eventType) lines.push(`*Evento:* ${input.eventType}`)
-  if (input.packageName) lines.push(`*Paquete:* ${input.packageName}`)
+  if (input.packageName)
+    lines.push(`*Paquete:* ${input.packageName}${input.packagePrice ? ` (${shortMoney(input.packagePrice)})` : ''}`)
   lines.push(`*Fecha:* ${longDate(input.dateISO)}`)
   if (input.slotName) lines.push(`*Horario:* ${input.slotName} (${input.start} — ${input.end})`)
   lines.push(`*Invitados:* ${input.guests}`)
-  if (input.addons?.length) lines.push(`*Adicionales:* ${input.addons.join(', ')}`)
+  if (input.addons?.length) {
+    if (typeof input.addons[0] === 'string') {
+      lines.push(`*Adicionales:* ${(input.addons as string[]).join(', ')}`)
+    } else {
+      lines.push('*Adicionales:*')
+      for (const a of input.addons as { name: string; quantity: number; subtotal: number }[])
+        lines.push(`  • ${a.name}${a.quantity > 1 ? ` ×${a.quantity}` : ''} — ${shortMoney(a.subtotal)}`)
+    }
+  }
   lines.push(`*Total estimado:* ${shortMoney(input.total)}`)
-  lines.push('', '¿Me confirman la disponibilidad?')
+  if (input.deposit) lines.push(`*Abono para reservar:* ${shortMoney(input.deposit)}`)
+  if (input.notes) lines.push(`*Comentarios:* ${input.notes}`)
+  if (input.source) lines.push(`_Vengo desde: ${input.source}_`)
+  lines.push('', '¿Me confirman la disponibilidad? 🙌')
   return lines.join('\n')
 }
 

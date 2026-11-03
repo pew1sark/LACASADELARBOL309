@@ -1,6 +1,30 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Addon, EventType, Faq, GalleryImage, Package, Settings, TimeSlot } from '../lib/types'
+import {
+  FALLBACK_ADDONS,
+  FALLBACK_EVENT_TYPES,
+  FALLBACK_FAQS,
+  FALLBACK_GALLERY,
+  FALLBACK_PACKAGES,
+  FALLBACK_SETTINGS,
+  FALLBACK_SLOTS,
+  INSTAGRAM_URL,
+  resolveWhatsApp,
+} from '../lib/fallback'
+
+/** Tiempo máximo que el landing espera a la base antes de usar el respaldo. */
+const TIMEOUT_MS = 3500
+
+function withTimeout<T>(p: PromiseLike<T>): Promise<T | null> {
+  return Promise.race([
+    Promise.resolve(p).catch(() => null),
+    new Promise<null>((r) => setTimeout(() => r(null), TIMEOUT_MS)),
+  ])
+}
+
+type Res<T> = { data: T | null; error: { message: string } | null } | null
+const rows = <T,>(r: Res<T[]>): T[] => (r && !r.error && r.data ? r.data : [])
 
 interface SiteData {
   settings: Settings | null
@@ -12,6 +36,9 @@ interface SiteData {
   slots: TimeSlot[]
   loading: boolean
   error: string | null
+  /** true cuando la base no respondió y se muestra el catálogo de respaldo:
+   *  las solicitudes se envían directamente por WhatsApp. */
+  offline: boolean
   reload: () => void
 }
 
@@ -28,6 +55,7 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     slots: [],
     loading: true,
     error: null,
+    offline: false,
   })
   const [nonce, setNonce] = useState(0)
 
@@ -35,34 +63,57 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     let alive = true
     ;(async () => {
       setState((s) => ({ ...s, loading: true }))
-      const [settings, eventTypes, packages, addons, gallery, faqs, slots] = await Promise.all([
-        supabase.from('settings').select('*').eq('id', 1).maybeSingle(),
-        supabase.from('event_types').select('*').order('sort_order'),
-        supabase
-          .from('packages')
-          .select('*, package_services(*)')
-          .order('sort_order'),
-        supabase.from('addons').select('*').order('sort_order'),
-        supabase.from('gallery_images').select('*').order('sort_order'),
-        supabase.from('faqs').select('*').order('sort_order'),
-        supabase.from('time_slots').select('*').order('sort_order'),
+      const q = await Promise.all([
+        withTimeout(supabase.from('settings').select('*').eq('id', 1).maybeSingle()),
+        withTimeout(supabase.from('event_types').select('*').order('sort_order')),
+        withTimeout(supabase.from('packages').select('*, package_services(*)').order('sort_order')),
+        withTimeout(supabase.from('addons').select('*').order('sort_order')),
+        withTimeout(supabase.from('gallery_images').select('*').order('sort_order')),
+        withTimeout(supabase.from('faqs').select('*').order('sort_order')),
+        withTimeout(supabase.from('time_slots').select('*').order('sort_order')),
       ])
       if (!alive) return
-      const firstError =
-        settings.error ?? eventTypes.error ?? packages.error ?? addons.error ?? slots.error
+      const [settingsR, eventTypesR, packagesR, addonsR, galleryR, faqsR, slotsR] = q as [
+        Res<Settings>, Res<EventType[]>, Res<Package[]>, Res<Addon[]>, Res<GalleryImage[]>, Res<Faq[]>, Res<TimeSlot[]>,
+      ]
+
+      let eventTypes = rows(eventTypesR)
+      let packages = rows(packagesR)
+      let slots = rows(slotsR)
+      let addons = rows(addonsR)
+      // El catálogo va junto: si falta una pieza, se usa el respaldo completo
+      // para que los identificadores coincidan entre sí.
+      const offline = !eventTypes.length || !packages.length || !slots.length
+      if (offline) {
+        eventTypes = FALLBACK_EVENT_TYPES
+        packages = FALLBACK_PACKAGES
+        slots = FALLBACK_SLOTS
+        addons = FALLBACK_ADDONS
+      }
+      const gallery = rows(galleryR)
+      const faqs = rows(faqsR)
+      const dbSettings = settingsR && !settingsR.error ? settingsR.data : null
+      const settings: Settings = {
+        ...FALLBACK_SETTINGS,
+        ...(dbSettings ?? {}),
+      }
+      settings.whatsapp = resolveWhatsApp(dbSettings?.whatsapp)
+      settings.instagram_url ||= INSTAGRAM_URL
+
       setState({
-        settings: (settings.data as Settings) ?? null,
-        eventTypes: (eventTypes.data as EventType[]) ?? [],
-        packages: ((packages.data as Package[]) ?? []).map((p) => ({
+        settings,
+        eventTypes,
+        packages: packages.map((p) => ({
           ...p,
-          package_services: (p.package_services ?? []).sort((a, b) => a.sort_order - b.sort_order),
+          package_services: [...(p.package_services ?? [])].sort((a, b) => a.sort_order - b.sort_order),
         })),
-        addons: (addons.data as Addon[]) ?? [],
-        gallery: (gallery.data as GalleryImage[]) ?? [],
-        faqs: (faqs.data as Faq[]) ?? [],
-        slots: (slots.data as TimeSlot[]) ?? [],
+        addons,
+        gallery: gallery.length ? gallery : FALLBACK_GALLERY,
+        faqs: faqs.length ? faqs : FALLBACK_FAQS,
+        slots,
         loading: false,
-        error: firstError ? firstError.message : null,
+        error: offline ? 'Catálogo de respaldo' : null,
+        offline,
       })
     })()
     return () => {
