@@ -17,6 +17,28 @@ export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`
 /** Números de ejemplo que trae la semilla: si siguen en la base, se ignoran. */
 const PLACEHOLDER_NUMBERS = ['56900000000', '']
 
+/** Fotos reales (sacadas del reel) que reemplazan a las ilustraciones de
+ *  ejemplo de la semilla. Una foto subida desde el panel siempre manda. */
+const REAL_PHOTOS: Record<string, string> = {
+  'images/hero.svg': 'images/fotos/salon-principal.webp',
+  'images/evento-infantil.svg': 'images/fotos/bloques-gigantes.webp',
+  'images/evento-cumpleanos.svg': 'images/fotos/mesa-globos.webp',
+  'images/evento-particular.svg': 'images/fotos/salon-principal.webp',
+  'images/pack-infantil.svg': 'images/fotos/mesa-tematica.webp',
+  'images/pack-teen.svg': 'images/fotos/taca-taca.webp',
+  'images/pack-adultos.svg': 'images/fotos/salon-mesas.webp',
+  'images/pack-particular.svg': 'images/fotos/fiesta-estilo.webp',
+  'images/galeria-01.svg': 'images/fotos/salon-principal.webp',
+  'images/galeria-02.svg': 'images/fotos/juegos-inflable.webp',
+  'images/galeria-03.svg': 'images/fotos/patio-pingpong.webp',
+  'images/galeria-04.svg': 'images/fotos/mesa-dulce.webp',
+  'images/galeria-05.svg': 'images/fotos/cocina.webp',
+  'images/galeria-06.svg': 'images/fotos/fachada.webp',
+}
+
+export const realPhoto = <T extends string | null | undefined>(url: T): T | string =>
+  (url && REAL_PHOTOS[url.replace(/^\//, '')]) || url
+
 export function resolveWhatsApp(fromDb?: string | null): string {
   const clean = (fromDb ?? '').replace(/\D/g, '')
   return PLACEHOLDER_NUMBERS.includes(clean) ? WHATSAPP_NUMBER : clean
@@ -28,9 +50,9 @@ export const FALLBACK_SETTINGS: Settings = {
   tagline: 'El lugar perfecto para celebrar momentos inolvidables',
   about:
     'Una casa de eventos pensada para celebrar en familia y entre amigos. Un espacio cálido, limpio y seguro, con áreas para niños y adultos, listo para que solo te preocupes de disfrutar.',
-  address: null,
-  city: 'Santiago',
-  region: 'Región Metropolitana',
+  address: 'Los Castaños',
+  city: 'Chiguayante',
+  region: 'Biobío',
   country: 'Chile',
   phone: '+56 9 5473 7249',
   whatsapp: WHATSAPP_NUMBER,
@@ -49,7 +71,7 @@ export const FALLBACK_SETTINGS: Settings = {
   currency: 'CLP',
   cancellation_policy:
     'Las reservas se confirman con un abono del 30%. Cambios de fecha sin costo hasta 15 días antes del evento. Cancelaciones con menos de 7 días de anticipación no tienen devolución del abono.',
-  hero_image_url: 'images/hero.svg',
+  hero_image_url: 'images/fotos/salon-principal.webp',
   setup_steps: [],
 }
 
@@ -134,14 +156,14 @@ export const FALLBACK_SLOTS: TimeSlot[] = [
 ]
 
 export const FALLBACK_GALLERY: GalleryImage[] = [
-  ['Salón principal', 'Salón principal montado para una celebración'],
-  ['Zona de juegos', 'Zona de juegos infantiles'],
-  ['Terraza', 'Terraza exterior con luces'],
+  ['Salón principal', 'Salón principal decorado para un cumpleaños'],
+  ['Zona de juegos', 'Galpón de juegos con inflable'],
+  ['Patio', 'Patio con mesa de ping pong'],
   ['Mesa dulce', 'Mesa dulce y decoración'],
   ['Cocina de apoyo', 'Cocina de apoyo equipada'],
   ['Fachada', 'Fachada de la casa de eventos'],
 ].map(([caption, alt], i) => ({
-  id: `g${i}`, url: `images/galeria-0${i + 1}.svg`, alt, caption, sort_order: i + 1, active: true,
+  id: `g${i}`, url: realPhoto(`images/galeria-0${i + 1}.svg`) as string, alt, caption, sort_order: i + 1, active: true,
 }))
 
 export const FALLBACK_FAQS: Faq[] = [

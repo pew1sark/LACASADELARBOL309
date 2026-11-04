@@ -266,21 +266,27 @@ desde el primer día.
 
 ## Identidad de marca
 
+Tomada del reel oficial de Meta (*La Casa del Árbol · Los Castaños*, Chiguayante).
+
 | Elemento | Valor |
 | --- | --- |
-| Isotipo | Copa de árbol de tres círculos con una casita de techo dorado (`app/src/components/brand/Logo.tsx`) |
-| Logotipo | "La Casa del Árbol" en Fraunces + "309" en dorado |
-| Verde hoja | `#2F6B45` (principal) · `#4E9E68` · `#1E442C` (fondos oscuros) |
-| Crema | `#FDFAF5` (fondo) · `#F1E5D3` |
-| Sol | `#E8A33D` (acentos y llamados a la acción secundarios) |
-| Madera | `#5A3E2B` (texto) · `#8A6A52` |
-| Terracota | `#C96F4A` (alertas y detalles) |
+| Logo | Follaje con "LA CASA DEL ÁRBOL · LOS CASTAÑOS" sobre placa celeste (`app/public/brand/logo.webp`, componente `app/src/components/brand/Logo.tsx`) |
+| Verde bosque | `#17422F` (fondos de marca, como el cierre del reel) |
+| Verde hoja | `#2F6B45` (botones) · `#4E9E68` |
+| Lima | `#E0F890` (titulares y acentos sobre verde) |
+| Celeste | `#DAF6FA` (placa del logo, sección de video) |
+| Crema | `#FDFAF5` (fondo) |
 | Tipografías | Fraunces (títulos) · Inter (texto) |
-| Tono | Cercano, cálido y directo: "Celebra en una casa solo para ti" |
+| Frases | "Aquí empieza su gran día", "Una fiesta a su estilo", "Diversión en grande", "Agenda tu fecha" |
+| Contacto | Julio Cuevas · +56 9 5473 7249 |
 
-El mismo logo se usa en el sitio, el panel, el favicon y la imagen para redes
-(`og-cover.png`). Los íconos de servicios se asignan solos según el texto
-(`app/src/lib/icons.ts`); los de los extras se eligen en el panel.
+Fotos reales en `app/public/images/fotos/` (fotogramas del reel, sin textos) y
+el recorrido en video en `app/public/video/recorrido.mp4` (1,3 MB, sin audio).
+Mientras la base tenga las ilustraciones de ejemplo, el sitio muestra la foto
+real equivalente (`realPhoto` en `app/src/lib/fallback.ts`); lo que se suba
+desde el panel siempre tiene prioridad. Los íconos de servicios se asignan
+solos según el texto (`app/src/lib/icons.ts`); los de los extras se eligen en
+el panel.
 
 ## Fotos
 

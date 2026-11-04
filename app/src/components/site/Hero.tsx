@@ -26,11 +26,11 @@ export function Hero() {
         <img
           src={asset(settings?.hero_image_url ?? 'images/hero.svg')}
           alt=""
-          className="size-full object-cover opacity-55"
+          className="size-full object-cover object-[70%_75%]"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-leaf-900/95 via-leaf-900/70 to-bark-900/60" />
-        <div className="pointer-events-none absolute -right-24 top-10 size-[28rem] rounded-full bg-sun-400/10 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-leaf-950/95 via-leaf-900/80 to-leaf-900/40" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-leaf-950/60 to-transparent" />
       </div>
 
       <div className="container-x relative grid items-center gap-7 py-8 sm:py-12 md:py-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:py-24">
@@ -43,22 +43,23 @@ export function Hero() {
           >
             <Icon name="instagram" className="size-3.5" /> @{INSTAGRAM_HANDLE}
             <span className="text-cream-50/50">·</span>
-            Casa de eventos{settings?.city ? ` en ${settings.city}` : ''}
+            <Icon name="mapPin" className="size-3.5 text-lime-300" />
+            {settings?.city ?? 'Chiguayante'}
           </a>
 
           <h1 className="mt-5 text-[2.3rem] leading-[1.04] sm:text-6xl lg:text-[4rem]">
             Celebra en una casa{' '}
-            <span className="relative whitespace-nowrap text-sun-400">
+            <span className="relative whitespace-nowrap text-lime-300">
               solo para ti
-              <svg viewBox="0 0 200 12" className="absolute -bottom-2 left-0 w-full text-sun-400/60" aria-hidden>
+              <svg viewBox="0 0 200 12" className="absolute -bottom-2 left-0 w-full text-lime-300/60" aria-hidden>
                 <path d="M2 9c40-6 120-8 196-3" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
               </svg>
             </span>
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-cream-200 sm:text-lg">
-            Cumpleaños infantiles, celebraciones y eventos privados con todo listo. Cotiza en 1 minuto,
-            elige tu fecha y recibe tu cotización directo en WhatsApp.
+            Salón, galpón de juegos con inflable y cama elástica, taca-taca, patio y cocina: todo para tu
+            cumpleaños o evento. Cotiza en 1 minuto y recibe tu cotización directo en WhatsApp.
           </p>
 
           <ul className="mt-8 hidden max-w-lg grid-cols-2 gap-3 sm:grid text-sm font-medium text-cream-100">
@@ -69,7 +70,7 @@ export function Hero() {
               ['clock', 'Respuesta el mismo día'],
             ].map(([icon, label]) => (
               <li key={label} className="flex items-center gap-2.5">
-                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-cream-50/10 text-sun-400">
+                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-cream-50/10 text-lime-300">
                   <Icon name={icon as 'users'} className="size-4" />
                 </span>
                 {label}

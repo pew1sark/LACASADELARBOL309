@@ -34,7 +34,8 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center text-cream-50">
           <LogoMark className="mx-auto size-16 shadow-lift" />
-          <h1 className="mt-4 text-2xl">La Casa del Árbol <span className="text-sun-400">309</span></h1>
+          <h1 className="mt-4 text-2xl">La Casa del Árbol</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-lime-300">Los Castaños</p>
           <p className="mt-1 text-sm text-cream-200">Panel de administración</p>
         </div>
 

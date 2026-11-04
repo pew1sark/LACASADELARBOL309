@@ -12,8 +12,8 @@ export function Gallery() {
   return (
     <Section
       id="galeria"
-      eyebrow="El lugar"
-      title="Conoce la casa"
+      eyebrow="Celebraciones en la casa"
+      title="Celebremos juntos"
       subtitle={settings?.about ?? undefined}
       tone="white"
     >

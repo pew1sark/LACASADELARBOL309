@@ -8,8 +8,8 @@ import { Button } from '../ui/Primitives'
 
 const NAV = [
   { href: '#eventos', label: 'Eventos' },
+  { href: '#espacios', label: 'La casa' },
   { href: '#paquetes', label: 'Paquetes' },
-  { href: '#galeria', label: 'El lugar' },
   { href: '#preguntas', label: 'Preguntas' },
 ]
 

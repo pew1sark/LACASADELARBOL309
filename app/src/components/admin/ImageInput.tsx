@@ -26,7 +26,7 @@ export function ImageInput({
   const input = useRef<HTMLInputElement>(null)
   const [busy, setBusy] = useState(false)
   const [showUrl, setShowUrl] = useState(false)
-  const placeholder = !value || value.startsWith('images/')
+  const placeholder = !value || value.endsWith('.svg')
 
   const onFile = async (file?: File) => {
     if (!file) return
