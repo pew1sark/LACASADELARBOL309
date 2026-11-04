@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Pack Particular">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#EDE4F5"/><stop offset="100%" stop-color="#D3C1E6"/>
-    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8ECDF"/><stop offset="1" stop-color="#BFDDC9"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#E8A33D" stop-opacity="0.25"/><stop offset="1" stop-color="#E8A33D" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1000" height="700" fill="url(#bg)"/>
-  <circle cx="695" cy="300" r="189" fill="#6B4E8F" opacity="0.12"/><circle cx="127" cy="169" r="175" fill="#6B4E8F" opacity="0.23"/><circle cx="529" cy="281" r="169" fill="#6B4E8F" opacity="0.21"/><circle cx="295" cy="208" r="134" fill="#6B4E8F" opacity="0.12"/><circle cx="375" cy="263" r="160" fill="#6B4E8F" opacity="0.28"/>
-  <path d="M0 546 Q 250 489.99999999999994 500 532 T 1000 504 L 1000 700 L 0 700 Z" fill="#6B4E8F" opacity="0.22"/>
-  <rect x="482" y="294" width="36" height="280" rx="12" fill="#6B4E8F" opacity="0.45"/>
-  <path d="M390 322 h 220 l -20 -63 h -180 Z" fill="#6B4E8F" opacity="0.55"/>
-  <rect x="400" y="322" width="200" height="91" rx="8" fill="#6B4E8F" opacity="0.4"/>
-  <circle cx="500" cy="367.5" r="19.6" fill="#EDE4F5" opacity="0.75"/>
-  <text x="500" y="651" font-family="Inter, system-ui, sans-serif" font-size="39"
-        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">PACK PARTICULAR</text>
+  <rect width="1000" height="700" fill="url(#sky)"/>
+  <circle cx="500" cy="315" r="450" fill="url(#glow)"/>
+  <rect x="384" y="176" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(154 384 176)"/><circle cx="721" cy="377" r="4.4" fill="#D98A68" opacity="0.55"/><circle cx="927" cy="292" r="5.4" fill="#4E9E68" opacity="0.55"/><rect x="230" y="407" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(113 230 407)"/><circle cx="687" cy="287" r="5.7" fill="#E8A33D" opacity="0.55"/><circle cx="573" cy="373" r="6.2" fill="#D98A68" opacity="0.55"/><rect x="155" y="221" width="10" height="4" rx="2" fill="#4E9E68" opacity=".55" transform="rotate(117 155 221)"/><circle cx="754" cy="106" r="6.8" fill="#FDFAF5" opacity="0.55"/><circle cx="527" cy="131" r="3.2" fill="#E8A33D" opacity="0.55"/><rect x="857" y="117" width="10" height="4" rx="2" fill="#D98A68" opacity=".55" transform="rotate(145 857 117)"/><circle cx="466" cy="117" r="3.4" fill="#4E9E68" opacity="0.55"/><circle cx="741" cy="328" r="4.6" fill="#FDFAF5" opacity="0.55"/><rect x="625" y="24" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(71 625 24)"/><circle cx="910" cy="55" r="3.8" fill="#D98A68" opacity="0.55"/><circle cx="964" cy="181" r="4.6" fill="#4E9E68" opacity="0.55"/><rect x="647" y="141" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(121 647 141)"/><circle cx="536" cy="218" r="5.7" fill="#E8A33D" opacity="0.55"/><circle cx="20" cy="331" r="6.7" fill="#D98A68" opacity="0.55"/>
+  <path d="M0 560 Q 300 518 550 553 T 1000 532 V 700 H 0Z" fill="#3F8556"/>
+  <path d="M0 595 Q 400 560 1000 602 V 700 H 0Z" fill="#1E442C" opacity=".25"/>
+  <g transform="translate(500 560)">
+    <rect x="-16.660000000000004" y="-273.7" width="33.32000000000001" height="273.7" rx="11.900000000000002" fill="#8A6A52"/>
+    <circle cx="0" cy="-368.90000000000003" r="147.56000000000003" fill="#4E9E68"/>
+    <circle cx="-130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <circle cx="130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <path d="M-119.00000000000001 -233.24000000000004 L0 -323.68000000000006 L119.00000000000001 -233.24000000000004Z" fill="#E8A33D"/>
+    <rect x="-99.96000000000001" y="-238.00000000000003" width="199.92000000000002" height="119.00000000000001" rx="14.280000000000001" fill="#FDFAF5"/>
+    <rect x="-21.42" y="-190.40000000000003" width="42.84" height="71.4" rx="9.520000000000001" fill="#5A3E2B"/>
+    <circle cx="-61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <circle cx="61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <path d="M-119.00000000000001 0 L-28.560000000000002 -119.00000000000001 M-99.96000000000001 -28.560000000000002 H-52.36000000000001 M-80.92000000000002 -61.88000000000001 H-38.080000000000005" stroke="#5A3E2B" stroke-width="7.140000000000001" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(200 224) scale(1.6666666666666667)"><path d="M0 18-22-4a13 13 0 0 1 22-14 13 13 0 0 1 22 14Z" fill="#E8A33D"/></g><g transform="translate(800 252) scale(1.3461538461538463)"><path d="M0 18-22-4a13 13 0 0 1 22-14 13 13 0 0 1 22 14Z" fill="#C96F4A"/></g>
+  <g transform="translate(500 654.5)">
+    <rect x="-196" y="-31.5" width="392" height="52.5" rx="26.25" fill="#FDFAF5" opacity=".92"/>
+    <text y="8.4" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="29" font-weight="600" fill="#1E442C" text-anchor="middle">Pack Particular</text>
+  </g>
 </svg>

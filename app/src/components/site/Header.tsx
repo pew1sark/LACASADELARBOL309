@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Logo } from '../brand/Logo'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSiteData } from '../../hooks/useSiteData'
 import { Icon } from '../ui/Icon'
@@ -41,18 +42,8 @@ export function Header() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-18">
-        <Link to="/" className="flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-leaf-700 text-white">
-            <Icon name="home" className="size-4.5" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-display text-[0.95rem] font-semibold leading-snug">
-              {settings?.business_name ?? 'La Casa del Árbol 309'}
-            </span>
-            <span className="block text-[0.68rem] font-medium uppercase tracking-[0.14em] text-bark-500">
-              Casa de eventos
-            </span>
-          </span>
+        <Link to="/" aria-label={settings?.business_name ?? 'La Casa del Árbol 309'}>
+          <Logo compact />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">

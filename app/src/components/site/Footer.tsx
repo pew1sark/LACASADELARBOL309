@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Logo } from '../brand/Logo'
 import { useSiteData } from '../../hooks/useSiteData'
 import { Icon } from '../ui/Icon'
 
@@ -11,7 +12,7 @@ export function Footer() {
       <div className="container-x">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <p className="font-display text-2xl text-cream-50">{settings?.business_name}</p>
+            <Logo tone="light" />
             <p className="mt-3 max-w-sm text-sm leading-relaxed">{settings?.tagline}</p>
             {settings?.whatsapp && (
               <a href={`https://wa.me/${settings.whatsapp}`} target="_blank" rel="noreferrer noopener" className="mt-3 inline-block text-sm font-semibold text-cream-50 hover:text-sun-400">

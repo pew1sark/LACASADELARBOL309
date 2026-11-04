@@ -110,21 +110,21 @@ export const FALLBACK_PACKAGES: Package[] = [
   },
 ]
 
-const addon = (id: string, name: string, description: string, price: number, unit: string, per_guest = false): Addon => ({
-  id, name, description, price, unit, per_guest, icon: null, sort_order: 0, active: true,
+const addon = (id: string, name: string, description: string, price: number, unit: string, per_guest = false, icon: string | null = null, category = 'Otros'): Addon => ({
+  id, name, description, price, unit, per_guest, icon, category, sort_order: 0, active: true,
 })
 
 export const FALLBACK_ADDONS: Addon[] = [
-  addon('ad-deco', 'Decoración temática', 'Ambientación completa según el tema que elijas.', 60000, 'servicio'),
-  addon('ad-anim', 'Animador infantil', 'Animación con juegos y concursos durante 2 horas.', 90000, 'servicio'),
-  addon('ad-dj', 'DJ', 'DJ profesional con equipo propio.', 120000, 'servicio'),
-  addon('ad-foto', 'Fotografía', 'Cobertura fotográfica del evento con entrega digital.', 80000, 'servicio'),
-  addon('ad-torta', 'Torta personalizada', 'Torta a pedido según porciones y diseño.', 45000, 'unidad'),
-  addon('ad-candy', 'Candy bar', 'Mesa dulce montada y decorada.', 70000, 'servicio'),
-  addon('ad-globos', 'Globos y ambientación', 'Arco de globos y decoración de entrada.', 35000, 'servicio'),
-  addon('ad-pinata', 'Piñata', 'Piñata cargada con dulces y sorpresas.', 25000, 'unidad'),
-  addon('ad-catering', 'Catering por persona', 'Servicio de comida y bebida por invitado.', 6500, 'persona', true),
-  addon('ad-hora', 'Hora extra', 'Extiende tu celebración una hora más.', 40000, 'hora'),
+  addon('ad-deco', 'Decoración temática', 'Ambientación completa según el tema que elijas.', 60000, 'servicio', false, 'sparkles', 'Decoración'),
+  addon('ad-anim', 'Animador infantil', 'Animación con juegos y concursos durante 2 horas.', 90000, 'servicio', false, 'smile', 'Entretención'),
+  addon('ad-dj', 'DJ', 'DJ profesional con equipo propio.', 120000, 'servicio', false, 'music', 'Entretención'),
+  addon('ad-foto', 'Fotografía', 'Cobertura fotográfica del evento con entrega digital.', 80000, 'servicio', false, 'camera', 'Registro'),
+  addon('ad-torta', 'Torta personalizada', 'Torta a pedido según porciones y diseño.', 45000, 'unidad', false, 'cake', 'Comida'),
+  addon('ad-candy', 'Candy bar', 'Mesa dulce montada y decorada.', 70000, 'servicio', false, 'candy', 'Comida'),
+  addon('ad-globos', 'Globos y ambientación', 'Arco de globos y decoración de entrada.', 35000, 'servicio', false, 'balloon', 'Decoración'),
+  addon('ad-pinata', 'Piñata', 'Piñata cargada con dulces y sorpresas.', 25000, 'unidad', false, 'gift', 'Entretención'),
+  addon('ad-catering', 'Catering por persona', 'Servicio de comida y bebida por invitado.', 6500, 'persona', true, 'utensils', 'Comida'),
+  addon('ad-hora', 'Hora extra', 'Extiende tu celebración una hora más.', 40000, 'hora', false, 'clock', 'Tiempo'),
 ]
 
 export const FALLBACK_SLOTS: TimeSlot[] = [

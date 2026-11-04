@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { ImageInput } from '../../components/admin/ImageInput'
 import { Link } from 'react-router-dom'
 import { Icon } from '../../components/ui/Icon'
 import { Badge, Button, Card, Field, LoadingBlock, TextArea } from '../../components/ui/Primitives'
@@ -435,19 +436,18 @@ export default function PuestaEnMarcha() {
             {s.id === 'fotos' && (
               <div className="space-y-4">
                 <div className="rounded-xl bg-cream-100 p-3.5 text-sm text-bark-700">
-                  Sube tus fotos a Instagram, Google Drive (enlace público) o cualquier servicio de
-                  imágenes, y pega aquí la URL directa. Debe terminar en .jpg, .png o .webp.
+                  Guarda en tu teléfono las mejores fotos de tu Instagram o Facebook y súbelas con
+                  "Subir foto". Para ordenar, agregar o quitar fotos de la galería usa
+                  Precios y servicios → Fotos.
                 </div>
 
-                <Field
+                <ImageInput
                   label="Foto principal (portada)"
+                  folder="portada"
                   value={form.hero_image_url}
-                  onChange={(e) => set('hero_image_url', e.target.value)}
-                  placeholder="https://…/portada.jpg"
+                  onChange={(url) => set('hero_image_url', url)}
+                  aspect="aspect-[16/7]"
                 />
-                {!isPlaceholderImage(form.hero_image_url) && (
-                  <img src={form.hero_image_url} alt="" className="h-32 w-full rounded-xl object-cover" />
-                )}
 
                 <div>
                   <p className="mb-2 text-sm font-semibold">Galería</p>

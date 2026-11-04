@@ -8,7 +8,9 @@ import { friendlyError } from '../../lib/errors'
 import { money, toISO } from '../../lib/format'
 import { DEFAULT_WEEKEND_DAYS, WEEKDAY_LABELS, quotePackage } from '../../lib/pricing'
 import { supabase } from '../../lib/supabase'
-import type { Addon, EventType, Package, TimeSlot } from '../../lib/types'
+import type { Addon, EventType, GalleryImage, Package, TimeSlot } from '../../lib/types'
+import { ImageInput } from '../../components/admin/ImageInput'
+import { PICKABLE_ICONS, addonIcon, serviceIcon } from '../../lib/icons'
 
 /* =============================================================================
  * Precios y servicios — editor completo del catálogo, solo para administradores.
@@ -17,13 +19,14 @@ import type { Addon, EventType, Package, TimeSlot } from '../../lib/types'
  * solo permiten escribir a usuarios registrados en admin_users.
  * ========================================================================== */
 
-type Tab = 'packages' | 'addons' | 'slots' | 'events' | 'rules' | 'simulator'
+type Tab = 'packages' | 'addons' | 'slots' | 'events' | 'photos' | 'rules' | 'simulator'
 
 const TABS: { id: Tab; label: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
   { id: 'packages', label: 'Paquetes', icon: 'gift' },
   { id: 'addons', label: 'Extras', icon: 'sparkles' },
   { id: 'slots', label: 'Horarios', icon: 'clock' },
   { id: 'events', label: 'Tipos de evento', icon: 'party' },
+  { id: 'photos', label: 'Fotos', icon: 'image' },
   { id: 'rules', label: 'Reglas de precio', icon: 'money' },
   { id: 'simulator', label: 'Simulador', icon: 'chart' },
 ]
@@ -86,6 +89,7 @@ export default function Paquetes() {
       {tab === 'addons' && <AddonsTab />}
       {tab === 'slots' && <SlotsTab />}
       {tab === 'events' && <EventsTab />}
+      {tab === 'photos' && <PhotosTab />}
       {tab === 'rules' && <RulesTab />}
       {tab === 'simulator' && <SimulatorTab />}
     </div>
@@ -427,7 +431,7 @@ function PackageModal({ pkg, nextOrder, eventTypes, onClose }: {
         </fieldset>
 
         <div className="sm:col-span-2">
-          <Field label="Imagen (URL)" hint="ruta images/… o URL de tu foto" value={form.image_url} onChange={(e) => set({ image_url: e.target.value })} />
+          <ImageInput label="Foto del paquete" folder="paquetes" value={form.image_url} onChange={(url) => set({ image_url: url })} aspect="aspect-[10/7]" />
         </div>
         <div className="sm:col-span-2">
           <TextArea label="Descripción" hint="opcional" value={form.description} onChange={(e) => set({ description: e.target.value })} />
@@ -437,7 +441,10 @@ function PackageModal({ pkg, nextOrder, eventTypes, onClose }: {
           <p className="mb-2 text-sm font-semibold">Servicios incluidos <span className="font-normal text-bark-500">({services.length})</span></p>
           <div className="space-y-2">
             {services.map((s, i) => (
-              <div key={i} className="flex gap-1.5">
+              <div key={i} className="flex items-center gap-1.5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-leaf-50 text-leaf-700" title="Ícono automático según el texto">
+                  <Icon name={serviceIcon(s)} className="size-4" />
+                </span>
                 <input
                   value={s}
                   onChange={(e) => setServices(services.map((x, j) => (j === i ? e.target.value : x)))}
@@ -509,6 +516,10 @@ function AddonsTab() {
                 const i = sorted.indexOf(a)
                 return (
                   <div key={a.id} className={`flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between ${a.active ? '' : 'opacity-60'}`}>
+                    <div className="flex min-w-0 gap-3">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-leaf-50 text-leaf-700">
+                      <Icon name={addonIcon(a.icon, a.name)} className="size-5" />
+                    </span>
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="font-semibold">{a.name}</h3>
@@ -520,6 +531,7 @@ function AddonsTab() {
                         {money(a.price)} <span className="font-normal text-bark-500">/ {a.unit}</span>
                         {a.max_quantity != null && <span className="font-normal text-bark-500"> · máx. {a.max_quantity}</span>}
                       </p>
+                    </div>
                     </div>
                     <RowActions
                       active={a.active}
@@ -563,6 +575,7 @@ function AddonModal({ addon, categories, nextOrder, onClose }: {
     unit: addon?.unit ?? 'servicio',
     per_guest: addon?.per_guest ?? false,
     max_quantity: addon?.max_quantity != null ? String(addon.max_quantity) : '',
+    icon: addonIcon(addon?.icon, addon?.name ?? '') as string,
     active: addon?.active ?? true,
   })
   const set = (patch: Partial<typeof form>) => setForm((f) => ({ ...f, ...patch }))
@@ -577,6 +590,7 @@ function AddonModal({ addon, categories, nextOrder, onClose }: {
         unit: form.per_guest ? 'persona' : form.unit,
         per_guest: form.per_guest,
         max_quantity: optNum(form.max_quantity),
+        icon: form.icon,
         active: form.active,
       }
       return addon
@@ -589,6 +603,25 @@ function AddonModal({ addon, categories, nextOrder, onClose }: {
       <div className="space-y-4">
         <Field label="Nombre" value={form.name} onChange={(e) => set({ name: e.target.value })} placeholder="Candy bar" />
         <TextArea label="Descripción" hint="opcional" value={form.description} onChange={(e) => set({ description: e.target.value })} />
+        <div>
+          <p className="mb-2 text-sm font-semibold">Ícono</p>
+          <div className="grid grid-cols-7 gap-1.5 sm:grid-cols-10">
+            {PICKABLE_ICONS.map((ic) => (
+              <button
+                key={ic}
+                type="button"
+                onClick={() => set({ icon: ic })}
+                aria-label={ic}
+                aria-pressed={form.icon === ic}
+                className={`grid aspect-square place-items-center rounded-lg transition ${
+                  form.icon === ic ? 'bg-leaf-700 text-white' : 'bg-cream-100 text-bark-700 hover:bg-cream-200'
+                }`}
+              >
+                <Icon name={ic} className="size-4.5" />
+              </button>
+            ))}
+          </div>
+        </div>
         <div>
           <Field label="Categoría" value={form.category} onChange={(e) => set({ category: e.target.value })} list="addon-categories" />
           <datalist id="addon-categories">
@@ -768,7 +801,7 @@ function EventModal({ ev, nextOrder, onClose }: { ev: EventType | null; nextOrde
         <Field label="Nombre" value={form.name} onChange={(e) => set({ name: e.target.value })} placeholder="Baby shower" />
         <Field label="Identificador para enlaces" hint="se usa en ?evento=" value={form.slug} onChange={(e) => set({ slug: e.target.value })} placeholder={slugify(form.name || 'baby-shower')} />
         <TextArea label="Descripción corta" value={form.short_description} onChange={(e) => set({ short_description: e.target.value })} />
-        <Field label="Imagen (URL)" value={form.image_url} onChange={(e) => set({ image_url: e.target.value })} />
+        <ImageInput label="Foto" folder="eventos" value={form.image_url} onChange={(url) => set({ image_url: url })} aspect="aspect-[4/3]" />
         <Check checked={form.active} onChange={(v) => set({ active: v })}>Visible en la web</Check>
         <Button full disabled={busy || form.name.trim().length < 2} onClick={() => void save()}>
           {busy ? 'Guardando…' : ev ? 'Guardar cambios' : 'Crear tipo de evento'}
@@ -910,5 +943,109 @@ function SimRow({ label, value }: { label: string; value: number }) {
       <dt className="text-bark-500">{label}</dt>
       <dd className="font-medium">{money(value)}</dd>
     </div>
+  )
+}
+
+/* ================================== FOTOS ================================== */
+
+function PhotosTab() {
+  const { settings, gallery } = useSiteData()
+  const { busy, run } = useSaver()
+  const [hero, setHero] = useState(settings?.hero_image_url ?? '')
+  const sorted = [...gallery].sort((a, b) => a.sort_order - b.sort_order)
+
+  const update = (g: GalleryImage, patch: Partial<GalleryImage>) =>
+    run(() => supabase.from('gallery_images').update(patch).eq('id', g.id), 'Foto actualizada')
+
+  return (
+    <div className="space-y-6">
+      <div className="flex gap-3 rounded-2xl bg-sun-100 p-4 text-sm text-bark-900">
+        <Icon name="instagram" className="size-5 shrink-0 text-sun-600" />
+        <p>
+          Desde el celular: abre tu Instagram o Facebook, guarda las fotos en el teléfono y súbelas aquí con
+          <strong> Subir foto</strong>. Se comprimen solas para que la web cargue rápido. Usa fotos horizontales,
+          con buena luz y sin texto encima.
+        </p>
+      </div>
+
+      <Card className="p-5">
+        <ImageInput label="Foto de portada (fondo del inicio)" hint="horizontal, mín. 1600 px" folder="portada" value={hero} onChange={setHero} aspect="aspect-[16/7]" />
+        <Button
+          className="mt-3"
+          disabled={busy || hero === (settings?.hero_image_url ?? '')}
+          onClick={() => void run(() => supabase.from('settings').update({ hero_image_url: hero || null }).eq('id', 1), 'Portada actualizada')}
+        >
+          Guardar portada
+        </Button>
+      </Card>
+
+      <div>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-lg">Galería "Conoce la casa"</h2>
+          <Button
+            size="sm"
+            onClick={() =>
+              void run(
+                () =>
+                  supabase.from('gallery_images').insert({
+                    url: 'images/galeria-01.svg',
+                    caption: 'Nueva foto',
+                    alt: 'Foto de La Casa del Árbol 309',
+                    sort_order: (sorted.at(-1)?.sort_order ?? 0) + 1,
+                  }),
+                'Espacio agregado: sube la foto',
+              )
+            }
+          >
+            <Icon name="plus" className="size-4" /> Agregar foto
+          </Button>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {sorted.map((g, i) => (
+            <GalleryCard
+              key={g.id}
+              g={g}
+              onSave={(patch) => void update(g, patch)}
+              onUp={i > 0 ? () => void run(() => swapOrder('gallery_images', g, sorted[i - 1]), 'Orden actualizado') : undefined}
+              onDown={i < sorted.length - 1 ? () => void run(() => swapOrder('gallery_images', g, sorted[i + 1]), 'Orden actualizado') : undefined}
+              onToggle={() => void update(g, { active: !g.active })}
+              onDelete={() => confirmDelete('esta foto') && void run(() => supabase.from('gallery_images').delete().eq('id', g.id), 'Foto eliminada')}
+            />
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-bark-500">La primera foto se muestra más grande en la web.</p>
+      </div>
+    </div>
+  )
+}
+
+function GalleryCard({ g, onSave, onUp, onDown, onToggle, onDelete }: {
+  g: GalleryImage
+  onSave: (patch: Partial<GalleryImage>) => void
+  onUp?: () => void
+  onDown?: () => void
+  onToggle: () => void
+  onDelete: () => void
+}) {
+  const [caption, setCaption] = useState(g.caption ?? '')
+  return (
+    <Card className={`p-3 ${g.active ? '' : 'opacity-60'}`}>
+      <ImageInput label={g.active ? 'Foto' : 'Foto (oculta)'} folder="galeria" value={g.url} onChange={(url) => onSave({ url })} aspect="aspect-[4/3]" />
+      <div className="mt-2 flex gap-2">
+        <input
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          onBlur={() => caption !== (g.caption ?? '') && onSave({ caption, alt: caption })}
+          placeholder="Título (ej: Terraza)"
+          className="w-full rounded-xl border border-bark-900/15 bg-white px-3 py-2 text-sm focus:border-leaf-600 focus:outline-none"
+        />
+      </div>
+      <div className="mt-2 flex items-center justify-end gap-1 text-bark-500">
+        <button onClick={onUp} disabled={!onUp} className="grid size-8 place-items-center rounded-lg hover:bg-cream-200 disabled:opacity-30" aria-label="Subir"><Icon name="chevronLeft" className="size-4 rotate-90" /></button>
+        <button onClick={onDown} disabled={!onDown} className="grid size-8 place-items-center rounded-lg hover:bg-cream-200 disabled:opacity-30" aria-label="Bajar"><Icon name="chevronLeft" className="size-4 -rotate-90" /></button>
+        <button onClick={onToggle} className="grid size-8 place-items-center rounded-lg hover:bg-cream-200" aria-label={g.active ? 'Ocultar' : 'Mostrar'}><Icon name={g.active ? 'check' : 'ban'} className="size-4" /></button>
+        <button onClick={onDelete} className="grid size-8 place-items-center rounded-lg hover:bg-cream-200 hover:text-terra-500" aria-label="Eliminar"><Icon name="trash" className="size-4" /></button>
+      </div>
+    </Card>
   )
 }

@@ -3,6 +3,7 @@ import { asset } from '../../lib/asset'
 import { money } from '../../lib/format'
 import { track } from '../../lib/analytics'
 import { startQuote } from '../../lib/quote'
+import { serviceIcon } from '../../lib/icons'
 import { openWhatsApp, packageMessage } from '../../lib/whatsapp'
 import { Icon, WhatsAppIcon } from '../ui/Icon'
 import { Badge, Button, Section } from '../ui/Primitives'
@@ -58,8 +59,10 @@ export function Packages() {
 
               <ul className="mt-5 flex-1 space-y-2">
                 {(pkg.package_services ?? []).slice(0, 6).map((s) => (
-                  <li key={s.id} className="flex items-start gap-2 text-sm text-bark-700">
-                    <Icon name="check" className="mt-0.5 size-4 shrink-0 text-leaf-600" />
+                  <li key={s.id} className="flex items-center gap-2.5 text-sm text-bark-700">
+                    <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-leaf-50 text-leaf-700">
+                      <Icon name={serviceIcon(s.name)} className="size-4" />
+                    </span>
                     {s.name}
                   </li>
                 ))}

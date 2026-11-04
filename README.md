@@ -264,8 +264,32 @@ desde el primer día.
 
 ---
 
-## Imágenes
+## Identidad de marca
 
-Las imágenes de `app/public/images/` son marcadores de posición generados con
-`node scripts/gen-placeholders.mjs`. Para usar fotos reales, súbelas a un
-servicio de imágenes y pega la URL en el panel (paquetes, galería y portada).
+| Elemento | Valor |
+| --- | --- |
+| Isotipo | Copa de árbol de tres círculos con una casita de techo dorado (`app/src/components/brand/Logo.tsx`) |
+| Logotipo | "La Casa del Árbol" en Fraunces + "309" en dorado |
+| Verde hoja | `#2F6B45` (principal) · `#4E9E68` · `#1E442C` (fondos oscuros) |
+| Crema | `#FDFAF5` (fondo) · `#F1E5D3` |
+| Sol | `#E8A33D` (acentos y llamados a la acción secundarios) |
+| Madera | `#5A3E2B` (texto) · `#8A6A52` |
+| Terracota | `#C96F4A` (alertas y detalles) |
+| Tipografías | Fraunces (títulos) · Inter (texto) |
+| Tono | Cercano, cálido y directo: "Celebra en una casa solo para ti" |
+
+El mismo logo se usa en el sitio, el panel, el favicon y la imagen para redes
+(`og-cover.png`). Los íconos de servicios se asignan solos según el texto
+(`app/src/lib/icons.ts`); los de los extras se eligen en el panel.
+
+## Fotos
+
+Las fotos se suben desde el panel (**Precios y servicios → Fotos**, y en cada
+paquete o tipo de evento) con el botón *Subir foto*: se comprimen en el
+navegador a WebP de máx. 1800 px y se guardan en Supabase Storage (bucket
+`media`, migración `20261104000000_media_storage.sql`). Solo los
+administradores pueden subir o borrar.
+
+Mientras no haya fotos reales se muestran ilustraciones de marca generadas con
+`node scripts/gen-placeholders.mjs` (y `node scripts/og-png.cjs` para la
+imagen de redes en PNG).

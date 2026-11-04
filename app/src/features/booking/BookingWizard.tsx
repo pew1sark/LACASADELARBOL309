@@ -12,6 +12,7 @@ import { asset } from '../../lib/asset'
 import { friendlyError, isBusinessError } from '../../lib/errors'
 import { longDate, money } from '../../lib/format'
 import { quotePackage } from '../../lib/pricing'
+import { addonIcon } from '../../lib/icons'
 import { PREFILL_EVENT, type PrefillDetail } from '../../lib/quote'
 import { supabase } from '../../lib/supabase'
 import type { Addon, SlotStatus } from '../../lib/types'
@@ -694,19 +695,28 @@ function AddonCard({ addon, guests, quantity, onChange }: {
         active ? 'border-leaf-700 bg-leaf-50/60' : 'border-bark-900/8 bg-white'
       }`}
     >
-      <button
-        type="button"
-        onClick={() => onChange(active ? 0 : 1)}
-        aria-label={active ? `Quitar ${addon.name}` : `Agregar ${addon.name}`}
-        aria-pressed={active}
-        className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full transition ${
-          active ? 'bg-leaf-700 text-white' : 'bg-cream-200 text-bark-700 hover:bg-cream-300'
+      <span
+        className={`grid size-11 shrink-0 place-items-center rounded-xl transition ${
+          active ? 'bg-leaf-700 text-white' : 'bg-cream-100 text-leaf-700'
         }`}
       >
-        <Icon name={active ? 'check' : 'plus'} className="size-3.5" />
-      </button>
+        <Icon name={addonIcon(addon.icon, addon.name)} className="size-5" />
+      </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-snug">{addon.name}</p>
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-semibold leading-snug">{addon.name}</p>
+          <button
+            type="button"
+            onClick={() => onChange(active ? 0 : 1)}
+            aria-label={active ? `Quitar ${addon.name}` : `Agregar ${addon.name}`}
+            aria-pressed={active}
+            className={`grid size-7 shrink-0 place-items-center rounded-full transition ${
+              active ? 'bg-leaf-700 text-white' : 'bg-cream-200 text-bark-700 hover:bg-cream-300'
+            }`}
+          >
+            <Icon name={active ? 'check' : 'plus'} className="size-3.5" />
+          </button>
+        </div>
         {addon.description && <p className="mt-0.5 text-xs leading-snug text-bark-500">{addon.description}</p>}
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="text-sm font-semibold text-leaf-700">
