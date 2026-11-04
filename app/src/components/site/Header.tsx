@@ -7,9 +7,9 @@ import { startQuote } from '../../lib/quote'
 import { Button } from '../ui/Primitives'
 
 const NAV = [
-  { href: '#eventos', label: 'Eventos' },
   { href: '#espacios', label: 'La casa' },
-  { href: '#paquetes', label: 'Paquetes' },
+  { href: '#precio', label: 'Precio' },
+  { href: '#agendar', label: 'Agenda' },
   { href: '#preguntas', label: 'Preguntas' },
 ]
 
@@ -59,7 +59,7 @@ export function Header() {
               botón chocaría con su propia utilidad de display. */}
           <span className="hidden sm:contents">
             <Button size="sm" onClick={cta}>
-              Cotizar ahora
+              Agendar fecha
             </Button>
           </span>
           <button
@@ -87,7 +87,7 @@ export function Header() {
               </a>
             ))}
             <Button full className="my-3" onClick={cta}>
-              Cotizar y agendar
+              Agendar mi fecha
             </Button>
           </nav>
         </div>

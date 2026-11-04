@@ -4,12 +4,16 @@ import type { IconName } from '../components/ui/Icon'
 export const PICKABLE_ICONS: IconName[] = [
   'sparkles', 'balloon', 'party', 'cake', 'candy', 'gift', 'utensils', 'kitchen', 'music', 'speaker',
   'camera', 'smile', 'baby', 'heart', 'star', 'clock', 'users', 'chair', 'table', 'lightbulb',
-  'car', 'broom', 'shield', 'tree', 'wifi', 'snow', 'home', 'check',
+  'car', 'broom', 'shield', 'tree', 'wifi', 'snow', 'home', 'puzzle', 'droplet', 'check',
 ]
 
 /** Reglas de palabra clave → ícono para los servicios incluidos en un paquete.
  *  El orden importa: la primera coincidencia gana. */
 const RULES: [RegExp, IconName][] = [
+  [/taca|hockey|futbol[ií]to/i, 'party'],
+  [/bloque|construir|madera/i, 'puzzle'],
+  [/ba[nñ]o/i, 'droplet'],
+  [/multiuso/i, 'sparkles'],
   [/exclusiv|privad|casa completa|espacio/i, 'home'],
   [/mesa|mantel/i, 'table'],
   [/silla/i, 'chair'],

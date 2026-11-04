@@ -2,9 +2,9 @@ import { Icon, type IconName } from '../ui/Icon'
 import { Section } from '../ui/Primitives'
 
 const STEPS: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'clipboard', title: 'Arma tu cotización', text: 'Elige evento, paquete y extras. Ves el total al instante, aquí mismo.' },
   { icon: 'calendar', title: 'Elige fecha y horario', text: 'El calendario te muestra solo los días y bloques que están libres.' },
-  { icon: 'check', title: 'Llega a WhatsApp', text: 'Tu cotización nos llega completa por WhatsApp y confirmamos el mismo día.' },
+  { icon: 'clipboard', title: 'Cuéntanos de tu evento', text: 'Qué celebras y cuántos invitados. Precio fijo, sin sorpresas.' },
+  { icon: 'check', title: 'Llega a WhatsApp', text: 'Tu solicitud nos llega completa por WhatsApp y confirmamos el mismo día.' },
   { icon: 'money', title: 'Abonas y es tuya', text: 'Con el abono bloqueamos la fecha solo para ti. ¡A celebrar!' },
 ]
 

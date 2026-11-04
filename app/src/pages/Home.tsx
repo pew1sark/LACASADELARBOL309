@@ -1,21 +1,18 @@
 import { useEffect } from 'react'
 import { useSiteData } from '../hooks/useSiteData'
 import { Agenda } from '../components/site/Agenda'
-import { EventTypes } from '../components/site/EventTypes'
 import { Faq } from '../components/site/Faq'
 import { FinalCta } from '../components/site/FinalCta'
-import { Gallery } from '../components/site/Gallery'
 import { Hero } from '../components/site/Hero'
 import { InstagramCta } from '../components/site/InstagramCta'
 import { MobileCtaBar } from '../components/site/MobileCtaBar'
-import { Packages } from '../components/site/Packages'
+import { Process } from '../components/site/Process'
+import { Rental } from '../components/site/Rental'
 import { Spaces } from '../components/site/Spaces'
 import { VideoTour } from '../components/site/VideoTour'
-import { Ideas } from '../components/site/Ideas'
-import { Process } from '../components/site/Process'
 
-/** Landing pensado para tráfico de Meta Ads: hero con cotizador, prueba del
- *  lugar, paquetes con precio y la agenda completa en la misma página. */
+/** Landing para tráfico de Meta Ads: el espacio se arrienda completo a precio
+ *  fijo. Muestra el catálogo de áreas, el precio y la agenda en la misma página. */
 export default function Home() {
   const { loading } = useSiteData()
   // Enlaces externos a /#agendar (bio de Instagram, anuncios): bajar a la
@@ -31,14 +28,11 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <EventTypes />
       <Spaces />
       <VideoTour />
-      <Packages />
+      <Rental />
       <Process />
       <Agenda />
-      <Ideas />
-      <Gallery />
       <InstagramCta />
       <Faq />
       <FinalCta />

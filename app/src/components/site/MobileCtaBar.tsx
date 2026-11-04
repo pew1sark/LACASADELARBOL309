@@ -43,7 +43,7 @@ export function MobileCtaBar() {
           onClick={() => startQuote({}, 'mobile_bar')}
           className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-leaf-700 font-bold text-white shadow-soft active:scale-[0.98]"
         >
-          Cotizar y agendar <Icon name="arrowRight" className="size-4" />
+          Agendar mi fecha <Icon name="arrowRight" className="size-4" />
         </button>
         <button
           type="button"

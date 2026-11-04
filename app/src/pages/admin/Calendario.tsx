@@ -18,7 +18,7 @@ const nextDay = (iso: string) =>
   new Date(new Date(`${iso}T12:00:00`).getTime() + 86400000).toISOString().slice(0, 10)
 
 export default function Calendario() {
-  const { slots, packages, eventTypes } = useSiteData()
+  const { slots, allPackages: packages, eventTypes } = useSiteData()
   const { push } = useToast()
   const today = new Date()
   const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1))

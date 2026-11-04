@@ -3,6 +3,7 @@ import { useSiteData } from '../../hooks/useSiteData'
 import { asset } from '../../lib/asset'
 import { INSTAGRAM_HANDLE } from '../../lib/fallback'
 import { money } from '../../lib/format'
+import { RENTAL_PRICE } from '../../lib/fallback'
 import { startQuote } from '../../lib/quote'
 import { Icon } from '../ui/Icon'
 
@@ -11,13 +12,7 @@ export function Hero() {
   const [eventSlug, setEventSlug] = useState<string | null>(null)
   const [guests, setGuests] = useState(25)
 
-  const minPrice = packages.length ? Math.min(...packages.map((p) => p.price)) : null
-  const fromPrice = (slug: string) => {
-    const et = eventTypes.find((e) => e.slug === slug)
-    const list = packages.filter((p) => p.event_type_id === et?.id)
-    return list.length ? Math.min(...list.map((p) => p.price)) : null
-  }
-  const selectedFrom = eventSlug ? fromPrice(eventSlug) : minPrice
+  const price = packages[0]?.price ?? RENTAL_PRICE
   const max = settings?.max_capacity ?? 60
 
   return (
@@ -59,14 +54,14 @@ export function Hero() {
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-cream-200 sm:text-lg">
             Salón, galpón de juegos con inflable y cama elástica, taca-taca, patio y cocina: todo para tu
-            cumpleaños o evento. Cotiza en 1 minuto y recibe tu cotización directo en WhatsApp.
+            cumpleaños o evento. Arriendas la casa completa a precio fijo y reservas en 1 minuto por WhatsApp.
           </p>
 
           <ul className="mt-8 hidden max-w-lg grid-cols-2 gap-3 sm:grid text-sm font-medium text-cream-100">
             {[
               ['users', `Hasta ${max} invitados`],
               ['shield', 'Espacio privado y seguro'],
-              ['money', 'Sin pago para cotizar'],
+              ['money', `Arriendo ${money(price)}`],
               ['clock', 'Respuesta el mismo día'],
             ].map(([icon, label]) => (
               <li key={label} className="flex items-center gap-2.5">
@@ -82,7 +77,7 @@ export function Hero() {
         {/* Cotizador rápido: lo primero que ve quien llega desde un anuncio. */}
         <div className="fade-up rounded-3xl bg-cream-50 p-5 text-bark-900 shadow-lift sm:p-7" style={{ animationDelay: '120ms' }}>
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">Cotiza tu evento</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">Agenda tu fecha</p>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-leaf-100 px-2.5 py-1 text-[0.7rem] font-semibold text-leaf-900">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-leaf-500 opacity-60" />
@@ -98,7 +93,6 @@ export function Hero() {
               [0, 1, 2].map((i) => <div key={i} className="h-[52px] animate-pulse rounded-2xl bg-cream-200/70" />)}
             {eventTypes.map((et) => {
               const active = eventSlug === et.slug
-              const from = fromPrice(et.slug)
               return (
                 <button
                   key={et.id}
@@ -119,7 +113,6 @@ export function Hero() {
                     </span>
                     <span className="font-semibold">{et.name}</span>
                   </span>
-                  {from && <span className="text-xs text-bark-500">desde {money(from)}</span>}
                 </button>
               )
             })}
@@ -147,16 +140,15 @@ export function Hero() {
             onClick={() => startQuote({ eventSlug: eventSlug ?? undefined, guests }, 'hero')}
             className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-leaf-700 text-base font-bold text-white shadow-soft transition hover:bg-leaf-900 active:scale-[0.99]"
           >
-            Ver precios y fechas libres <Icon name="arrowRight" className="size-5" />
+            Ver fechas libres <Icon name="arrowRight" className="size-5" />
           </button>
-          {selectedFrom && (
-            <p className="mt-3 text-center text-xs text-bark-500">
-              Paquetes desde <strong className="text-bark-900">{money(selectedFrom)}</strong> · sin compromiso
-            </p>
-          )}
+          <div className="mt-4 flex items-center justify-between rounded-2xl bg-leaf-50 px-4 py-3">
+            <span className="text-sm text-bark-700">Arriendo de la casa completa</span>
+            <strong className="font-display text-xl text-leaf-700">{money(price)}</strong>
+          </div>
           <ul className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 border-t border-bark-900/8 pt-4 text-xs font-medium text-bark-700 sm:hidden">
             <li className="flex items-center gap-1"><Icon name="check" className="size-3.5 text-leaf-600" /> Hasta {max} invitados</li>
-            <li className="flex items-center gap-1"><Icon name="check" className="size-3.5 text-leaf-600" /> Sin pago para cotizar</li>
+            <li className="flex items-center gap-1"><Icon name="check" className="size-3.5 text-leaf-600" /> Precio fijo, sin sorpresas</li>
             <li className="flex items-center gap-1"><Icon name="check" className="size-3.5 text-leaf-600" /> Respuesta el mismo día</li>
           </ul>
         </div>

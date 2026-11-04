@@ -18,7 +18,7 @@ import { supabase } from '../../lib/supabase'
 import type { Addon, SlotStatus } from '../../lib/types'
 import { BookingSuccess, type SubmittedReservation } from './BookingSuccess'
 
-const STEPS = ['Evento', 'Fecha', 'Extras', 'Confirmar'] as const
+const STEPS = ['Fecha', 'Tu evento', 'Confirmar'] as const
 
 interface Draft {
   eventTypeId: string | null
@@ -107,12 +107,10 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
 
   const applyPrefill = (detail: PrefillDetail) => {
     const patch: Partial<Draft> = {}
-    let jump = 0
     if (detail.eventSlug) {
       const found = eventTypes.find((x) => x.slug === detail.eventSlug)
       if (found) {
         patch.eventTypeId = found.id
-        patch.packageId = null
       }
     }
     if (detail.packageSlug) {
@@ -120,14 +118,13 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
       if (found) {
         patch.packageId = found.id
         patch.eventTypeId = found.event_type_id ?? patch.eventTypeId ?? null
-        jump = 1
       }
     }
     if (detail.guests) patch.guests = detail.guests
     if (Object.keys(patch).length) {
       markStarted()
       set(patch)
-      setStep(jump)
+      setStep(0)
     }
   }
 
@@ -157,6 +154,13 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
   const pkg = packages.find((p) => p.id === draft.packageId) ?? null
   const eventType = eventTypes.find((e) => e.id === draft.eventTypeId) ?? null
   const slot = day?.slots.find((s) => s.id === draft.slotId) ?? null
+
+  // Con una sola opción de arriendo (hoy: $140.000) se elige sola.
+  useEffect(() => {
+    if (loading || !packages.length) return
+    if (!packages.some((p) => p.id === draft.packageId)) set({ packageId: packages[0].id })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, packages])
 
   const visiblePackages = useMemo(
     () =>
@@ -199,9 +203,8 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
 
   const canContinue = (() => {
     switch (step) {
-      case 0: return Boolean(draft.packageId)
-      case 1: return Boolean(draft.date && draft.slotId)
-      case 2: return draft.guests > 0 && draft.guests <= maxGuests
+      case 0: return Boolean(draft.date && draft.slotId)
+      case 1: return Boolean(draft.packageId) && draft.guests > 0 && draft.guests <= maxGuests
       default: return nameOk && phoneOk
     }
   })()
@@ -246,7 +249,8 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
     if (!offline) {
       const payload = {
         event_type_id: draft.eventTypeId,
-        package_id: draft.packageId,
+        // El arriendo de respaldo no existe en la base: se envía sin paquete.
+        package_id: draft.packageId?.startsWith('pk-') ? null : draft.packageId,
         time_slot_id: draft.slotId,
         event_date: draft.date,
         guests: draft.guests,
@@ -271,7 +275,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
       } else if (res?.error && isBusinessError(res.error)) {
         setSubmitting(false)
         push(friendlyError(res.error), 'error')
-        if (String(res.error.message).includes('HORARIO_NO_DISPONIBLE')) goTo(1)
+        if (String(res.error.message).includes('HORARIO_NO_DISPONIBLE')) goTo(0)
         return
       }
       // Si la base no respondió, la solicitud igual llega completa por WhatsApp.
@@ -310,7 +314,60 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
 
           <div className="mt-7 fade-up" key={step}>
             {step === 0 && (
-              <StepShell title="¿Qué quieres celebrar?" subtitle="Elige el tipo de evento y tu paquete. Verás el precio al instante.">
+              <StepShell title="¿Cuándo es tu evento?" subtitle="Elige el día y el horario. Te mostramos solo lo que está libre.">
+                <Calendar
+                  value={draft.date}
+                  onSelect={(iso, d) => {
+                    set({ date: iso, slotId: null })
+                    setDay(d)
+                    track('date_selected', { date: iso })
+                  }}
+                  onMonthChange={() => track('calendar_open')}
+                />
+
+                {draft.date && day && (
+                  <div className="mt-5 fade-up">
+                    <p className="mb-3 text-sm font-semibold text-bark-700 first-letter:uppercase">{longDate(draft.date)}</p>
+                    <div className="grid gap-2.5 sm:grid-cols-3">
+                      {day.slots.map((s) => {
+                        const selectable = s.status === 'available' || s.status === 'pending'
+                        const active = draft.slotId === s.id
+                        return (
+                          <button
+                            key={s.id}
+                            disabled={!selectable}
+                            onClick={() => {
+                              set({ slotId: s.id })
+                              goTo(1)
+                            }}
+                            className={`rounded-2xl border-2 p-3.5 text-left transition ${
+                              active
+                                ? 'border-leaf-700 bg-leaf-50'
+                                : selectable
+                                  ? 'border-bark-900/8 bg-white hover:border-leaf-300'
+                                  : 'cursor-not-allowed border-bark-900/5 bg-cream-50 opacity-50'
+                            }`}
+                          >
+                            <span className="block font-semibold">{s.name}</span>
+                            <span className="block text-sm text-bark-500">{s.start} — {s.end}</span>
+                            {Number(slots.find((x) => x.id === s.id)?.surcharge ?? 0) > 0 && (
+                              <span className="mt-1 block text-xs font-semibold text-sun-600">
+                                +{money(slots.find((x) => x.id === s.id)?.surcharge)}
+                              </span>
+                            )}
+                            <span className="mt-2 block"><SlotBadge status={s.status} /></span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </StepShell>
+            )}
+
+            {step === 1 && (
+              <StepShell title="Cuéntanos de tu evento" subtitle="Así preparamos la casa para ti. El arriendo es la casa completa, solo para tu evento.">
+                <p className="mb-2 text-sm font-semibold">¿Qué celebras?</p>
                 <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
                   {eventTypes.map((et) => {
                     const active = draft.eventTypeId === et.id
@@ -319,7 +376,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                         key={et.id}
                         onClick={() => {
                           markStarted()
-                          set({ eventTypeId: active ? null : et.id, packageId: null })
+                          set({ eventTypeId: active ? null : et.id })
                         }}
                         className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${
                           active
@@ -333,6 +390,38 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                   })}
                 </div>
 
+
+                <div className="mt-5">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-cream-100 p-4">
+                  <div>
+                    <p className="font-semibold">Invitados</p>
+                    <p className="text-xs text-bark-500">
+                      Capacidad máxima: {maxGuests} personas
+                      {pkg?.included_guests != null && Number(pkg.extra_guest_price) > 0 && (
+                        <> · {pkg.included_guests} incluidos, luego {money(pkg.extra_guest_price)} c/u</>
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <StepBtn label="Menos invitados" onClick={() => set({ guests: Math.max(1, draft.guests - 5) })}>−</StepBtn>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      aria-label="Cantidad de invitados"
+                      value={draft.guests}
+                      min={1}
+                      max={maxGuests}
+                      onChange={(e) => set({ guests: Math.max(1, Math.min(maxGuests, Number(e.target.value) || 0)) })}
+                      className="w-14 border-0 bg-transparent text-center font-display text-3xl font-semibold text-leaf-700 focus:outline-none"
+                    />
+                    <StepBtn label="Más invitados" onClick={() => set({ guests: Math.min(maxGuests, draft.guests + 5) })}>+</StepBtn>
+                  </div>
+                </div>
+
+                </div>
+                {packages.length > 1 && (
+                  <div className="mt-5">
+                    <p className="mb-2 text-sm font-semibold">Elige tu opción</p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {visiblePackages.map((p) => {
                     const active = draft.packageId === p.id
@@ -346,7 +435,6 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                             guests: Math.min(draft.guests, p.max_guests),
                           })
                           track('view_package', { package: p.slug, content_name: p.name, value: p.price, currency: 'CLP' })
-                          goTo(1)
                         }}
                         className={`group flex gap-3 overflow-hidden rounded-2xl border-2 bg-white p-2.5 text-left transition ${
                           active ? 'border-leaf-700 shadow-lift' : 'border-bark-900/8 hover:border-leaf-300'
@@ -374,89 +462,10 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                     )
                   })}
                 </div>
-              </StepShell>
-            )}
-
-            {step === 1 && (
-              <StepShell title="¿Cuándo es tu evento?" subtitle="Elige el día y el horario. Te mostramos solo lo que está libre.">
-                <Calendar
-                  value={draft.date}
-                  onSelect={(iso, d) => {
-                    set({ date: iso, slotId: null })
-                    setDay(d)
-                    track('date_selected', { date: iso })
-                  }}
-                  onMonthChange={() => track('calendar_open')}
-                />
-
-                {draft.date && day && (
-                  <div className="mt-5 fade-up">
-                    <p className="mb-3 text-sm font-semibold text-bark-700 first-letter:uppercase">{longDate(draft.date)}</p>
-                    <div className="grid gap-2.5 sm:grid-cols-3">
-                      {day.slots.map((s) => {
-                        const selectable = s.status === 'available' || s.status === 'pending'
-                        const active = draft.slotId === s.id
-                        return (
-                          <button
-                            key={s.id}
-                            disabled={!selectable}
-                            onClick={() => {
-                              set({ slotId: s.id })
-                              goTo(2)
-                            }}
-                            className={`rounded-2xl border-2 p-3.5 text-left transition ${
-                              active
-                                ? 'border-leaf-700 bg-leaf-50'
-                                : selectable
-                                  ? 'border-bark-900/8 bg-white hover:border-leaf-300'
-                                  : 'cursor-not-allowed border-bark-900/5 bg-cream-50 opacity-50'
-                            }`}
-                          >
-                            <span className="block font-semibold">{s.name}</span>
-                            <span className="block text-sm text-bark-500">{s.start} — {s.end}</span>
-                            {Number(slots.find((x) => x.id === s.id)?.surcharge ?? 0) > 0 && (
-                              <span className="mt-1 block text-xs font-semibold text-sun-600">
-                                +{money(slots.find((x) => x.id === s.id)?.surcharge)}
-                              </span>
-                            )}
-                            <span className="mt-2 block"><SlotBadge status={s.status} /></span>
-                          </button>
-                        )
-                      })}
-                    </div>
                   </div>
                 )}
-              </StepShell>
-            )}
-
-            {step === 2 && (
-              <StepShell title="Invitados y extras" subtitle="Ajusta la cantidad de personas y suma lo que quieras. Todo es opcional.">
-                <div className="flex items-center justify-between gap-4 rounded-2xl bg-cream-100 p-4">
-                  <div>
-                    <p className="font-semibold">Invitados</p>
-                    <p className="text-xs text-bark-500">
-                      Máximo {maxGuests} en este paquete
-                      {pkg?.included_guests != null && Number(pkg.extra_guest_price) > 0 && (
-                        <> · {pkg.included_guests} incluidos, luego {money(pkg.extra_guest_price)} c/u</>
-                      )}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <StepBtn label="Menos invitados" onClick={() => set({ guests: Math.max(1, draft.guests - 5) })}>−</StepBtn>
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      aria-label="Cantidad de invitados"
-                      value={draft.guests}
-                      min={1}
-                      max={maxGuests}
-                      onChange={(e) => set({ guests: Math.max(1, Math.min(maxGuests, Number(e.target.value) || 0)) })}
-                      className="w-14 border-0 bg-transparent text-center font-display text-3xl font-semibold text-leaf-700 focus:outline-none"
-                    />
-                    <StepBtn label="Más invitados" onClick={() => set({ guests: Math.min(maxGuests, draft.guests + 5) })}>+</StepBtn>
-                  </div>
-                </div>
-
+                {addons.length > 0 && (
+                  <div className="mt-2">
                 {groupByCategory(addons).map(([category, list]) => (
                 <div key={category} className="mt-5">
                   {category && <p className="mb-2 text-xs font-bold uppercase tracking-wider text-bark-500">{category}</p>}
@@ -478,11 +487,13 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                 </div>
                 </div>
                 ))}
+                  </div>
+                )}
               </StepShell>
             )}
 
-            {step === 3 && (
-              <StepShell title="¿A nombre de quién?" subtitle="Te enviamos la cotización por WhatsApp para confirmar tu fecha.">
+            {step === 2 && (
+              <StepShell title="¿A nombre de quién?" subtitle="Te llega la solicitud lista por WhatsApp para confirmar tu fecha.">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field
                     label="Nombre"
@@ -551,7 +562,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
 
                 <Button full size="lg" variant="whatsapp" className="mt-6" onClick={submit} disabled={submitting || !canContinue}>
                   {submitting ? <Spinner className="size-5" /> : <WhatsAppIcon />}
-                  {submitting ? 'Preparando tu cotización…' : 'Agendar y recibir por WhatsApp'}
+                  {submitting ? 'Preparando tu solicitud…' : 'Agendar y recibir por WhatsApp'}
                 </Button>
                 <p className="mt-3 text-center text-xs text-bark-500">
                   No pagas nada ahora. Confirmamos disponibilidad por WhatsApp y recién ahí se solicita el abono.
@@ -560,7 +571,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
             )}
           </div>
 
-          {step < 3 && (
+          {step < 2 && (
             <div className="mt-7 flex items-center gap-3 border-t border-bark-900/8 pt-5">
               {step > 0 && (
                 <Button variant="ghost" onClick={() => goTo(step - 1)}>
@@ -578,9 +589,9 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
               </Button>
             </div>
           )}
-          {step === 3 && (
+          {step === 2 && (
             <div className="mt-4">
-              <Button variant="ghost" size="sm" onClick={() => goTo(2)}>
+              <Button variant="ghost" size="sm" onClick={() => goTo(1)}>
                 <Icon name="chevronLeft" className="size-4" /> Atrás
               </Button>
             </div>
@@ -619,7 +630,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
 
 function Progress({ step, onJump }: { step: number; onJump: (i: number) => void }) {
   return (
-    <ol className="grid grid-cols-4 gap-2">
+    <ol className="grid grid-cols-3 gap-2">
       {STEPS.map((name, i) => {
         const done = i < step
         const active = i === step
@@ -756,10 +767,10 @@ function QuoteSummary(props: {
     <div className="overflow-hidden rounded-3xl border border-bark-900/8 bg-white shadow-soft">
       <div className="flex items-center gap-2 border-b border-bark-900/8 bg-leaf-900 px-5 py-3.5 text-cream-50">
         <Icon name="clipboard" className="size-4 text-sun-400" />
-        <p className="text-sm font-semibold">Tu cotización</p>
+        <p className="text-sm font-semibold">Tu reserva</p>
       </div>
       {empty ? (
-        <p className="px-5 py-6 text-sm text-bark-500">Elige un paquete y aquí verás el detalle y el total al instante.</p>
+        <p className="px-5 py-6 text-sm text-bark-500">Elige fecha y horario y aquí verás el resumen de tu reserva.</p>
       ) : (
         <>
           <dl className="space-y-2.5 px-5 py-4 text-sm">
