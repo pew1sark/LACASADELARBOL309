@@ -11,6 +11,8 @@ import { getAttribution, sourceLabel } from '../../lib/attribution'
 import { asset } from '../../lib/asset'
 import { friendlyError, isBusinessError } from '../../lib/errors'
 import { longDate, money } from '../../lib/format'
+import { quotePackage } from '../../lib/pricing'
+import { addonIcon } from '../../lib/icons'
 import { PREFILL_EVENT, type PrefillDetail } from '../../lib/quote'
 import { supabase } from '../../lib/supabase'
 import type { Addon, SlotStatus } from '../../lib/types'
@@ -56,7 +58,7 @@ function localCode(): string {
 }
 
 export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
-  const { settings, eventTypes, packages, addons, loading, offline } = useSiteData()
+  const { settings, eventTypes, packages, addons, slots, loading, offline } = useSiteData()
   const { push } = useToast()
   const [params] = useSearchParams()
   const rootRef = useRef<HTMLDivElement>(null)
@@ -176,7 +178,18 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
   )
 
   const addonsTotal = selectedAddons.reduce((sum, s) => sum + s.addon.price * s.quantity, 0)
-  const total = (pkg?.price ?? 0) + addonsTotal
+  const slotDef = slots.find((s) => s.id === draft.slotId) ?? null
+  const pq = quotePackage(pkg, {
+    date: draft.date,
+    guests: draft.guests,
+    slot: slotDef,
+    weekendDays: settings?.weekend_days,
+  })
+  const total = pq.total + addonsTotal
+  const priceLines = [
+    pq.extraGuests > 0 ? { label: `${pq.extraGuests} invitados adicionales × ${money(pq.extraGuestPrice)}`, value: pq.extraGuestsTotal } : null,
+    pq.slotSurcharge > 0 && slotDef ? { label: `Recargo horario ${slotDef.name}`, value: pq.slotSurcharge } : null,
+  ].filter(Boolean) as { label: string; value: number }[]
   const depositPct = settings?.deposit_percent ?? 30
   const deposit = Math.round((total * depositPct) / 100)
   const maxGuests = pkg?.max_guests ?? settings?.max_capacity ?? 60
@@ -216,7 +229,9 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
       end_time: slot?.end ?? null,
       guests: draft.guests,
       package_name: pkg.name,
-      package_price: pkg.price,
+      package_price: pq.base,
+      price_lines: priceLines,
+      weekend: pq.weekend,
       total_amount: total,
       deposit,
       addons: selectedAddons.map((s) => ({ name: s.addon.name, quantity: s.quantity, subtotal: s.addon.price * s.quantity })),
@@ -251,6 +266,7 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
         const data = res.data as { code: string; total_amount?: number }
         base.code = data.code
         base.total_amount = Number(data.total_amount ?? total)
+        base.deposit = Math.round((base.total_amount * depositPct) / 100)
         base.registered = true
       } else if (res?.error && isBusinessError(res.error)) {
         setSubmitting(false)
@@ -349,6 +365,9 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                           </p>
                           <p className="mt-1 text-xs text-bark-500">
                             {p.duration_hours} h · hasta {p.max_guests} personas
+                            {p.included_guests != null && Number(p.extra_guest_price) > 0 && (
+                              <> · incluye {p.included_guests}, +{money(p.extra_guest_price)} c/u adicional</>
+                            )}
                           </p>
                         </div>
                       </button>
@@ -395,6 +414,11 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                           >
                             <span className="block font-semibold">{s.name}</span>
                             <span className="block text-sm text-bark-500">{s.start} — {s.end}</span>
+                            {Number(slots.find((x) => x.id === s.id)?.surcharge ?? 0) > 0 && (
+                              <span className="mt-1 block text-xs font-semibold text-sun-600">
+                                +{money(slots.find((x) => x.id === s.id)?.surcharge)}
+                              </span>
+                            )}
                             <span className="mt-2 block"><SlotBadge status={s.status} /></span>
                           </button>
                         )
@@ -410,7 +434,12 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                 <div className="flex items-center justify-between gap-4 rounded-2xl bg-cream-100 p-4">
                   <div>
                     <p className="font-semibold">Invitados</p>
-                    <p className="text-xs text-bark-500">Máximo {maxGuests} en este paquete</p>
+                    <p className="text-xs text-bark-500">
+                      Máximo {maxGuests} en este paquete
+                      {pkg?.included_guests != null && Number(pkg.extra_guest_price) > 0 && (
+                        <> · {pkg.included_guests} incluidos, luego {money(pkg.extra_guest_price)} c/u</>
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center gap-3">
                     <StepBtn label="Menos invitados" onClick={() => set({ guests: Math.max(1, draft.guests - 5) })}>−</StepBtn>
@@ -428,8 +457,11 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                   </div>
                 </div>
 
-                <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
-                  {addons.map((a) => (
+                {groupByCategory(addons).map(([category, list]) => (
+                <div key={category} className="mt-5">
+                  {category && <p className="mb-2 text-xs font-bold uppercase tracking-wider text-bark-500">{category}</p>}
+                <div className="grid gap-2.5 sm:grid-cols-2">
+                  {list.map((a) => (
                     <AddonCard
                       key={a.id}
                       addon={a}
@@ -444,6 +476,8 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                     />
                   ))}
                 </div>
+                </div>
+                ))}
               </StepShell>
             )}
 
@@ -502,7 +536,9 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
                   <QuoteSummary
                     eventName={eventType?.name}
                     pkgName={pkg?.name}
-                    pkgPrice={pkg?.price}
+                    pkgPrice={pkg ? pq.base : undefined}
+                    weekend={pq.weekend}
+                    lines={priceLines}
                     date={draft.date}
                     slot={slot ? `${slot.name} · ${slot.start}–${slot.end}` : null}
                     guests={draft.guests}
@@ -556,7 +592,9 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
             <QuoteSummary
               eventName={eventType?.name}
               pkgName={pkg?.name}
-              pkgPrice={pkg?.price}
+              pkgPrice={pkg ? pq.base : undefined}
+              weekend={pq.weekend}
+              lines={priceLines}
               date={draft.date}
               slot={slot ? `${slot.name} · ${slot.start}–${slot.end}` : null}
               guests={draft.guests}
@@ -657,19 +695,28 @@ function AddonCard({ addon, guests, quantity, onChange }: {
         active ? 'border-leaf-700 bg-leaf-50/60' : 'border-bark-900/8 bg-white'
       }`}
     >
-      <button
-        type="button"
-        onClick={() => onChange(active ? 0 : 1)}
-        aria-label={active ? `Quitar ${addon.name}` : `Agregar ${addon.name}`}
-        aria-pressed={active}
-        className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full transition ${
-          active ? 'bg-leaf-700 text-white' : 'bg-cream-200 text-bark-700 hover:bg-cream-300'
+      <span
+        className={`grid size-11 shrink-0 place-items-center rounded-xl transition ${
+          active ? 'bg-leaf-700 text-white' : 'bg-cream-100 text-leaf-700'
         }`}
       >
-        <Icon name={active ? 'check' : 'plus'} className="size-3.5" />
-      </button>
+        <Icon name={addonIcon(addon.icon, addon.name)} className="size-5" />
+      </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-snug">{addon.name}</p>
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-semibold leading-snug">{addon.name}</p>
+          <button
+            type="button"
+            onClick={() => onChange(active ? 0 : 1)}
+            aria-label={active ? `Quitar ${addon.name}` : `Agregar ${addon.name}`}
+            aria-pressed={active}
+            className={`grid size-7 shrink-0 place-items-center rounded-full transition ${
+              active ? 'bg-leaf-700 text-white' : 'bg-cream-200 text-bark-700 hover:bg-cream-300'
+            }`}
+          >
+            <Icon name={active ? 'check' : 'plus'} className="size-3.5" />
+          </button>
+        </div>
         {addon.description && <p className="mt-0.5 text-xs leading-snug text-bark-500">{addon.description}</p>}
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="text-sm font-semibold text-leaf-700">
@@ -680,7 +727,7 @@ function AddonCard({ addon, guests, quantity, onChange }: {
             <div className="flex items-center gap-1.5">
               <button type="button" onClick={() => onChange(quantity - 1)} className="size-6 rounded-full bg-cream-200 text-sm text-bark-700" aria-label="Menos">−</button>
               <span className="w-4 text-center text-sm font-semibold">{quantity}</span>
-              <button type="button" onClick={() => onChange(quantity + 1)} className="size-6 rounded-full bg-cream-200 text-sm text-bark-700" aria-label="Más">+</button>
+              <button type="button" disabled={addon.max_quantity != null && quantity >= addon.max_quantity} onClick={() => onChange(quantity + 1)} className="size-6 disabled:opacity-40 rounded-full bg-cream-200 text-sm text-bark-700" aria-label="Más">+</button>
             </div>
           )}
           {active && addon.per_guest && <span className="text-xs text-bark-500">× {guests}</span>}
@@ -694,6 +741,8 @@ function QuoteSummary(props: {
   eventName?: string
   pkgName?: string
   pkgPrice?: number
+  weekend?: boolean
+  lines?: { label: string; value: number }[]
   date: string | null
   slot: string | null
   guests: number
@@ -716,6 +765,8 @@ function QuoteSummary(props: {
           <dl className="space-y-2.5 px-5 py-4 text-sm">
             {props.eventName && <SumRow label="Evento" value={props.eventName} />}
             <SumRow label={props.pkgName!} value={money(props.pkgPrice)} strong />
+            {props.weekend && <p className="-mt-1.5 text-xs text-sun-600">Tarifa de fin de semana</p>}
+            {props.lines?.map((l) => <SumRow key={l.label} label={`+ ${l.label}`} value={money(l.value)} />)}
             <SumRow label="Fecha" value={props.date ? longDate(props.date) : 'Por elegir'} muted={!props.date} />
             <SumRow label="Horario" value={props.slot ?? 'Por elegir'} muted={!props.slot} />
             <SumRow label="Invitados" value={`${props.guests}`} />
@@ -745,4 +796,15 @@ function SumRow({ label, value, strong, muted }: { label: string; value: string;
       <dd className={`shrink-0 text-right first-letter:uppercase ${muted ? 'text-bark-500/60' : 'font-medium'} max-w-[60%]`}>{value}</dd>
     </div>
   )
+}
+
+function groupByCategory(list: Addon[]): [string, Addon[]][] {
+  const map = new Map<string, Addon[]>()
+  for (const a of list) {
+    const key = a.category && a.category !== 'Otros' ? a.category : 'Otros'
+    map.set(key, [...(map.get(key) ?? []), a])
+  }
+  // Si todo cae en una sola categoría no se muestra el título.
+  if (map.size === 1) return [['', list]]
+  return [...map.entries()]
 }

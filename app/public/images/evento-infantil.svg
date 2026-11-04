@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Cumpleaños infantiles">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDF0D5"/><stop offset="100%" stop-color="#F5D99B"/>
-    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDF0D5"/><stop offset="1" stop-color="#F7DDA6"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#E8A33D" stop-opacity="0.25"/><stop offset="1" stop-color="#E8A33D" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#bg)"/>
-  <circle cx="121" cy="197" r="250" fill="#B8802A" opacity="0.18"/><circle cx="175" cy="220" r="159" fill="#B8802A" opacity="0.20"/><circle cx="931" cy="396" r="218" fill="#B8802A" opacity="0.22"/><circle cx="388" cy="165" r="148" fill="#B8802A" opacity="0.27"/><circle cx="670" cy="184" r="184" fill="#B8802A" opacity="0.26"/>
-  <path d="M0 702 Q 300 630 600 684 T 1200 648 L 1200 900 L 0 900 Z" fill="#B8802A" opacity="0.22"/>
-  <rect x="578.4" y="378" width="43.199999999999996" height="360" rx="14.4" fill="#B8802A" opacity="0.45"/>
-  <path d="M468 414 h 264 l -24 -81 h -216 Z" fill="#B8802A" opacity="0.55"/>
-  <rect x="480" y="414" width="240" height="117" rx="9.6" fill="#B8802A" opacity="0.4"/>
-  <circle cx="600" cy="472.5" r="25.2" fill="#FDF0D5" opacity="0.75"/>
-  <text x="600" y="837" font-family="Inter, system-ui, sans-serif" font-size="50"
-        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">CUMPLEAÑOS INFANTILES</text>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="600" cy="405" r="540" fill="url(#glow)"/>
+  <rect x="108" y="369" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(82 108 369)"/><circle cx="1064" cy="468" r="4.2" fill="#D98A68" opacity="0.55"/><circle cx="294" cy="74" r="4.6" fill="#4E9E68" opacity="0.55"/><rect x="714" y="292" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(99 714 292)"/><circle cx="1078" cy="458" r="6.8" fill="#E8A33D" opacity="0.55"/><circle cx="586" cy="498" r="6.6" fill="#D98A68" opacity="0.55"/><rect x="481" y="499" width="10" height="4" rx="2" fill="#4E9E68" opacity=".55" transform="rotate(62 481 499)"/><circle cx="481" cy="381" r="3.6" fill="#FDFAF5" opacity="0.55"/><circle cx="801" cy="85" r="4.1" fill="#E8A33D" opacity="0.55"/><rect x="546" y="433" width="10" height="4" rx="2" fill="#D98A68" opacity=".55" transform="rotate(43 546 433)"/><circle cx="438" cy="65" r="5.6" fill="#4E9E68" opacity="0.55"/><circle cx="479" cy="445" r="4.0" fill="#FDFAF5" opacity="0.55"/><rect x="661" y="200" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(93 661 200)"/><circle cx="1016" cy="385" r="3.9" fill="#D98A68" opacity="0.55"/><circle cx="979" cy="116" r="3.0" fill="#4E9E68" opacity="0.55"/><rect x="416" y="507" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(83 416 507)"/><circle cx="976" cy="97" r="4.5" fill="#E8A33D" opacity="0.55"/><circle cx="133" cy="239" r="4.4" fill="#D98A68" opacity="0.55"/>
+  <path d="M0 720 Q 360 666 660 711 T 1200 684 V 900 H 0Z" fill="#3F8556"/>
+  <path d="M0 765 Q 480 720 1200 774 V 900 H 0Z" fill="#1E442C" opacity=".25"/>
+  <g transform="translate(600 720)">
+    <rect x="-21.42" y="-351.9" width="42.84" height="351.9" rx="15.3" fill="#8A6A52"/>
+    <circle cx="0" cy="-474.3" r="189.72" fill="#4E9E68"/>
+    <circle cx="-168.3" cy="-382.5" r="140.76000000000002" fill="#3F8556"/>
+    <circle cx="168.3" cy="-382.5" r="140.76000000000002" fill="#3F8556"/>
+    <path d="M-153 -299.88 L0 -416.16 L153 -299.88Z" fill="#E8A33D"/>
+    <rect x="-128.51999999999998" y="-306" width="257.03999999999996" height="153" rx="18.36" fill="#FDFAF5"/>
+    <rect x="-27.54" y="-244.8" width="55.08" height="91.8" rx="12.24" fill="#5A3E2B"/>
+    <circle cx="-79.56" cy="-244.8" r="18.36" fill="#E8A33D"/>
+    <circle cx="79.56" cy="-244.8" r="18.36" fill="#E8A33D"/>
+    <path d="M-153 0 L-36.72 -153 M-128.51999999999998 -36.72 H-67.32000000000001 M-104.04 -79.56 H-48.96" stroke="#5A3E2B" stroke-width="9.18" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(240 288) scale(2.142857142857143)"><path d="M-14 10 Q-10 40 -4 60 M14 6 Q10 40 4 60" stroke="#5A3E2B" stroke-width="1.5" fill="none" opacity=".5"/><ellipse cx="-14" cy="-10" rx="16" ry="20" fill="#C96F4A"/><ellipse cx="14" cy="-14" rx="16" ry="20" fill="#E8A33D"/></g><g transform="translate(960 324) scale(1.7307692307692308)"><path d="M-14 10 Q-10 40 -4 60 M14 6 Q10 40 4 60" stroke="#5A3E2B" stroke-width="1.5" fill="none" opacity=".5"/><ellipse cx="-14" cy="-10" rx="16" ry="20" fill="#C96F4A"/><ellipse cx="14" cy="-14" rx="16" ry="20" fill="#E8A33D"/></g>
+  <g transform="translate(600 841.5)">
+    <rect x="-338.40000000000003" y="-40.5" width="676.8000000000001" height="67.5" rx="33.75" fill="#FDFAF5" opacity=".92"/>
+    <text y="10.8" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="38" font-weight="600" fill="#1E442C" text-anchor="middle">Cumpleaños infantiles</text>
+  </g>
 </svg>

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import { LogoMark } from '../../components/brand/Logo'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { Icon } from '../../components/ui/Icon'
 import { Button, Card, Field } from '../../components/ui/Primitives'
 import { useAuth } from '../../hooks/useAuth'
 import { friendlyError } from '../../lib/errors'
@@ -33,10 +33,9 @@ export default function AdminLogin() {
     <div className="grid min-h-svh place-items-center bg-leaf-900 p-5">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center text-cream-50">
-          <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-leaf-700">
-            <Icon name="home" className="size-7" />
-          </span>
-          <h1 className="mt-4 text-2xl">Casa del Árbol 309</h1>
+          <LogoMark className="mx-auto size-16 shadow-lift" />
+          <h1 className="mt-4 text-2xl">La Casa del Árbol</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-lime-300">Los Castaños</p>
           <p className="mt-1 text-sm text-cream-200">Panel de administración</p>
         </div>
 

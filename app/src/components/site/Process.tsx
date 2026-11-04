@@ -14,19 +14,19 @@ export function Process() {
       eyebrow="Cómo funciona"
       title="De anuncio a fecha reservada en minutos"
       subtitle="Sin llamadas eternas ni esperar respuesta para saber el precio."
-      tone="leaf"
+      tone="white"
     >
       <ol className="grid gap-6 md:grid-cols-4">
         {STEPS.map((s, i) => (
-          <li key={s.title} className="relative rounded-2xl border border-cream-50/12 bg-cream-50/5 p-6">
-            <span className="mb-4 grid size-11 place-items-center rounded-xl bg-sun-400 text-bark-900">
+          <li key={s.title} className="relative rounded-3xl border border-bark-900/8 bg-cream-50 p-6">
+            <span className="mb-4 grid size-11 place-items-center rounded-xl bg-leaf-700 text-lime-300">
               <Icon name={s.icon} />
             </span>
-            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.16em] text-sun-400">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
               Paso {i + 1}
             </span>
-            <h3 className="text-lg text-cream-50">{s.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-cream-200">{s.text}</p>
+            <h3 className="text-lg">{s.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-bark-500">{s.text}</p>
           </li>
         ))}
       </ol>

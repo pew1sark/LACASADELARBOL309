@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Pack Infantil">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDF0D5"/><stop offset="100%" stop-color="#F5D99B"/>
-    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDF0D5"/><stop offset="1" stop-color="#F7DDA6"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#E8A33D" stop-opacity="0.25"/><stop offset="1" stop-color="#E8A33D" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1000" height="700" fill="url(#bg)"/>
-  <circle cx="601" cy="153" r="115" fill="#B8802A" opacity="0.15"/><circle cx="491" cy="276" r="127" fill="#B8802A" opacity="0.22"/><circle cx="646" cy="290" r="118" fill="#B8802A" opacity="0.21"/><circle cx="341" cy="242" r="130" fill="#B8802A" opacity="0.20"/><circle cx="719" cy="217" r="128" fill="#B8802A" opacity="0.24"/>
-  <path d="M0 546 Q 250 489.99999999999994 500 532 T 1000 504 L 1000 700 L 0 700 Z" fill="#B8802A" opacity="0.22"/>
-  <rect x="482" y="294" width="36" height="280" rx="12" fill="#B8802A" opacity="0.45"/>
-  <path d="M390 322 h 220 l -20 -63 h -180 Z" fill="#B8802A" opacity="0.55"/>
-  <rect x="400" y="322" width="200" height="91" rx="8" fill="#B8802A" opacity="0.4"/>
-  <circle cx="500" cy="367.5" r="19.6" fill="#FDF0D5" opacity="0.75"/>
-  <text x="500" y="651" font-family="Inter, system-ui, sans-serif" font-size="39"
-        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">PACK INFANTIL</text>
+  <rect width="1000" height="700" fill="url(#sky)"/>
+  <circle cx="500" cy="315" r="450" fill="url(#glow)"/>
+  <rect x="818" y="169" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(72 818 169)"/><circle cx="452" cy="308" r="5.7" fill="#D98A68" opacity="0.55"/><circle cx="110" cy="394" r="4.4" fill="#4E9E68" opacity="0.55"/><rect x="61" y="235" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(107 61 235)"/><circle cx="153" cy="260" r="4.3" fill="#E8A33D" opacity="0.55"/><circle cx="850" cy="307" r="4.5" fill="#D98A68" opacity="0.55"/><rect x="749" y="124" width="10" height="4" rx="2" fill="#4E9E68" opacity=".55" transform="rotate(55 749 124)"/><circle cx="283" cy="101" r="4.5" fill="#FDFAF5" opacity="0.55"/><circle cx="787" cy="148" r="5.3" fill="#E8A33D" opacity="0.55"/><rect x="398" y="377" width="10" height="4" rx="2" fill="#D98A68" opacity=".55" transform="rotate(133 398 377)"/><circle cx="320" cy="234" r="3.1" fill="#4E9E68" opacity="0.55"/><circle cx="246" cy="300" r="5.1" fill="#FDFAF5" opacity="0.55"/><rect x="596" y="178" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(4 596 178)"/><circle cx="424" cy="373" r="3.1" fill="#D98A68" opacity="0.55"/><circle cx="29" cy="36" r="3.7" fill="#4E9E68" opacity="0.55"/><rect x="304" y="246" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(159 304 246)"/><circle cx="222" cy="364" r="3.4" fill="#E8A33D" opacity="0.55"/><circle cx="832" cy="43" r="5.0" fill="#D98A68" opacity="0.55"/>
+  <path d="M0 560 Q 300 518 550 553 T 1000 532 V 700 H 0Z" fill="#3F8556"/>
+  <path d="M0 595 Q 400 560 1000 602 V 700 H 0Z" fill="#1E442C" opacity=".25"/>
+  <g transform="translate(500 560)">
+    <rect x="-16.660000000000004" y="-273.7" width="33.32000000000001" height="273.7" rx="11.900000000000002" fill="#8A6A52"/>
+    <circle cx="0" cy="-368.90000000000003" r="147.56000000000003" fill="#4E9E68"/>
+    <circle cx="-130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <circle cx="130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <path d="M-119.00000000000001 -233.24000000000004 L0 -323.68000000000006 L119.00000000000001 -233.24000000000004Z" fill="#E8A33D"/>
+    <rect x="-99.96000000000001" y="-238.00000000000003" width="199.92000000000002" height="119.00000000000001" rx="14.280000000000001" fill="#FDFAF5"/>
+    <rect x="-21.42" y="-190.40000000000003" width="42.84" height="71.4" rx="9.520000000000001" fill="#5A3E2B"/>
+    <circle cx="-61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <circle cx="61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <path d="M-119.00000000000001 0 L-28.560000000000002 -119.00000000000001 M-99.96000000000001 -28.560000000000002 H-52.36000000000001 M-80.92000000000002 -61.88000000000001 H-38.080000000000005" stroke="#5A3E2B" stroke-width="7.140000000000001" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(200 224) scale(1.6666666666666667)"><path d="M-14 10 Q-10 40 -4 60 M14 6 Q10 40 4 60" stroke="#5A3E2B" stroke-width="1.5" fill="none" opacity=".5"/><ellipse cx="-14" cy="-10" rx="16" ry="20" fill="#C96F4A"/><ellipse cx="14" cy="-14" rx="16" ry="20" fill="#E8A33D"/></g><g transform="translate(800 252) scale(1.3461538461538463)"><path d="M-14 10 Q-10 40 -4 60 M14 6 Q10 40 4 60" stroke="#5A3E2B" stroke-width="1.5" fill="none" opacity=".5"/><ellipse cx="-14" cy="-10" rx="16" ry="20" fill="#C96F4A"/><ellipse cx="14" cy="-14" rx="16" ry="20" fill="#E8A33D"/></g>
+  <g transform="translate(500 654.5)">
+    <rect x="-173.6" y="-31.5" width="347.2" height="52.5" rx="26.25" fill="#FDFAF5" opacity=".92"/>
+    <text y="8.4" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="29" font-weight="600" fill="#1E442C" text-anchor="middle">Pack Infantil</text>
+  </g>
 </svg>

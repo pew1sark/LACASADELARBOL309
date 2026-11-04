@@ -41,6 +41,8 @@ export interface Settings {
   cancellation_policy: string | null
   hero_image_url: string | null
   setup_steps: string[]
+  /** Días (0 = domingo) en que rige el precio de fin de semana. */
+  weekend_days?: number[]
 }
 
 export interface SettingsPayment {
@@ -77,6 +79,8 @@ export interface TimeSlot {
   weekdays: number[]
   sort_order: number
   active: boolean
+  /** Recargo fijo por elegir este bloque. */
+  surcharge?: number
 }
 
 export interface PackageService {
@@ -101,6 +105,12 @@ export interface Package {
   badge: string | null
   sort_order: number
   active: boolean
+  /** Precio en días de fin de semana; null = mismo precio. */
+  weekend_price?: number | null
+  /** Invitados incluidos en el precio; null = todos hasta la capacidad. */
+  included_guests?: number | null
+  /** Valor por cada invitado sobre los incluidos. */
+  extra_guest_price?: number
   package_services?: PackageService[]
 }
 
@@ -114,6 +124,8 @@ export interface Addon {
   icon: string | null
   sort_order: number
   active: boolean
+  category?: string
+  max_quantity?: number | null
 }
 
 export interface GalleryImage {

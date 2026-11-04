@@ -121,8 +121,11 @@ protegidas por RLS; es correcto que estén versionadas).
 
 ### Base de datos
 
-Las migraciones están en `supabase/migrations/` y ya se encuentran aplicadas en
-el proyecto. Para recrear el esquema desde cero, ejecútalas en orden.
+Proyecto Supabase: **ANIMA COMPANY** (`ucwvtiteftajllfnzyvz`).
+
+Las migraciones están en `supabase/migrations/`. Para recrear el esquema desde
+cero, ejecútalas en orden (la de precios detallados es
+`20261103000000_pricing_detail.sql`).
 
 Para dar acceso al panel a otra persona, sigue `supabase/crear_administrador.sql`.
 
@@ -199,6 +202,28 @@ Mientras queden secciones pendientes, el inicio del panel muestra un aviso.
 
 ---
 
+## Precios y servicios (panel)
+
+`/admin/paquetes` es el editor del catálogo, solo para administradores (la
+escritura la protege RLS: solo usuarios en `admin_users`):
+
+- **Paquetes**: crear, duplicar, ordenar, ocultar y eliminar. Por paquete:
+  precio base, precio de fin de semana, invitados incluidos, valor por invitado
+  adicional, capacidad, duración, etiqueta, imagen y lista de servicios
+  incluidos (ordenable). Muestra una vista previa del precio.
+- **Extras**: precio, unidad, por invitado, cantidad máxima y categoría.
+- **Horarios**: hora de inicio y término, días disponibles y recargo.
+- **Tipos de evento**: nombre, enlace (`?evento=`), descripción e imagen.
+- **Reglas de precio**: días de fin de semana, % de abono, capacidad,
+  anticipación mínima y horizonte de la agenda.
+- **Simulador**: arma una cotización de prueba con la configuración actual.
+
+El total que ve el cliente usa `app/src/lib/pricing.ts`; el que queda en la
+reserva lo calcula la base (`public.package_quote`) con la misma fórmula, y se
+guarda el desglose en `reservations.pricing_detail`.
+
+---
+
 ## WhatsApp
 
 Es el canal principal, con mensajes armados automáticamente:
@@ -239,8 +264,38 @@ desde el primer día.
 
 ---
 
-## Imágenes
+## Identidad de marca
 
-Las imágenes de `app/public/images/` son marcadores de posición generados con
-`node scripts/gen-placeholders.mjs`. Para usar fotos reales, súbelas a un
-servicio de imágenes y pega la URL en el panel (paquetes, galería y portada).
+Tomada del reel oficial de Meta (*La Casa del Árbol · Los Castaños*, Chiguayante).
+
+| Elemento | Valor |
+| --- | --- |
+| Logo | Follaje con "LA CASA DEL ÁRBOL · LOS CASTAÑOS" sobre placa celeste (`app/public/brand/logo.webp`, componente `app/src/components/brand/Logo.tsx`) |
+| Verde bosque | `#17422F` (fondos de marca, como el cierre del reel) |
+| Verde hoja | `#2F6B45` (botones) · `#4E9E68` |
+| Lima | `#E0F890` (titulares y acentos sobre verde) |
+| Celeste | `#DAF6FA` (placa del logo, sección de video) |
+| Crema | `#FDFAF5` (fondo) |
+| Tipografías | Fraunces (títulos) · Inter (texto) |
+| Frases | "Aquí empieza su gran día", "Una fiesta a su estilo", "Diversión en grande", "Agenda tu fecha" |
+| Contacto | Julio Cuevas · +56 9 5473 7249 |
+
+Fotos reales en `app/public/images/fotos/` (fotogramas del reel, sin textos) y
+el recorrido en video en `app/public/video/recorrido.mp4` (1,3 MB, sin audio).
+Mientras la base tenga las ilustraciones de ejemplo, el sitio muestra la foto
+real equivalente (`realPhoto` en `app/src/lib/fallback.ts`); lo que se suba
+desde el panel siempre tiene prioridad. Los íconos de servicios se asignan
+solos según el texto (`app/src/lib/icons.ts`); los de los extras se eligen en
+el panel.
+
+## Fotos
+
+Las fotos se suben desde el panel (**Precios y servicios → Fotos**, y en cada
+paquete o tipo de evento) con el botón *Subir foto*: se comprimen en el
+navegador a WebP de máx. 1800 px y se guardan en Supabase Storage (bucket
+`media`, migración `20261104000000_media_storage.sql`). Solo los
+administradores pueden subir o borrar.
+
+Mientras no haya fotos reales se muestran ilustraciones de marca generadas con
+`node scripts/gen-placeholders.mjs` (y `node scripts/og-png.cjs` para la
+imagen de redes en PNG).

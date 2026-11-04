@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Logo } from '../../components/brand/Logo'
 import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { Icon, type IconName } from '../../components/ui/Icon'
 import { Button, LoadingBlock } from '../../components/ui/Primitives'
@@ -14,7 +15,7 @@ const NAV: { to: string; label: string; short?: string; icon: IconName; end?: bo
   { to: '/admin/reservas', label: 'Reservas', icon: 'list' },
   { to: '/admin/calendario', label: 'Calendario', short: 'Agenda', icon: 'calendar' },
   { to: '/admin/clientes', label: 'Clientes', icon: 'users' },
-  { to: '/admin/paquetes', label: 'Paquetes', short: 'Packs', icon: 'gift' },
+  { to: '/admin/paquetes', label: 'Precios y servicios', short: 'Precios', icon: 'money' },
   { to: '/admin/configuracion', label: 'Ajustes', icon: 'settings' },
 ]
 
@@ -47,14 +48,8 @@ export default function AdminLayout() {
       <div className="mx-auto flex max-w-7xl">
         {/* Barra lateral en escritorio */}
         <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-r border-bark-900/8 bg-white px-3 py-5 lg:flex">
-          <div className="mb-6 flex items-center gap-2.5 px-2">
-            <span className="grid size-9 place-items-center rounded-xl bg-leaf-700 text-white">
-              <Icon name="home" className="size-4.5" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-semibold">Casa del Árbol 309</span>
-              <span className="block text-[0.68rem] uppercase tracking-wider text-bark-500">Administración</span>
-            </span>
+          <div className="mb-6 px-2">
+            <Logo compact subtitle="Administración" />
           </div>
 
           <nav className="flex flex-1 flex-col gap-1">
@@ -85,7 +80,7 @@ export default function AdminLayout() {
 
         <div className="min-w-0 flex-1 pb-20 lg:pb-0">
           <header className="sticky top-0 z-30 flex h-15 items-center justify-between gap-3 border-b border-bark-900/8 bg-white/95 px-4 py-3 backdrop-blur lg:px-8">
-            <p className="font-display text-lg font-semibold lg:hidden">Casa del Árbol 309</p>
+            <span className="lg:hidden"><Logo compact subtitle={null} /></span>
             <div className="hidden lg:block" />
             <NotificationsBell />
           </header>

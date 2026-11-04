@@ -9,6 +9,9 @@ import { Hero } from '../components/site/Hero'
 import { InstagramCta } from '../components/site/InstagramCta'
 import { MobileCtaBar } from '../components/site/MobileCtaBar'
 import { Packages } from '../components/site/Packages'
+import { Spaces } from '../components/site/Spaces'
+import { VideoTour } from '../components/site/VideoTour'
+import { Ideas } from '../components/site/Ideas'
 import { Process } from '../components/site/Process'
 
 /** Landing pensado para tráfico de Meta Ads: hero con cotizador, prueba del
@@ -29,9 +32,12 @@ export default function Home() {
     <>
       <Hero />
       <EventTypes />
+      <Spaces />
+      <VideoTour />
       <Packages />
       <Process />
       <Agenda />
+      <Ideas />
       <Gallery />
       <InstagramCta />
       <Faq />

@@ -19,7 +19,17 @@
   --color-leaf-500: #4e9e68;
   --color-leaf-600: #3f8556;
   --color-leaf-700: #2f6b45;
-  --color-leaf-900: #1e442c;
+  --color-leaf-900: #17422f;
+  --color-leaf-950: #0f2d20;
+
+  /* Acento lima del reel de la marca (titulares sobre verde) */
+  --color-lime-200: #eefbc4;
+  --color-lime-300: #e0f890;
+  --color-lime-400: #c9ec5c;
+
+  /* Celeste del fondo del logo */
+  --color-sky-50: #eefafc;
+  --color-sky-100: #daf6fa;
 
   --color-sun-100: #fdf0d5;
   --color-sun-400: #e8a33d;

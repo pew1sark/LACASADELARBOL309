@@ -10,6 +10,7 @@ import {
   FALLBACK_SETTINGS,
   FALLBACK_SLOTS,
   INSTAGRAM_URL,
+  realPhoto,
   resolveWhatsApp,
 } from '../lib/fallback'
 
@@ -99,16 +100,24 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
       }
       settings.whatsapp = resolveWhatsApp(dbSettings?.whatsapp)
       settings.instagram_url ||= INSTAGRAM_URL
+      settings.hero_image_url = realPhoto(settings.hero_image_url) as string
+      // La semilla quedó con Santiago: la casa está en Chiguayante.
+      if (!settings.city || settings.city === 'Santiago') {
+        settings.city = 'Chiguayante'
+        settings.region = 'Biobío'
+      }
+      eventTypes = eventTypes.map((e) => ({ ...e, image_url: realPhoto(e.image_url) as string | null }))
 
       setState({
         settings,
         eventTypes,
         packages: packages.map((p) => ({
           ...p,
+          image_url: realPhoto(p.image_url) as string | null,
           package_services: [...(p.package_services ?? [])].sort((a, b) => a.sort_order - b.sort_order),
         })),
         addons,
-        gallery: gallery.length ? gallery : FALLBACK_GALLERY,
+        gallery: gallery.length ? gallery.map((g) => ({ ...g, url: realPhoto(g.url) as string })) : FALLBACK_GALLERY,
         faqs: faqs.length ? faqs : FALLBACK_FAQS,
         slots,
         loading: false,
