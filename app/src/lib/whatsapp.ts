@@ -26,7 +26,7 @@ export function goToWhatsApp(phone: string | null | undefined, message: string, 
 }
 
 export const genericMessage = (business: string) =>
-  `Hola ${business} 👋 Quiero consultar disponibilidad para una celebración.`
+  `Hola ${business} 👋 Quiero consultar disponibilidad para arrendar la casa.`
 
 export const packageMessage = (business: string, pkg: string, price: number) =>
   `Hola ${business} 👋 Me interesa el ${pkg} (desde ${shortMoney(price)}). ¿Qué fechas tienen disponibles?`
@@ -58,7 +58,7 @@ export function requestMessage(input: {
   source?: string | null
 }): string {
   const lines = [
-    `Hola ${input.business} 👋 Quiero agendar mi evento. Esta es mi cotización:`,
+    `Hola ${input.business} 👋 Quiero arrendar la casa para mi evento. Esta es mi solicitud:`,
     '',
     `*Código:* ${input.code}`,
     `*Nombre:* ${input.name}`,
@@ -66,7 +66,7 @@ export function requestMessage(input: {
   if (input.phone) lines.push(`*Teléfono:* ${input.phone}`)
   if (input.eventType) lines.push(`*Evento:* ${input.eventType}`)
   if (input.packageName)
-    lines.push(`*Paquete:* ${input.packageName}${input.packagePrice ? ` (${shortMoney(input.packagePrice)})` : ''}`)
+    lines.push(`*Arriendo:* ${input.packageName}${input.packagePrice ? ` (${shortMoney(input.packagePrice)})` : ''}`)
   for (const l of input.priceLines ?? []) lines.push(`  + ${l.label}: ${shortMoney(l.value)}`)
   lines.push(`*Fecha:* ${longDate(input.dateISO)}`)
   if (input.slotName) lines.push(`*Horario:* ${input.slotName} (${input.start} — ${input.end})`)

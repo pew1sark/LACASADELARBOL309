@@ -71,9 +71,9 @@ export function Footer() {
           <div>
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-sun-400">Reservas</p>
             <ul className="space-y-3 text-sm">
-              <li><a href={`${import.meta.env.BASE_URL}#agendar`} className="transition hover:text-cream-50">Cotizar y agendar</a></li>
+              <li><a href={`${import.meta.env.BASE_URL}#agendar`} className="transition hover:text-cream-50">Agendar mi fecha</a></li>
               <li><Link to="/estado" className="transition hover:text-cream-50">Ver estado de mi solicitud</Link></li>
-              <li><a href={`${import.meta.env.BASE_URL}#paquetes`} className="transition hover:text-cream-50">Paquetes y precios</a></li>
+              <li><a href={`${import.meta.env.BASE_URL}#precio`} className="transition hover:text-cream-50">Precio del arriendo</a></li>
               <li><a href={`${import.meta.env.BASE_URL}#preguntas`} className="transition hover:text-cream-50">Preguntas frecuentes</a></li>
             </ul>
           </div>

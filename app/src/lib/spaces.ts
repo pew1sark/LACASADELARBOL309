@@ -62,10 +62,10 @@ export const SPACES: Space[] = [
   {
     kicker: 'Versatilidad',
     title: 'Sala multiuso',
-    text: 'Un espacio extra para la mesa dulce, los regalos o un rincón para los adultos.',
+    text: 'Un espacio extra para los regalos, la torta o un rincón tranquilo para los adultos.',
     image: 'images/fotos/sala-multiuso.webp',
     icon: 'sparkles',
-    tags: ['Mesa dulce', 'Regalos'],
+    tags: ['Regalos', 'Rincón adultos'],
   },
   {
     kicker: 'Comodidad',

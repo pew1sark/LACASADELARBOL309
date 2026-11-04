@@ -212,7 +212,7 @@ function confirmDelete(what: string) {
 /* ================================ PAQUETES ================================= */
 
 function PackagesTab() {
-  const { packages, eventTypes } = useSiteData()
+  const { allPackages: packages, eventTypes } = useSiteData()
   const { run } = useSaver()
   const [editing, setEditing] = useState<Package | 'new' | null>(null)
   const sorted = [...packages].sort((a, b) => a.sort_order - b.sort_order)
@@ -493,7 +493,7 @@ function nextWeekday(dow: number): string {
 const UNITS = ['servicio', 'unidad', 'persona', 'hora']
 
 function AddonsTab() {
-  const { addons } = useSiteData()
+  const { allAddons: addons } = useSiteData()
   const { run } = useSaver()
   const [editing, setEditing] = useState<Addon | 'new' | null>(null)
   const sorted = [...addons].sort((a, b) => a.sort_order - b.sort_order)
@@ -732,7 +732,7 @@ function SlotModal({ slot, nextOrder, onClose }: { slot: TimeSlot | null; nextOr
 /* ============================= TIPOS DE EVENTO ============================= */
 
 function EventsTab() {
-  const { eventTypes, packages } = useSiteData()
+  const { eventTypes, allPackages: packages } = useSiteData()
   const { run } = useSaver()
   const [editing, setEditing] = useState<EventType | 'new' | null>(null)
   const sorted = [...eventTypes].sort((a, b) => a.sort_order - b.sort_order)
@@ -869,7 +869,7 @@ function RulesTab() {
 /* ================================ SIMULADOR ================================ */
 
 function SimulatorTab() {
-  const { packages, slots, addons, settings } = useSiteData()
+  const { allPackages: packages, slots, allAddons: addons, settings } = useSiteData()
   const [pkgId, setPkgId] = useState(packages[0]?.id ?? '')
   const [slotId, setSlotId] = useState(slots[0]?.id ?? '')
   const [date, setDate] = useState(() => nextWeekday(6))

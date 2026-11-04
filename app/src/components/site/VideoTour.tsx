@@ -7,7 +7,7 @@ const POINTS = [
   { icon: 'smile' as const, text: 'Inflable, cama elástica, taca-taca y air hockey' },
   { icon: 'star' as const, text: 'Bloques gigantes y juegos de madera' },
   { icon: 'tree' as const, text: 'Patio con ping pong y básquetbol' },
-  { icon: 'sparkles' as const, text: 'Ambientación a tu estilo: globos, mesa dulce y temáticas' },
+  { icon: 'kitchen' as const, text: 'Cocina equipada, baños y sala multiuso' },
 ]
 
 /** Recorrido en video (el mismo reel de los anuncios), en marco de celular.

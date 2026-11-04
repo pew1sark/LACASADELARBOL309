@@ -33,7 +33,7 @@ export interface SubmittedReservation {
 const AUTO_SECONDS = 4
 
 const TIMELINE = [
-  { title: 'Cotización lista', text: 'Ya tienes el detalle y el total estimado.' },
+  { title: 'Solicitud lista', text: 'Ya tienes la fecha, el horario y el valor del arriendo.' },
   { title: 'La envías por WhatsApp', text: 'Nos llega completa: no tienes que explicar nada.' },
   { title: 'Confirmamos tu fecha', text: 'Revisamos la agenda y te respondemos el mismo día.' },
   { title: 'Abonas y queda reservado', text: 'Con el abono bloqueamos la fecha solo para ti. 🎉' },
@@ -96,7 +96,7 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
           <span className="mx-auto grid size-16 place-items-center rounded-full bg-leaf-100 text-leaf-700">
             <Icon name="check" className="size-8" />
           </span>
-          <h2 className="mt-5 text-3xl leading-tight md:text-4xl">¡Tu cotización está lista, {r.customerName.split(' ')[0]}!</h2>
+          <h2 className="mt-5 text-3xl leading-tight md:text-4xl">¡Tu solicitud está lista, {r.customerName.split(' ')[0]}!</h2>
           <p className="mt-3 text-bark-500">
             Envíala por WhatsApp y te confirmamos la disponibilidad de tu fecha.
           </p>
@@ -122,7 +122,7 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
           <dl className="divide-y divide-bark-900/8 text-sm">
             {r.eventTypeName && <Row label="Evento" value={r.eventTypeName} />}
             {r.package_name && (
-              <Row label={r.weekend ? 'Paquete (fin de semana)' : 'Paquete'} value={`${r.package_name} · ${money(r.package_price)}`} />
+              <Row label={r.weekend ? 'Arriendo (fin de semana)' : 'Arriendo'} value={`${r.package_name} · ${money(r.package_price)}`} />
             )}
             {r.price_lines?.map((l) => <Row key={l.label} label={`+ ${l.label}`} value={money(l.value)} />)}
             <Row label="Fecha" value={longDate(r.event_date)} />
@@ -155,7 +155,7 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
             )}
             <span className="relative flex items-center gap-2.5">
               <WhatsAppIcon className="size-6" />
-              {sent ? 'Abrir WhatsApp otra vez' : 'Enviar cotización por WhatsApp'}
+              {sent ? 'Abrir WhatsApp otra vez' : 'Enviar solicitud por WhatsApp'}
             </span>
           </button>
           {!cancelled ? (

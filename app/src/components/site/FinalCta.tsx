@@ -21,7 +21,7 @@ export function FinalCta() {
             <LogoMark className="mx-auto mt-6 size-28 md:size-32" />
             <h2 className="mt-6 text-3xl leading-tight md:text-5xl">¡Agenda tu próximo cumpleaños!</h2>
             <p className="mx-auto mt-4 max-w-lg text-cream-200">
-              Arma tu cotización en un minuto y recíbela en WhatsApp. Te respondemos el mismo día y no pagas nada
+              Elige tu fecha en un minuto y recibe la solicitud lista en WhatsApp. Te respondemos el mismo día y no pagas nada
               hasta confirmar.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -30,7 +30,7 @@ export function FinalCta() {
                 onClick={() => startQuote({}, 'final_cta')}
                 className="inline-flex h-13 items-center gap-2 rounded-full bg-lime-300 px-7 font-bold text-leaf-900 shadow-soft transition hover:bg-lime-400"
               >
-                Cotizar mi evento <Icon name="arrowRight" className="size-4.5" />
+                Ver fechas libres <Icon name="arrowRight" className="size-4.5" />
               </button>
               <button
                 type="button"

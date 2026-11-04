@@ -30,8 +30,12 @@ const rows = <T,>(r: Res<T[]>): T[] => (r && !r.error && r.data ? r.data : [])
 interface SiteData {
   settings: Settings | null
   eventTypes: EventType[]
+  /** Lo que se ofrece en la web pública (hoy: solo el arriendo a precio fijo). */
   packages: Package[]
   addons: Addon[]
+  /** Catálogo completo de la base, para el panel de administración. */
+  allPackages: Package[]
+  allAddons: Addon[]
   gallery: GalleryImage[]
   faqs: Faq[]
   slots: TimeSlot[]
@@ -51,6 +55,8 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     eventTypes: [],
     packages: [],
     addons: [],
+    allPackages: [],
+    allAddons: [],
     gallery: [],
     faqs: [],
     slots: [],
@@ -108,15 +114,26 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
       }
       eventTypes = eventTypes.map((e) => ({ ...e, image_url: realPhoto(e.image_url) as string | null }))
 
+      const allPackages = packages.map((p) => ({
+        ...p,
+        image_url: realPhoto(p.image_url) as string | null,
+        package_services: [...(p.package_services ?? [])].sort((a, b) => a.sort_order - b.sort_order),
+      }))
+      // Modelo actual: se arrienda la casa completa a precio fijo y sin extras.
+      // Si la base todavía no tiene el arriendo (migración arriendo_unico sin
+      // aplicar), la web muestra el arriendo de respaldo y oculta los paquetes
+      // y extras antiguos. Una vez migrada, manda lo que diga el panel.
+      const rental = allPackages.filter((p) => p.active && p.slug === 'arriendo-espacio')
+      const legacy = !rental.length
+      const publicPackages = legacy ? FALLBACK_PACKAGES : allPackages.filter((p) => p.active)
+
       setState({
         settings,
         eventTypes,
-        packages: packages.map((p) => ({
-          ...p,
-          image_url: realPhoto(p.image_url) as string | null,
-          package_services: [...(p.package_services ?? [])].sort((a, b) => a.sort_order - b.sort_order),
-        })),
-        addons,
+        packages: publicPackages,
+        addons: legacy ? [] : addons.filter((a) => a.active),
+        allPackages,
+        allAddons: addons,
         gallery: gallery.length ? gallery.map((g) => ({ ...g, url: realPhoto(g.url) as string })) : FALLBACK_GALLERY,
         faqs: faqs.length ? faqs : FALLBACK_FAQS,
         slots,

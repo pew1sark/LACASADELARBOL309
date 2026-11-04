@@ -12,7 +12,7 @@ import { supabase } from '../../lib/supabase'
 import type { GalleryImage, SettingsPayment, TimeSlot } from '../../lib/types'
 
 export default function PuestaEnMarcha() {
-  const { settings, packages, gallery, slots, loading, reload } = useSiteData()
+  const { settings, allPackages: packages, gallery, slots, loading, reload } = useSiteData()
   const { push } = useToast()
 
   const [payment, setPayment] = useState<Partial<SettingsPayment>>({})
