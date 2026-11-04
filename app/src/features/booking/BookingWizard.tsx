@@ -15,6 +15,7 @@ import { quotePackage } from '../../lib/pricing'
 import { addonIcon } from '../../lib/icons'
 import { PREFILL_EVENT, type PrefillDetail } from '../../lib/quote'
 import { supabase } from '../../lib/supabase'
+import { animaActivo, solicitarAnima } from '../../lib/anima'
 import type { Addon, SlotStatus } from '../../lib/types'
 import { BookingSuccess, type SubmittedReservation } from './BookingSuccess'
 
@@ -262,10 +263,14 @@ export function BookingWizard({ embedded = false }: { embedded?: boolean }) {
         notes,
         addons: selectedAddons.map((s) => ({ addon_id: s.addon.id, quantity: s.quantity })),
       }
-      const res = await Promise.race([
-        supabase.rpc('create_reservation_request', { payload }).then((r) => r, (e) => ({ data: null, error: e })),
-        new Promise<null>((r) => setTimeout(() => r(null), 8000)),
-      ])
+      // En ANIMA COMPANY la solicitud lleva de dónde vino (utm/fbclid/gclid):
+      // así la pestaña Anuncios sabe qué campaña trajo cada reserva.
+      const res = animaActivo()
+        ? await solicitarAnima({ ...payload, attribution: getAttribution() })
+        : await Promise.race([
+            supabase.rpc('create_reservation_request', { payload }).then((r) => r, (e) => ({ data: null, error: e })),
+            new Promise<null>((r) => setTimeout(() => r(null), 8000)),
+          ])
       if (res && !res.error && res.data) {
         const data = res.data as { code: string; total_amount?: number }
         base.code = data.code

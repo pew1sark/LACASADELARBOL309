@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { animaActivo, disponibilidadAnima } from '../lib/anima'
 import { toISO } from '../lib/format'
 import type { AvailabilityRow, SlotStatus, TimeSlot } from '../lib/types'
 import { useSiteData } from './useSiteData'
@@ -59,10 +60,12 @@ export function useAvailability(month: Date) {
     setLoading(true)
     let data: AvailabilityRow[] | null = null
     if (!offline) {
-      const res = await Promise.race([
-        supabase.rpc('get_availability', { p_from: from, p_to: to }).then((r) => r, () => null),
-        new Promise<null>((r) => setTimeout(() => r(null), 4000)),
-      ])
+      const res = animaActivo()
+        ? await disponibilidadAnima(from, to)
+        : await Promise.race([
+            supabase.rpc('get_availability', { p_from: from, p_to: to }).then((r) => r, () => null),
+            new Promise<null>((r) => setTimeout(() => r(null), 4000)),
+          ])
       if (res && !res.error) data = (res.data ?? []) as AvailabilityRow[]
       else setError(res?.error?.message ?? 'timeout')
     }

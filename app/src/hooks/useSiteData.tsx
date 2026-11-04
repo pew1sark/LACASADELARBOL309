@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { supabase } from '../lib/supabase'
+import { catalogoAnima } from '../lib/anima'
 import type { Addon, EventType, Faq, GalleryImage, Package, Settings, TimeSlot } from '../lib/types'
 import {
   FALLBACK_ADDONS,
@@ -70,7 +71,23 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     let alive = true
     ;(async () => {
       setState((s) => ({ ...s, loading: true }))
-      const q = await Promise.all([
+      // ANIMA COMPANY primero: si responde, el catálogo (y las reservas) salen de ahí.
+      // La galería sigue siendo contenido de la web.
+      const [anima, galeria] = await Promise.all([
+        catalogoAnima(),
+        withTimeout(supabase.from('gallery_images').select('*').order('sort_order')),
+      ])
+      const q = anima
+        ? [
+            { data: { id: 1, ...anima.settings }, error: null },
+            { data: anima.event_types.map((e) => ({ long_description: null, active: true, ...e })), error: null },
+            { data: anima.packages.map((p) => ({ active: true, ...p })), error: null },
+            { data: anima.addons.map((a) => ({ active: true, ...a })), error: null },
+            galeria,
+            { data: anima.faqs.map((f) => ({ active: true, ...f })), error: null },
+            { data: anima.time_slots.map((t) => ({ active: true, ...t })), error: null },
+          ]
+        : await Promise.all([
         withTimeout(supabase.from('settings').select('*').eq('id', 1).maybeSingle()),
         withTimeout(supabase.from('event_types').select('*').order('sort_order')),
         withTimeout(supabase.from('packages').select('*, package_services(*)').order('sort_order')),
@@ -78,9 +95,9 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
         withTimeout(supabase.from('gallery_images').select('*').order('sort_order')),
         withTimeout(supabase.from('faqs').select('*').order('sort_order')),
         withTimeout(supabase.from('time_slots').select('*').order('sort_order')),
-      ])
+          ])
       if (!alive) return
-      const [settingsR, eventTypesR, packagesR, addonsR, galleryR, faqsR, slotsR] = q as [
+      const [settingsR, eventTypesR, packagesR, addonsR, galleryR, faqsR, slotsR] = q as unknown as [
         Res<Settings>, Res<EventType[]>, Res<Package[]>, Res<Addon[]>, Res<GalleryImage[]>, Res<Faq[]>, Res<TimeSlot[]>,
       ]
 
