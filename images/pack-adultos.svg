@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Pack Adultos">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#F6E7D2"/><stop offset="100%" stop-color="#E2C9A6"/>
-    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBE6DA"/><stop offset="1" stop-color="#F2C9B1"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#E8A33D" stop-opacity="0.25"/><stop offset="1" stop-color="#E8A33D" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1000" height="700" fill="url(#bg)"/>
-  <circle cx="409" cy="128" r="200" fill="#5A3E2B" opacity="0.19"/><circle cx="106" cy="328" r="196" fill="#5A3E2B" opacity="0.24"/><circle cx="154" cy="129" r="156" fill="#5A3E2B" opacity="0.23"/><circle cx="491" cy="247" r="176" fill="#5A3E2B" opacity="0.27"/><circle cx="208" cy="284" r="168" fill="#5A3E2B" opacity="0.13"/>
-  <path d="M0 546 Q 250 489.99999999999994 500 532 T 1000 504 L 1000 700 L 0 700 Z" fill="#5A3E2B" opacity="0.22"/>
-  <rect x="482" y="294" width="36" height="280" rx="12" fill="#5A3E2B" opacity="0.45"/>
-  <path d="M390 322 h 220 l -20 -63 h -180 Z" fill="#5A3E2B" opacity="0.55"/>
-  <rect x="400" y="322" width="200" height="91" rx="8" fill="#5A3E2B" opacity="0.4"/>
-  <circle cx="500" cy="367.5" r="19.6" fill="#F6E7D2" opacity="0.75"/>
-  <text x="500" y="651" font-family="Inter, system-ui, sans-serif" font-size="39"
-        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">PACK ADULTOS</text>
+  <rect width="1000" height="700" fill="url(#sky)"/>
+  <circle cx="500" cy="315" r="450" fill="url(#glow)"/>
+  <rect x="744" y="328" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(22 744 328)"/><circle cx="34" cy="18" r="6.4" fill="#D98A68" opacity="0.55"/><circle cx="536" cy="325" r="6.2" fill="#4E9E68" opacity="0.55"/><rect x="244" y="92" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(133 244 92)"/><circle cx="343" cy="413" r="3.4" fill="#E8A33D" opacity="0.55"/><circle cx="831" cy="261" r="3.3" fill="#D98A68" opacity="0.55"/><rect x="547" y="264" width="10" height="4" rx="2" fill="#4E9E68" opacity=".55" transform="rotate(37 547 264)"/><circle cx="836" cy="334" r="6.9" fill="#FDFAF5" opacity="0.55"/><circle cx="571" cy="141" r="5.8" fill="#E8A33D" opacity="0.55"/><rect x="123" y="34" width="10" height="4" rx="2" fill="#D98A68" opacity=".55" transform="rotate(25 123 34)"/><circle cx="831" cy="414" r="3.5" fill="#4E9E68" opacity="0.55"/><circle cx="204" cy="330" r="4.9" fill="#FDFAF5" opacity="0.55"/><rect x="737" y="273" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(123 737 273)"/><circle cx="390" cy="330" r="5.9" fill="#D98A68" opacity="0.55"/><circle cx="651" cy="191" r="6.7" fill="#4E9E68" opacity="0.55"/><rect x="206" y="160" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(99 206 160)"/><circle cx="898" cy="229" r="5.5" fill="#E8A33D" opacity="0.55"/><circle cx="907" cy="301" r="6.9" fill="#D98A68" opacity="0.55"/>
+  <path d="M0 560 Q 300 518 550 553 T 1000 532 V 700 H 0Z" fill="#2F6B45"/>
+  <path d="M0 595 Q 400 560 1000 602 V 700 H 0Z" fill="#1E442C" opacity=".25"/>
+  <g transform="translate(500 560)">
+    <rect x="-16.660000000000004" y="-273.7" width="33.32000000000001" height="273.7" rx="11.900000000000002" fill="#8A6A52"/>
+    <circle cx="0" cy="-368.90000000000003" r="147.56000000000003" fill="#4E9E68"/>
+    <circle cx="-130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <circle cx="130.90000000000003" cy="-297.50000000000006" r="109.48000000000002" fill="#3F8556"/>
+    <path d="M-119.00000000000001 -233.24000000000004 L0 -323.68000000000006 L119.00000000000001 -233.24000000000004Z" fill="#E8A33D"/>
+    <rect x="-99.96000000000001" y="-238.00000000000003" width="199.92000000000002" height="119.00000000000001" rx="14.280000000000001" fill="#FDFAF5"/>
+    <rect x="-21.42" y="-190.40000000000003" width="42.84" height="71.4" rx="9.520000000000001" fill="#5A3E2B"/>
+    <circle cx="-61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <circle cx="61.88000000000001" cy="-190.40000000000003" r="14.280000000000001" fill="#E8A33D"/>
+    <path d="M-119.00000000000001 0 L-28.560000000000002 -119.00000000000001 M-99.96000000000001 -28.560000000000002 H-52.36000000000001 M-80.92000000000002 -61.88000000000001 H-38.080000000000005" stroke="#5A3E2B" stroke-width="7.140000000000001" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(200 224) scale(1.6666666666666667)"><path d="M-80 0 Q0 30 80 0" stroke="#5A3E2B" stroke-width="2" fill="none" opacity=".5"/><circle cx="-60" cy="4" r="6" fill="#E8A33D"/><circle cx="-30" cy="9" r="6" fill="#E8A33D"/><circle cx="0" cy="14" r="6" fill="#E8A33D"/><circle cx="30" cy="9" r="6" fill="#E8A33D"/><circle cx="60" cy="4" r="6" fill="#E8A33D"/></g><g transform="translate(800 252) scale(1.3461538461538463)"><path d="M-80 0 Q0 30 80 0" stroke="#5A3E2B" stroke-width="2" fill="none" opacity=".5"/><circle cx="-60" cy="4" r="6" fill="#E8A33D"/><circle cx="-30" cy="9" r="6" fill="#C96F4A"/><circle cx="0" cy="14" r="6" fill="#E8A33D"/><circle cx="30" cy="9" r="6" fill="#C96F4A"/><circle cx="60" cy="4" r="6" fill="#E8A33D"/></g>
+  <g transform="translate(500 654.5)">
+    <rect x="-162.4" y="-31.5" width="324.8" height="52.5" rx="26.25" fill="#FDFAF5" opacity=".92"/>
+    <text y="8.4" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="29" font-weight="600" fill="#1E442C" text-anchor="middle">Pack Adultos</text>
+  </g>
 </svg>

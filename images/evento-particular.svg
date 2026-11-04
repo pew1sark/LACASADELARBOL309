@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Eventos particulares">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#EDE4F5"/><stop offset="100%" stop-color="#D3C1E6"/>
-    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8ECDF"/><stop offset="1" stop-color="#BFDDC9"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#E8A33D" stop-opacity="0.25"/><stop offset="1" stop-color="#E8A33D" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#bg)"/>
-  <circle cx="889" cy="387" r="230" fill="#6B4E8F" opacity="0.16"/><circle cx="224" cy="401" r="165" fill="#6B4E8F" opacity="0.22"/><circle cx="923" cy="425" r="154" fill="#6B4E8F" opacity="0.12"/><circle cx="859" cy="328" r="222" fill="#6B4E8F" opacity="0.26"/><circle cx="981" cy="275" r="247" fill="#6B4E8F" opacity="0.21"/>
-  <path d="M0 702 Q 300 630 600 684 T 1200 648 L 1200 900 L 0 900 Z" fill="#6B4E8F" opacity="0.22"/>
-  <rect x="578.4" y="378" width="43.199999999999996" height="360" rx="14.4" fill="#6B4E8F" opacity="0.45"/>
-  <path d="M468 414 h 264 l -24 -81 h -216 Z" fill="#6B4E8F" opacity="0.55"/>
-  <rect x="480" y="414" width="240" height="117" rx="9.6" fill="#6B4E8F" opacity="0.4"/>
-  <circle cx="600" cy="472.5" r="25.2" fill="#EDE4F5" opacity="0.75"/>
-  <text x="600" y="837" font-family="Inter, system-ui, sans-serif" font-size="50"
-        font-weight="600" fill="#ffffff" opacity="0.85" text-anchor="middle" letter-spacing="0.06em">EVENTOS PARTICULARES</text>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="600" cy="405" r="540" fill="url(#glow)"/>
+  <rect x="751" y="531" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(67 751 531)"/><circle cx="586" cy="94" r="5.3" fill="#D98A68" opacity="0.55"/><circle cx="819" cy="158" r="5.7" fill="#4E9E68" opacity="0.55"/><rect x="362" y="99" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(141 362 99)"/><circle cx="929" cy="326" r="3.8" fill="#E8A33D" opacity="0.55"/><circle cx="890" cy="28" r="4.9" fill="#D98A68" opacity="0.55"/><rect x="1146" y="535" width="10" height="4" rx="2" fill="#4E9E68" opacity=".55" transform="rotate(27 1146 535)"/><circle cx="1066" cy="482" r="3.5" fill="#FDFAF5" opacity="0.55"/><circle cx="421" cy="525" r="3.7" fill="#E8A33D" opacity="0.55"/><rect x="444" y="290" width="10" height="4" rx="2" fill="#D98A68" opacity=".55" transform="rotate(71 444 290)"/><circle cx="154" cy="413" r="4.5" fill="#4E9E68" opacity="0.55"/><circle cx="856" cy="10" r="3.8" fill="#FDFAF5" opacity="0.55"/><rect x="937" y="429" width="10" height="4" rx="2" fill="#E8A33D" opacity=".55" transform="rotate(46 937 429)"/><circle cx="664" cy="268" r="3.4" fill="#D98A68" opacity="0.55"/><circle cx="517" cy="447" r="6.5" fill="#4E9E68" opacity="0.55"/><rect x="183" y="511" width="10" height="4" rx="2" fill="#FDFAF5" opacity=".55" transform="rotate(48 183 511)"/><circle cx="504" cy="181" r="6.5" fill="#E8A33D" opacity="0.55"/><circle cx="897" cy="65" r="6.2" fill="#D98A68" opacity="0.55"/>
+  <path d="M0 720 Q 360 666 660 711 T 1200 684 V 900 H 0Z" fill="#3F8556"/>
+  <path d="M0 765 Q 480 720 1200 774 V 900 H 0Z" fill="#1E442C" opacity=".25"/>
+  <g transform="translate(600 720)">
+    <rect x="-21.42" y="-351.9" width="42.84" height="351.9" rx="15.3" fill="#8A6A52"/>
+    <circle cx="0" cy="-474.3" r="189.72" fill="#4E9E68"/>
+    <circle cx="-168.3" cy="-382.5" r="140.76000000000002" fill="#3F8556"/>
+    <circle cx="168.3" cy="-382.5" r="140.76000000000002" fill="#3F8556"/>
+    <path d="M-153 -299.88 L0 -416.16 L153 -299.88Z" fill="#E8A33D"/>
+    <rect x="-128.51999999999998" y="-306" width="257.03999999999996" height="153" rx="18.36" fill="#FDFAF5"/>
+    <rect x="-27.54" y="-244.8" width="55.08" height="91.8" rx="12.24" fill="#5A3E2B"/>
+    <circle cx="-79.56" cy="-244.8" r="18.36" fill="#E8A33D"/>
+    <circle cx="79.56" cy="-244.8" r="18.36" fill="#E8A33D"/>
+    <path d="M-153 0 L-36.72 -153 M-128.51999999999998 -36.72 H-67.32000000000001 M-104.04 -79.56 H-48.96" stroke="#5A3E2B" stroke-width="9.18" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g transform="translate(240 288) scale(2.142857142857143)"><path d="M0 18-22-4a13 13 0 0 1 22-14 13 13 0 0 1 22 14Z" fill="#E8A33D"/></g><g transform="translate(960 324) scale(1.7307692307692308)"><path d="M0 18-22-4a13 13 0 0 1 22-14 13 13 0 0 1 22 14Z" fill="#C96F4A"/></g>
+  <g transform="translate(600 841.5)">
+    <rect x="-324" y="-40.5" width="648" height="67.5" rx="33.75" fill="#FDFAF5" opacity=".92"/>
+    <text y="10.8" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="38" font-weight="600" fill="#1E442C" text-anchor="middle">Eventos particulares</text>
+  </g>
 </svg>
