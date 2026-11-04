@@ -72,7 +72,7 @@ export function Footer() {
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-sun-400">Reservas</p>
             <ul className="space-y-3 text-sm">
               <li><a href={`${import.meta.env.BASE_URL}#agendar`} className="transition hover:text-cream-50">Agendar mi fecha</a></li>
-              <li><Link to="/estado" className="transition hover:text-cream-50">Ver estado de mi solicitud</Link></li>
+              <li><Link to="/estado" className="transition hover:text-cream-50">Portal de clientes · Mi reserva</Link></li>
               <li><a href={`${import.meta.env.BASE_URL}#precio`} className="transition hover:text-cream-50">Precio del arriendo</a></li>
               <li><a href={`${import.meta.env.BASE_URL}#preguntas`} className="transition hover:text-cream-50">Preguntas frecuentes</a></li>
             </ul>
@@ -87,7 +87,10 @@ export function Footer() {
 
         <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-cream-50/10 pt-6 text-xs text-cream-200/60 sm:flex-row">
           <p>© {year} {settings?.business_name}. Todos los derechos reservados.</p>
-          <Link to="/admin" className="transition hover:text-cream-50">Acceso administración</Link>
+          <span className="flex gap-4">
+            <Link to="/admin" className="transition hover:text-cream-50">Administración</Link>
+            <Link to="/anima" className="transition hover:text-cream-50">Plataforma ANIMA COMPANY</Link>
+          </span>
         </div>
       </div>
     </footer>

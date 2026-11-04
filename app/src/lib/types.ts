@@ -43,6 +43,9 @@ export interface Settings {
   setup_steps: string[]
   /** Días (0 = domingo) en que rige el precio de fin de semana. */
   weekend_days?: number[]
+  /** Pago en línea con Mercado Pago activado desde el panel. */
+  mercadopago_enabled?: boolean
+  online_payment_mode?: 'deposit' | 'full' | 'both'
 }
 
 export interface SettingsPayment {
@@ -168,6 +171,8 @@ export interface ReservationAddon {
 
 export interface Payment {
   id: string
+  provider?: string
+  provider_payment_id?: string | null
   reservation_id: string
   amount: number
   method: string
@@ -251,6 +256,7 @@ export interface PublicReservation {
   deposit_percent: number
   created_at: string
   addons: { name: string; quantity: number; subtotal: number }[]
+  online_payment?: { enabled: boolean; mode: 'deposit' | 'full' | 'both'; last_status: PaymentIntentStatus | null }
   payment?: {
     instructions: string | null
     bank_name: string | null
@@ -278,4 +284,30 @@ export const STATUS_TONE: Record<ReservationStatus, 'amber' | 'blue' | 'green' |
   COMPLETED: 'gray',
   CANCELLED: 'red',
   REJECTED: 'red',
+}
+
+export type PaymentIntentStatus = 'created' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refund_needed'
+
+export interface PaymentIntent {
+  id: string
+  reservation_id: string
+  provider: string
+  kind: 'deposit' | 'full' | 'balance'
+  amount: number
+  status: PaymentIntentStatus
+  preference_id: string | null
+  provider_payment_id: string | null
+  status_detail: string | null
+  payer_email: string | null
+  created_at: string
+  updated_at: string
+  reservations?: { code: string; event_date: string; customers?: { first_name: string; last_name: string | null } } | null
+}
+
+export interface AdminUser {
+  user_id: string
+  full_name: string | null
+  email: string | null
+  role: 'admin' | 'anima'
+  created_at: string
 }

@@ -19,6 +19,7 @@ export type TrackEvent =
   | 'reservation_confirmed'
   | 'status_checked'
   | 'quote_cta_clicked'
+  | 'payment_started'
 
 export function track(event: TrackEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === 'undefined') return
@@ -30,6 +31,7 @@ export function track(event: TrackEvent, params: Record<string, unknown> = {}): 
     reservation_started: 'InitiateCheckout',
     reservation_submitted: 'Lead',
     whatsapp_clicked: 'Contact',
+    payment_started: 'AddPaymentInfo',
   }
   const standard = META[event]
   if (standard) window.fbq?.('track', standard, params)

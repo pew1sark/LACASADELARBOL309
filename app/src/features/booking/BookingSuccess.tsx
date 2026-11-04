@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon, WhatsAppIcon } from '../../components/ui/Icon'
 import { Badge } from '../../components/ui/Primitives'
+import { OnlinePay } from '../../components/site/OnlinePay'
 import { useSiteData } from '../../hooks/useSiteData'
 import { useToast } from '../../hooks/useToast'
 import { longDate, money } from '../../lib/format'
@@ -43,7 +44,9 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
   const { settings } = useSiteData()
   const { push } = useToast()
   const [seconds, setSeconds] = useState(AUTO_SECONDS)
-  const [cancelled, setCancelled] = useState(false)
+  // Con pago en línea activo, la acción principal es pagar: no se salta solo a WhatsApp.
+  const canPayOnline = Boolean(r.registered && settings?.mercadopago_enabled)
+  const [cancelled, setCancelled] = useState(canPayOnline)
   const [sent, setSent] = useState(false)
 
   const message = useMemo(
@@ -141,6 +144,19 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
             <Badge tone="amber"><Icon name="clock" className="size-3.5" /> Por confirmar</Badge>
           </div>
         </div>
+
+        {canPayOnline && (
+          <div className="mt-6">
+            <OnlinePay
+              code={r.code}
+              total={r.total_amount}
+              paid={0}
+              depositPercent={settings?.deposit_percent ?? 30}
+              mode={settings?.online_payment_mode ?? 'both'}
+            />
+            <p className="mt-4 text-center text-sm text-bark-500">¿Prefieres coordinar primero? Envíanos la solicitud:</p>
+          </div>
+        )}
 
         <div className="mt-6 space-y-3">
           <button

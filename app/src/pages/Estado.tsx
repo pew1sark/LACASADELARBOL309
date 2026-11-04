@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Icon, WhatsAppIcon } from '../components/ui/Icon'
 import { Badge, Button, Card, Field } from '../components/ui/Primitives'
+import { OnlinePay } from '../components/site/OnlinePay'
 import { useSiteData } from '../hooks/useSiteData'
 import { track } from '../lib/analytics'
 import { longDate, money } from '../lib/format'
@@ -10,8 +11,8 @@ import { STATUS_LABEL, STATUS_TONE, type PublicReservation } from '../lib/types'
 import { openWhatsApp } from '../lib/whatsapp'
 
 const NEXT_STEP: Record<string, string> = {
-  PENDING: 'Estamos revisando la disponibilidad de tu fecha. Te avisaremos por WhatsApp muy pronto.',
-  AWAITING_PAYMENT: '¡Tu fecha está disponible! Realiza el abono con los datos de más abajo y envíanos el comprobante para confirmar.',
+  PENDING: 'Recibimos tu solicitud. Paga el abono en línea para confirmar tu fecha al instante, o espera nuestra confirmación por WhatsApp.',
+  AWAITING_PAYMENT: '¡Tu fecha está disponible! Paga el abono en línea o por transferencia para confirmarla.',
   CONFIRMED: '¡Tu evento está confirmado! La fecha quedó bloqueada solo para ti.',
   COMPLETED: 'Este evento ya se realizó. ¡Gracias por celebrar con nosotros!',
   CANCELLED: 'Esta reserva fue cancelada. Si fue un error, escríbenos por WhatsApp.',
@@ -25,6 +26,7 @@ export default function Estado() {
   const [data, setData] = useState<PublicReservation | null>(null)
   const [loading, setLoading] = useState(false)
   const [notFound, setNotFound] = useState(false)
+  const payResult = params.get('pago') // ok | pendiente | error (vuelta desde Mercado Pago)
 
   const search = async (value: string) => {
     if (!value.trim()) return
@@ -39,8 +41,24 @@ export default function Estado() {
       return
     }
     setData(res as PublicReservation)
-    setParams({ codigo: value.trim().toUpperCase() }, { replace: true })
+    const next: Record<string, string> = { codigo: value.trim().toUpperCase() }
+    if (params.get('pago')) next.pago = params.get('pago')!
+    setParams(next, { replace: true })
   }
+
+  // Al volver de Mercado Pago el webhook puede tardar unos segundos:
+  // se vuelve a consultar hasta ver el pago registrado.
+  useEffect(() => {
+    if (payResult !== 'ok' || !data || data.paid_amount > 0) return
+    let tries = 0
+    const t = setInterval(async () => {
+      tries++
+      const { data: res } = await supabase.rpc('get_reservation_public', { p_code: data.code })
+      if (res) setData(res as PublicReservation)
+      if ((res as PublicReservation | null)?.paid_amount || tries >= 10) clearInterval(t)
+    }, 3000)
+    return () => clearInterval(t)
+  }, [payResult, data])
 
   useEffect(() => {
     const initial = params.get('codigo')
@@ -53,10 +71,27 @@ export default function Estado() {
   return (
     <div className="container-x py-12 md:py-16">
       <div className="mx-auto max-w-2xl">
-        <h1 className="text-3xl md:text-4xl">Estado de tu reserva</h1>
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-leaf-600">Portal de clientes</p>
+        <h1 className="text-3xl md:text-4xl">Mi reserva</h1>
         <p className="mt-3 text-bark-500">
-          Ingresa el código que te entregamos al enviar la solicitud (por ejemplo CA-K3F9TR).
+          Ingresa el código que te entregamos al agendar (por ejemplo CA-K3F9TR) para ver el estado, pagar en línea
+          o escribirnos.
         </p>
+
+        {payResult && (
+          <div
+            className={`mt-6 flex items-start gap-3 rounded-2xl p-4 text-sm ${
+              payResult === 'ok' ? 'bg-leaf-100 text-leaf-900' : payResult === 'pendiente' ? 'bg-sun-100 text-bark-900' : 'bg-terra-500/10 text-bark-900'
+            }`}
+          >
+            <Icon name={payResult === 'ok' ? 'check' : payResult === 'pendiente' ? 'clock' : 'alert'} className="mt-0.5 size-5 shrink-0" />
+            <p>
+              {payResult === 'ok' && <><strong>¡Pago recibido!</strong> Lo estamos registrando; en unos segundos tu reserva aparecerá confirmada.</>}
+              {payResult === 'pendiente' && <><strong>Pago en proceso.</strong> Mercado Pago lo está validando. Te avisaremos cuando se acredite.</>}
+              {payResult === 'error' && <><strong>El pago no se completó.</strong> No se hizo ningún cargo. Puedes intentarlo de nuevo más abajo.</>}
+            </p>
+          </div>
+        )}
 
         <form
           className="mt-6 flex flex-col gap-3 sm:flex-row"
@@ -117,8 +152,13 @@ export default function Estado() {
                   <Row label="Adicionales" value={data.addons.map((a) => a.name).join(', ')} />
                 )}
                 <Row label="Total" value={money(data.total_amount)} />
-                {data.paid_amount > 0 && <Row label="Abonado" value={money(data.paid_amount)} />}
+                {data.paid_amount > 0 && <Row label="Pagado" value={money(data.paid_amount)} />}
+                {data.paid_amount > 0 && data.total_amount > data.paid_amount && (
+                  <Row label="Saldo" value={money(data.total_amount - data.paid_amount)} />
+                )}
               </dl>
+
+              <Progress status={data.status} paid={data.paid_amount} />
 
               {data.payment && data.status === 'AWAITING_PAYMENT' && (
                 <div className="border-t border-bark-900/8 bg-leaf-50 px-5 py-5">
@@ -143,6 +183,19 @@ export default function Estado() {
                 </div>
               )}
             </Card>
+
+            {data.online_payment?.enabled && ['PENDING', 'AWAITING_PAYMENT', 'CONFIRMED'].includes(data.status) && (
+              <div className="mt-5">
+                <OnlinePay
+                  code={data.code}
+                  total={data.total_amount}
+                  paid={data.paid_amount}
+                  depositPercent={data.deposit_percent}
+                  mode={data.online_payment.mode}
+                  confirmed={data.status === 'CONFIRMED'}
+                />
+              </div>
+            )}
 
             <Button
               full
@@ -182,5 +235,29 @@ function PayRow({ label, value }: { label: string; value: string | null | undefi
       <span className="text-bark-500">{label}</span>
       <span className="font-medium">{value}</span>
     </p>
+  )
+}
+
+const STEPS = [
+  { key: 'request', label: 'Solicitud' },
+  { key: 'paid', label: 'Abono' },
+  { key: 'confirmed', label: 'Confirmada' },
+  { key: 'done', label: 'Evento' },
+]
+
+function Progress({ status, paid }: { status: string; paid: number }) {
+  if (status === 'CANCELLED' || status === 'REJECTED') return null
+  const reached = status === 'COMPLETED' ? 4 : status === 'CONFIRMED' ? 3 : paid > 0 ? 2 : 1
+  return (
+    <ol className="grid grid-cols-4 gap-2 border-t border-bark-900/8 px-5 py-4">
+      {STEPS.map((s, i) => (
+        <li key={s.key} className="text-center">
+          <span className={`mx-auto block h-1.5 rounded-full ${i < reached ? 'bg-leaf-600' : 'bg-bark-900/10'}`} />
+          <span className={`mt-1.5 block text-[0.7rem] font-semibold uppercase tracking-wide ${i < reached ? 'text-leaf-700' : 'text-bark-500/70'}`}>
+            {s.label}
+          </span>
+        </li>
+      ))}
+    </ol>
   )
 }

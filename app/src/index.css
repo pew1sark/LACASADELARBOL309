@@ -27,6 +27,17 @@
   --color-lime-300: #e0f890;
   --color-lime-400: #c9ec5c;
 
+  /* ANIMA COMPANY (consola /anima): misma paleta de la plataforma ANIMA */
+  --color-anima-bg: #f5f5f7;
+  --color-anima-ink: #111111;
+  --color-anima-ink2: #3a3733;
+  --color-anima-muted: #6e6e73;
+  --color-anima-line: #e6e3dd;
+  --color-anima-gold: #d0aa63;
+  --color-anima-gold-deep: #7b5920;
+  --color-anima-ok: #3a8a5f;
+  --color-anima-danger: #b23b3b;
+
   /* Celeste del fondo del logo */
   --color-sky-50: #eefafc;
   --color-sky-100: #daf6fa;

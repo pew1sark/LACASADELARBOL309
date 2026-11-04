@@ -55,6 +55,9 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Link to="/estado" className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-leaf-700 transition hover:bg-leaf-50 md:inline-flex">
+            <Icon name="users" className="size-4" /> Mi reserva
+          </Link>
           {/* El envoltorio controla la visibilidad: aplicar `hidden` sobre el
               botón chocaría con su propia utilidad de display. */}
           <span className="hidden sm:contents">
@@ -86,6 +89,9 @@ export function Header() {
                 {n.label}
               </a>
             ))}
+            <Link to="/estado" className="border-b border-bark-900/5 py-3.5 text-[0.95rem] font-medium text-leaf-700">
+              Mi reserva · Portal de clientes
+            </Link>
             <Button full className="my-3" onClick={cta}>
               Agendar mi fecha
             </Button>

@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabase'
 interface AuthState {
   session: Session | null
   isAdmin: boolean
+  /** 'anima' = ANIMA COMPANY (consola /anima); 'admin' = dueño del negocio. */
+  role: 'admin' | 'anima' | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
@@ -15,6 +17,7 @@ const Ctx = createContext<AuthState | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [role, setRole] = useState<'admin' | 'anima' | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -25,16 +28,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s)
       if (!s) {
         setIsAdmin(false)
+        setRole(null)
         setLoading(false)
         return
       }
       const { data } = await supabase
         .from('admin_users')
-        .select('user_id')
+        .select('user_id, role')
         .eq('user_id', s.user.id)
         .maybeSingle()
       if (!alive) return
       setIsAdmin(Boolean(data))
+      setRole(((data as { role?: 'admin' | 'anima' } | null)?.role) ?? null)
       setLoading(false)
     }
 
@@ -52,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       isAdmin,
+      role,
       loading,
       signIn: async (email, password) => {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -61,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await supabase.auth.signOut()
       },
     }),
-    [session, isAdmin, loading],
+    [session, isAdmin, role, loading],
   )
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

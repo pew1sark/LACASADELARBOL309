@@ -823,6 +823,8 @@ function RulesTab() {
     max_capacity: String(settings?.max_capacity ?? 60),
     lead_time_days: String(settings?.lead_time_days ?? 3),
     max_advance_days: String(settings?.max_advance_days ?? 365),
+    mercadopago_enabled: settings?.mercadopago_enabled ?? false,
+    online_payment_mode: settings?.online_payment_mode ?? 'both',
   })
   const set = (patch: Partial<typeof form>) => setForm((f) => ({ ...f, ...patch }))
 
@@ -840,6 +842,24 @@ function RulesTab() {
         <Field label="Anticipación mínima (días)" type="number" value={form.lead_time_days} onChange={(e) => set({ lead_time_days: e.target.value })} />
         <Field label="Agenda abierta hasta (días)" type="number" value={form.max_advance_days} onChange={(e) => set({ max_advance_days: e.target.value })} />
       </div>
+      <div className="rounded-2xl border border-bark-900/10 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-semibold">Pago en línea con Mercado Pago</p>
+          <span className="rounded-md bg-[#009ee3] px-2 py-0.5 text-[0.65rem] font-bold uppercase text-white">Mercado Pago</span>
+        </div>
+        <p className="mb-3 mt-1 text-xs text-bark-500">
+          El cliente paga desde la web y la reserva se confirma sola al aprobarse el pago. Requiere la credencial
+          MP_ACCESS_TOKEN cargada en Supabase.
+        </p>
+        <Check checked={form.mercadopago_enabled} onChange={(v) => set({ mercadopago_enabled: v })}>Activar pago en línea</Check>
+        <div className="mt-3">
+          <Select label="Qué puede pagar el cliente" value={form.online_payment_mode} onChange={(e) => set({ online_payment_mode: e.target.value as 'deposit' | 'full' | 'both' })}>
+            <option value="both">Abono o total (elige el cliente)</option>
+            <option value="deposit">Solo el abono</option>
+            <option value="full">Solo el total</option>
+          </Select>
+        </div>
+      </div>
       <Button
         disabled={busy}
         onClick={() =>
@@ -854,6 +874,8 @@ function RulesTab() {
                   max_capacity: num(form.max_capacity, 1),
                   lead_time_days: num(form.lead_time_days),
                   max_advance_days: num(form.max_advance_days, 30),
+                  mercadopago_enabled: form.mercadopago_enabled,
+                  online_payment_mode: form.online_payment_mode,
                 })
                 .eq('id', 1),
             'Reglas guardadas',
