@@ -6,6 +6,7 @@ import { useSiteData } from '../hooks/useSiteData'
 import { track } from '../lib/analytics'
 import { longDate, money } from '../lib/format'
 import { supabase } from '../lib/supabase'
+import { animaActivo, reservaAnima } from '../lib/anima'
 import { STATUS_LABEL, STATUS_TONE, type PublicReservation } from '../lib/types'
 import { openWhatsApp } from '../lib/whatsapp'
 
@@ -30,7 +31,9 @@ export default function Estado() {
     if (!value.trim()) return
     setLoading(true)
     setNotFound(false)
-    const { data: res } = await supabase.rpc('get_reservation_public', { p_code: value.trim() })
+    const { data: res } = animaActivo()
+      ? await reservaAnima(value.trim())
+      : await supabase.rpc('get_reservation_public', { p_code: value.trim() })
     setLoading(false)
     track('status_checked')
     if (!res) {
