@@ -1,5 +1,7 @@
 /** Capa de analítica agnóstica: funciona con Google Analytics, Google Tag
- *  Manager y Meta Pixel, y no rompe nada si ninguno está configurado. */
+ *  Manager y Meta Pixel, y no rompe nada si ninguno está configurado.
+ *  Cada evento va además a ANIMA COMPANY (pestaña «Web»), sin datos personales. */
+import { medir } from './anima'
 declare global {
   interface Window {
     dataLayer?: unknown[]
@@ -22,6 +24,7 @@ export type TrackEvent =
 
 export function track(event: TrackEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === 'undefined') return
+  medir(event)
   window.dataLayer?.push({ event, ...params })
   window.gtag?.('event', event, params)
   // Eventos estándar de Meta: son los que se pueden optimizar en Ads Manager.
