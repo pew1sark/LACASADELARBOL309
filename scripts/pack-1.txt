@@ -1,0 +1,20 @@
+# Pack 1 · Higgsfield (Nano Banana 2.1, 2K) · 05-11-2026 · fotos reales mejoradas, sin elementos inventados
+# nombre url
+01-fachada https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152829_9ded6db4-876c-48f4-887d-5ecb3be319af.png
+02-salon-principal https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152719_f8df866d-9500-4a89-a1d6-60b6d83692b3.png
+03-salon-celebracion https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152718_84edb62c-f962-4820-98f5-1850dff2f862.png
+04-mesa-celebracion https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152808_3c3d821e-78e8-4e44-af85-14f8483cdddc.png
+05-mesa-tematica https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152808_b15945b8-a5cb-4322-aa10-15494fda986a.png
+06-mesa-dulces https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152716_a0640b29-bccd-4066-8baa-1d1988e5a987.png
+07-galpon-inflable https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152717_25678ae7-9bab-4bea-9f97-6ffb334988e4.png
+08-juegos-madera https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152717_178417fb-b5ef-4e85-9ebf-7bdde7b638f1.png
+09-bloques-gigantes https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152941_0dd95510-a704-422b-8f6f-45f3ba25fcdb.png
+10-taca-taca https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152719_d40c99fc-c8ba-48b8-9b2e-ccf19cad45ef.png
+11-air-hockey https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152718_c7f6d14f-56e1-4a72-a264-106fc32097cb.png
+12-patio https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152718_88e9b5cc-1269-463e-8ce7-5f6cbc530eb9.png
+13-basquetbol https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152906_f54bde14-63cd-46fb-aded-9c78ad6ae4ff.png
+14-cocina https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152908_dab0d7d9-792c-40db-bf01-5e302e70a256.png
+15-sala-multiuso https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152943_34157bce-a021-429c-9c2f-d78c428be778.png
+16-banos https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152907_59a9c890-a8de-46bc-958d-9f11a79880ed.png
+17-decoracion https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152909_85d3bfde-3658-47be-b2b3-95453daf9005.png
+18-portada-vertical https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261105_152908_c8310f48-0cfb-4346-b57c-3a3ebfa46374.png
