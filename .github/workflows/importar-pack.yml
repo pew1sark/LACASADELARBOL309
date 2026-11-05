@@ -1,0 +1,46 @@
+# Trae un pack de imágenes (generadas en Higgsfield) al repo, en WebP listo
+# para la web: <nombre>.webp (1600 px) y <nombre>-sm.webp (800 px), en
+# app/public/images/pack/<pack>/ (lo que copia el build). Los PNG originales
+# (≈8 MB c/u) NO se guardan: quedan en Higgsfield. Lee scripts/pack-*.txt.
+# Se ejecuta al subir un pack nuevo a una rama claude/** o a mano.
+name: Importar pack de imágenes
+on:
+  push:
+    branches: ['claude/**']
+    paths: ['scripts/pack-*.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install --quiet pillow
+      - name: Descargar y convertir
+        run: |
+          python3 - <<'PY'
+          import glob, os, urllib.request, io
+          from PIL import Image
+          for pack in sorted(glob.glob('scripts/pack-*.txt')):
+              destino = os.path.join('app', 'public', 'images', 'pack', os.path.basename(pack)[:-4])
+              os.makedirs(destino, exist_ok=True)
+              for linea in open(pack, encoding='utf-8'):
+                  linea = linea.strip()
+                  if not linea or linea.startswith('#'): continue
+                  nombre, url = linea.split()
+                  web = os.path.join(destino, nombre + '.webp')
+                  if os.path.exists(web): continue
+                  datos = urllib.request.urlopen(url, timeout=60).read()
+                  im = Image.open(io.BytesIO(datos)).convert('RGB')
+                  for sufijo, ancho in (('', 1600), ('-sm', 800)):
+                      c = im.copy(); c.thumbnail((ancho, ancho * 2))
+                      c.save(os.path.join(destino, nombre + sufijo + '.webp'), 'WEBP', quality=82, method=6)
+                  print('ok', nombre, im.size)
+          PY
+      - name: Guardar en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/public/images/pack
+          git diff --cached --quiet || (git commit -m "Importar pack de imágenes [skip ci]" && git push)

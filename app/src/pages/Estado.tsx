@@ -4,6 +4,7 @@ import { Icon, WhatsAppIcon } from '../components/ui/Icon'
 import { Badge, Button, Card, Field } from '../components/ui/Primitives'
 import { useSiteData } from '../hooks/useSiteData'
 import { track } from '../lib/analytics'
+import { asset } from '../lib/asset'
 import { longDate, money } from '../lib/format'
 import { supabase } from '../lib/supabase'
 import { animaActivo, reservaAnima } from '../lib/anima'
@@ -147,6 +148,9 @@ export default function Estado() {
               )}
             </Card>
 
+            {data.status === 'CONFIRMED' && <PreparaTuEvento />}
+            {data.status === 'COMPLETED' && <Gracias instagram={settings?.instagram_url} />}
+
             <Button
               full
               size="lg"
@@ -166,6 +170,60 @@ export default function Estado() {
         )}
       </div>
     </div>
+  )
+}
+
+/** Post-venta: lo que el cliente necesita saber antes del día. Solo reglas
+ *  públicas que ya están en la web (preguntas frecuentes). */
+function PreparaTuEvento() {
+  const items = [
+    'Puedes traer tu comida, torta y decoración. La cocina equipada está incluida.',
+    'El saldo se paga el día del evento.',
+    'Capacidad máxima: 60 personas.',
+    '¿Necesitas cambiar la fecha? Sin costo hasta 15 días antes, sujeto a disponibilidad.',
+  ]
+  return (
+    <Card className="mt-5 p-5">
+      <h2 className="flex items-center gap-2 text-lg">
+        <Icon name="clipboard" className="size-5 text-leaf-700" /> Prepara tu evento
+      </h2>
+      <ul className="mt-3 space-y-2 text-sm text-bark-700">
+        {items.map((t) => (
+          <li key={t} className="flex gap-2">
+            <Icon name="check" className="mt-0.5 size-4 shrink-0 text-leaf-600" /> {t}
+          </li>
+        ))}
+      </ul>
+      <a
+        href={asset('catalogo/la-casa-del-arbol-309-catalogo.pdf')}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf-700 underline-offset-4 hover:underline"
+      >
+        Ver el catálogo de la casa (PDF) <Icon name="arrowRight" className="size-4" />
+      </a>
+    </Card>
+  )
+}
+
+function Gracias({ instagram }: { instagram?: string | null }) {
+  return (
+    <Card className="mt-5 p-5 text-center">
+      <h2 className="text-lg">¡Gracias por celebrar con nosotros!</h2>
+      <p className="mt-2 text-sm text-bark-700">
+        Si tienes fotos de tu fiesta, etiquétanos en Instagram. Y cuando quieras volver a celebrar, tu próxima fecha está a un clic.
+      </p>
+      <div className="mt-4 flex flex-wrap justify-center gap-3">
+        {instagram && (
+          <a href={instagram} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 rounded-full border-2 border-leaf-700 px-4 py-2 text-sm font-bold text-leaf-700">
+            <Icon name="instagram" className="size-4" /> Instagram
+          </a>
+        )}
+        <a href={`${import.meta.env.BASE_URL}#agendar`} className="inline-flex items-center gap-1.5 rounded-full bg-leaf-700 px-4 py-2 text-sm font-bold text-white">
+          <Icon name="calendar" className="size-4" /> Reservar otra fecha
+        </a>
+      </div>
+    </Card>
   )
 }
 

@@ -36,8 +36,40 @@ const REAL_PHOTOS: Record<string, string> = {
   'images/galeria-06.svg': 'images/fotos/fachada.webp',
 }
 
-export const realPhoto = <T extends string | null | undefined>(url: T): T | string =>
-  (url && REAL_PHOTOS[url.replace(/^\//, '')]) || url
+/** Pack 1 (nov. 2026): las mismas fotos, editadas con Higgsfield (luz, color,
+ *  nitidez y encuadre; sin agregar ni quitar nada del espacio). Si una ruta
+ *  guardada apunta a la foto original, se sirve la versión mejorada. */
+const PACK = 'images/pack/pack-1/'
+const MEJORADAS: Record<string, string> = {
+  'images/fotos/fachada.webp': `${PACK}01-fachada.webp`,
+  'images/fotos/salon-principal.webp': `${PACK}02-salon-principal.webp`,
+  'images/fotos/salon-mesas.webp': `${PACK}03-salon-celebracion.webp`,
+  'images/fotos/mesa-globos.webp': `${PACK}04-mesa-celebracion.webp`,
+  'images/fotos/mesa-tematica.webp': `${PACK}05-mesa-tematica.webp`,
+  'images/fotos/mesa-dulce.webp': `${PACK}06-mesa-dulces.webp`,
+  'images/fotos/juegos-inflable.webp': `${PACK}07-galpon-inflable.webp`,
+  'images/fotos/juegos-madera.webp': `${PACK}08-juegos-madera.webp`,
+  'images/fotos/bloques-gigantes.webp': `${PACK}09-bloques-gigantes.webp`,
+  'images/fotos/taca-taca.webp': `${PACK}10-taca-taca.webp`,
+  'images/fotos/air-hockey.webp': `${PACK}11-air-hockey.webp`,
+  'images/fotos/patio-pingpong.webp': `${PACK}12-patio.webp`,
+  'images/fotos/patio-basquetbol.webp': `${PACK}13-basquetbol.webp`,
+  'images/fotos/cocina.webp': `${PACK}14-cocina.webp`,
+  'images/fotos/sala-multiuso.webp': `${PACK}15-sala-multiuso.webp`,
+  'images/fotos/banos.webp': `${PACK}16-banos.webp`,
+  'images/fotos/fiesta-estilo.webp': `${PACK}17-decoracion.webp`,
+}
+
+export const realPhoto = <T extends string | null | undefined>(url: T): T | string => {
+  if (!url) return url
+  const limpia = url.replace(/^\//, '')
+  const real = REAL_PHOTOS[limpia] ?? limpia
+  return MEJORADAS[real] ?? (real === limpia ? url : real)
+}
+
+/** Versión liviana (800 px) de una foto del pack, para miniaturas. */
+export const miniatura = (url: string): string =>
+  url.startsWith(PACK) ? url.replace(/\.webp$/, '-sm.webp') : url
 
 export function resolveWhatsApp(fromDb?: string | null): string {
   const clean = (fromDb ?? '').replace(/\D/g, '')
@@ -71,7 +103,7 @@ export const FALLBACK_SETTINGS: Settings = {
   currency: 'CLP',
   cancellation_policy:
     'Las reservas se confirman con un abono del 30%. Cambios de fecha sin costo hasta 15 días antes del evento. Cancelaciones con menos de 7 días de anticipación no tienen devolución del abono.',
-  hero_image_url: 'images/fotos/salon-principal.webp',
+  hero_image_url: 'images/pack/pack-1/02-salon-principal.webp',
   setup_steps: [],
 }
 
@@ -115,7 +147,7 @@ export const FALLBACK_PACKAGES: Package[] = [
   {
     id: 'pk-arriendo', slug: 'arriendo-espacio', name: 'Arriendo del espacio', subtitle: 'La casa completa, solo para tu evento',
     description: null, event_type_id: null, price: RENTAL_PRICE, price_is_from: false, duration_hours: 3.5,
-    max_guests: 60, image_url: 'images/fotos/salon-principal.webp', badge: null, sort_order: 0, active: true,
+    max_guests: 60, image_url: 'images/pack/pack-1/02-salon-principal.webp', badge: null, sort_order: 0, active: true,
     weekend_price: null, included_guests: null, extra_guest_price: 0,
     package_services: services('pk-arriendo', []),
   },
