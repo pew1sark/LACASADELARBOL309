@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { asset } from '../../lib/asset'
+import { miniatura } from '../../lib/fallback'
 import { SPACES } from '../../lib/spaces'
 import { Icon } from '../ui/Icon'
 
@@ -53,7 +54,7 @@ export function Spaces() {
                     i === active ? 'ring-2 ring-lime-300 ring-offset-2 ring-offset-leaf-900' : 'opacity-80 hover:opacity-100'
                   }`}
                 >
-                  <img src={asset(sp.image)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={asset(miniatura(sp.image))} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <span className="absolute inset-0 bg-gradient-to-t from-leaf-950/90 via-leaf-950/30 to-transparent" />
                   <span className="relative flex min-h-24 w-full items-center gap-2 p-3">
                     <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-lime-300 text-leaf-900">

@@ -19,7 +19,7 @@ export function Hero() {
     <section className="relative overflow-hidden bg-leaf-900">
       <div className="absolute inset-0">
         <img
-          src={asset(settings?.hero_image_url ?? 'images/hero.svg')}
+          src={asset(settings?.hero_image_url ?? 'images/pack/pack-1/02-salon-principal.webp')}
           alt=""
           className="size-full object-cover object-[70%_75%]"
           fetchPriority="high"

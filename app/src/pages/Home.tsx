@@ -3,7 +3,9 @@ import { useSiteData } from '../hooks/useSiteData'
 import { Agenda } from '../components/site/Agenda'
 import { Faq } from '../components/site/Faq'
 import { FinalCta } from '../components/site/FinalCta'
+import { Catalogo } from '../components/site/Catalogo'
 import { Hero } from '../components/site/Hero'
+import { Ideas } from '../components/site/Ideas'
 import { InstagramCta } from '../components/site/InstagramCta'
 import { MobileCtaBar } from '../components/site/MobileCtaBar'
 import { Process } from '../components/site/Process'
@@ -29,7 +31,9 @@ export default function Home() {
     <>
       <Hero />
       <Spaces />
+      <Catalogo />
       <VideoTour />
+      <Ideas />
       <Rental />
       <Process />
       <Agenda />
