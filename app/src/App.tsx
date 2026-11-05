@@ -10,6 +10,7 @@ const Estado = lazy(() => import('./pages/Estado'))
 import Home from './pages/Home'
 const Reservar = lazy(() => import('./pages/Reservar'))
 import { LoadingBlock } from './components/ui/Primitives'
+import { medir } from './lib/anima'
 
 // El panel de administración se carga aparte: la landing pública no paga
 // su peso, que es lo que importa en móvil.
@@ -27,6 +28,7 @@ function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
     if (!pathname.includes('#')) window.scrollTo({ top: 0 })
+    medir('page_view') // una vista por página, para el monitoreo en ANIMA
   }, [pathname])
   return null
 }
