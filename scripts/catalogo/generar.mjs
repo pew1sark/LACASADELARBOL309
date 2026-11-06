@@ -30,7 +30,7 @@ const DATOS = {
   capacidad: 60,
   whatsapp: '+56 9 5473 7249',
   instagram: '@lacasadelarbol309',
-  web: 'pew1sark.github.io/LACASADELARBOL309',
+  web: 'lacasadelarbol309.cl',
   bloques: [
     ['Mañana', '11:00 – 14:30', 'Todos los días'],
     ['Tarde', '16:00 – 19:30', 'Todos los días'],
