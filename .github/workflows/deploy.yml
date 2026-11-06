@@ -37,9 +37,9 @@ jobs:
       - run: npm ci
 
       - name: Compilar
-        # Con dominio propio cambia esto a "/" y agrega un archivo CNAME.
+        # Dominio propio: lacasadelarbol309.cl (ver app/public/CNAME).
         env:
-          VITE_BASE_PATH: /LACASADELARBOL309/
+          VITE_BASE_PATH: /
         run: npm run build
 
       - name: Publicar en la raíz
