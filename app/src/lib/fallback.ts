@@ -69,7 +69,7 @@ export const realPhoto = <T extends string | null | undefined>(url: T): T | stri
 
 /** Versión liviana (800 px) de una foto del pack, para miniaturas. */
 export const miniatura = (url: string): string =>
-  url.startsWith(PACK) ? url.replace(/\.webp$/, '-sm.webp') : url
+  url.startsWith('images/pack/') ? url.replace(/\.webp$/, '-sm.webp') : url
 
 export function resolveWhatsApp(fromDb?: string | null): string {
   const clean = (fromDb ?? '').replace(/\D/g, '')

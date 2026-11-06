@@ -40,7 +40,10 @@ const DATOS = {
 
 // Fotos como data: URL para poder pasarlas a JPEG en el navegador (un PDF con
 // WebP sale sin comprimir: ~55 MB; en JPEG queda en pocos MB).
-const f = (n) => `data:image/webp;base64,${readFileSync(join(PACK, `${n}.webp`)).toString('base64')}`
+// 'p2/<nombre>' = pack 2 (videos del Drive, verticales); sin prefijo = pack 1.
+const PACK2 = join(RAIZ, 'app/public/images/pack/pack-2')
+const ruta = (n) => (n.startsWith('p2/') ? join(PACK2, `${n.slice(3)}.webp`) : join(PACK, `${n}.webp`))
+const f = (n) => `data:image/webp;base64,${readFileSync(ruta(n)).toString('base64')}`
 const fuente = (n) => pathToFileURL(join(AQUI, 'fuentes', n)).href
 const svg = (n) => readFileSync(join(AQUI, n), 'utf8').replace(/<\?xml[^>]*>/, '')
 const logo = pathToFileURL(join(RAIZ, 'app/public/brand/logo.webp')).href
@@ -110,39 +113,43 @@ td b{font:600 13pt F}
 
 const H = (n) => `style="height:${n}mm"`
 const pdfHtml = `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>${PDF_CSS}</style></head><body>
-${pagina(`<div class="fondo"><img src="${f('18-portada-vertical')}"></div><div class="velo"></div>
+${pagina(`<div class="fondo"><img src="${f('p2/19-entrada')}"></div><div class="velo"></div>
   <div class="arriba"><img src="${logo}"><div><div class="eyebrow" style="color:var(--lima)">Casa de eventos</div><div class="d" style="font-size:15pt">${DATOS.lugar}</div></div></div>
   <div class="abajo"><div class="eyebrow" style="color:var(--lima)">Catálogo del espacio</div>
   <h1>Celebra en una casa <span class="lima">solo para ti</span></h1>
   <div class="chips"><span>Casa completa</span><span>Hasta ${DATOS.capacidad} invitados</span><span>Arriendo ${DATOS.precio}</span><span>Juegos techados</span></div></div>`, 'portada')}
 
 ${pagina(`<div class="eyebrow">La casa</div><h2>Toda la casa, solo para tu evento</h2>
-  <p class="lead">Una casa privada en Chiguayante pensada para celebrar en familia y entre amigos: salón, galpón de juegos techado, patio, cocina equipada, sala multiuso y baños. Arriendas el espacio completo a precio fijo, traes tu comida, tu torta y tu decoración, y solo te preocupas de disfrutar.</p>
+  <p class="lead">Una casa privada en Chiguayante pensada para celebrar en familia y entre amigos: salón, galpón de juegos techado, zona de trepar, patio, cocina equipada, sala multiuso y baños. Arriendas el espacio completo a precio fijo, traes tu comida, tu torta y tu decoración, y solo te preocupas de disfrutar.</p>
   <div class="datos"><div><b>${DATOS.capacidad}</b><small>invitados máximo</small></div><div><b>${DATOS.precio}</b><small>arriendo, precio fijo</small></div><div><b>3,5 h</b><small>por bloque</small></div><div><b>${DATOS.abono}</b><small>de abono para reservar</small></div></div>
-  <div class="g">${foto('01-fachada', 'La casa · acceso privado', H(150))}</div>${pie(2)}`)}
+  <div class="g" style="grid-template-columns:1fr 1fr">${foto('p2/01-fachada', 'La casa · acceso privado', H(150))}${foto('p2/19-entrada', 'Entrada', H(150))}</div>${pie(2)}`)}
 
 ${pagina(`<div class="eyebrow">Salón principal</div><h2>Un espacio para celebrar</h2>
-  <p class="lead">Cielo de madera, pasto sintético y luz natural. Mesas y sillas para todos tus invitados, listas para armar a tu manera.</p>
-  <div class="g">${foto('02-salon-principal', 'Salón principal', H(112))}${foto('03-salon-celebracion', 'Salón armado para una celebración', H(98))}</div>${pie(3)}`)}
+  <p class="lead">Cielo de madera, pasto sintético y luz natural, con aire acondicionado. Mesas y sillas para tus invitados, un rincón con sillones y puertas de vidrio que conectan con el galpón de juegos.</p>
+  <div class="g" style="grid-template-columns:1fr 1fr 1fr">${foto('p2/02-salon', 'Salón principal', H(100))}${foto('p2/03-sala-estar', 'Rincón con sillones', H(100))}${foto('p2/04-puertas-galpon', 'Acceso al galpón', H(100))}${foto('03-salon-celebracion', 'Salón armado para una celebración', 'style="grid-column:span 3;height:98mm"')}</div>${pie(3)}`)}
 
 ${pagina(`<div class="eyebrow">Ideas de ambientación</div><h2>Una fiesta a su estilo</h2>
   <p class="lead">Así se han visto celebraciones reales en la casa. La decoración, la mesa dulce y la torta las pones tú (o tu proveedor de confianza).</p>
   <div class="g" style="grid-template-columns:1fr 1fr">${foto('04-mesa-celebracion', 'Mesa de celebración', H(104))}${foto('05-mesa-tematica', 'Mesa temática', H(104))}${foto('06-mesa-dulces', 'Mesa dulce', H(104))}${foto('17-decoracion', 'Decoración', H(104))}</div>${pie(4)}`)}
 
-${pagina(`<div class="eyebrow">Juegos y entretención</div><h2>Diversión en grande, aunque llueva</h2>
-  <p class="lead">Galpón de juegos techado con inflable y cama elástica, juegos de madera, bloques gigantes, taca-taca y air hockey para grandes y chicos.</p>
-  <div class="g" style="grid-template-columns:1fr 1fr">${foto('07-galpon-inflable', 'Galpón de juegos techado', 'style="grid-column:span 2;height:84mm"')}${foto('08-juegos-madera', 'Juegos de madera', H(62))}${foto('09-bloques-gigantes', 'Bloques gigantes', H(62))}${foto('10-taca-taca', 'Taca-taca', H(62))}${foto('11-air-hockey', 'Air hockey', H(62))}</div>${pie(5)}`)}
+${pagina(`<div class="eyebrow">Galpón de juegos</div><h2>Diversión en grande, aunque llueva</h2>
+  <p class="lead">Un galpón techado y luminoso con inflable, cama elástica con malla, bloques gigantes, taca-taca y air hockey para grandes y chicos.</p>
+  <div class="g" style="grid-template-columns:1fr 1fr 1fr">${foto('p2/05-galpon-juegos', 'Galpón techado · inflable', H(100))}${foto('p2/06-cama-elastica', 'Cama elástica con malla', H(100))}${foto('p2/10-bloques-gigantes', 'Bloques gigantes', H(100))}${foto('p2/11-taca-taca', 'Taca-taca', H(100))}${foto('p2/12-air-hockey', 'Air hockey', H(100))}${foto('09-bloques-gigantes', 'Para construir en grande', H(100))}</div>${pie(5)}`)}
+
+${pagina(`<div class="eyebrow">Zona de trepar</div><h2>Para trepar, colgarse y deslizarse</h2>
+  <p class="lead">Estructuras de madera con escaleras, malla de cuerda, columpio, tobogán y muro de escalada con agarres de colores, sobre pasto sintético.</p>
+  <div class="g" style="grid-template-columns:1fr 1fr 1fr">${foto('p2/07-estructura-tobogan', 'Estructura con tobogán', H(150))}${foto('p2/08-estructura-trepar', 'Malla y escaleras', H(150))}${foto('p2/09-muro-escalada', 'Muro de escalada', H(150))}</div>${pie(6)}`)}
 
 ${pagina(`<div class="eyebrow">Patio y áreas de apoyo</div><h2>Todo lo que tu evento necesita</h2>
-  <p class="lead">Patio con ping pong y básquetbol al aire libre, cocina con refrigerador y mesón para tu catering, sala multiuso para regalos o un rincón para adultos, y baños listos para tus invitados.</p>
-  <div class="g" style="grid-template-columns:1fr 1fr">${foto('12-patio', 'Patio · ping pong', H(66))}${foto('13-basquetbol', 'Básquetbol', H(66))}${foto('14-cocina', 'Cocina equipada', H(66))}${foto('15-sala-multiuso', 'Sala multiuso', H(66))}${foto('16-banos', 'Baños', 'style="grid-column:span 2;height:52mm"')}</div>${pie(6)}`)}
+  <p class="lead">Patio con ping pong y básquetbol al aire libre, sala multiuso para regalos o un rincón para adultos, cocina con refrigerador, horno y mesón para tu catering, y baños listos para tus invitados.</p>
+  <div class="g" style="grid-template-columns:1fr 1fr 1fr">${foto('p2/13-patio-ping-pong', 'Patio · ping pong', H(98))}${foto('p2/14-basquetbol', 'Básquetbol', H(98))}${foto('p2/15-sala-multiuso', 'Sala multiuso', H(98))}${foto('p2/17-cocina-meson', 'Cocina equipada', H(98))}${foto('p2/16-cocina', 'Mesón de apoyo', H(98))}${foto('p2/18-bano', 'Baño', H(98))}</div>${pie(7)}`)}
 
 ${pagina(`<div class="eyebrow">Arriendo</div><h2>Un precio, la casa completa</h2>
   <p class="lead">Sin paquetes confusos: arriendas todo el espacio para tu evento por un bloque de 3,5 horas.</p>
   <div class="precio"><b>${DATOS.precio}</b><span>Arriendo de la casa completa<br>Hasta ${DATOS.capacidad} invitados · reserva con ${DATOS.abono} de abono, saldo el día del evento</span></div>
   <h3 class="d" style="margin-top:12mm;font-size:16pt">Horarios disponibles</h3>
   <table>${DATOS.bloques.map(([n, h, d]) => `<tr><td><b>${n}</b></td><td>${h}</td><td>${d}</td></tr>`).join('')}</table>
-  <div class="g" style="grid-template-columns:1fr 1fr;margin-top:12mm">${foto('02-salon-principal', 'Salón', H(62))}${foto('07-galpon-inflable', 'Juegos', H(62))}</div>${pie(7)}`, 'oscura')}
+  <div class="g" style="grid-template-columns:1fr 1fr 1fr;margin-top:10mm">${foto('p2/02-salon', 'Salón', H(78))}${foto('p2/05-galpon-juegos', 'Juegos', H(78))}${foto('p2/07-estructura-tobogan', 'Zona de trepar', H(78))}</div>${pie(8)}`, 'oscura')}
 
 ${pagina(`<div class="eyebrow">Cómo reservar</div><h2>Tu fecha en 4 pasos</h2>
   <div class="pasos"><div><i>1</i>Elige fecha y horario en la agenda de la web.</div><div><i>2</i>Cuéntanos de tu evento: la solicitud llega lista a WhatsApp.</div><div><i>3</i>Confirmamos la disponibilidad el mismo día.</div><div><i>4</i>Con el abono del ${DATOS.abono} tu fecha queda reservada.</div></div>
@@ -156,7 +163,7 @@ ${pagina(`<div class="eyebrow">Cómo reservar</div><h2>Tu fecha en 4 pasos</h2>
     <div><h3>¿Cómo sé el estado de mi reserva?</h3><p>Con tu código de reserva lo revisas en la web cuando quieras.</p></div>
   </div>
   <div class="qrs"><div>${svg('qr-web.svg')}<p><b>Ver fechas libres</b><span>Escanea y elige tu fecha en la agenda en línea.</span></p></div>
-  <div>${svg('qr-whatsapp.svg')}<p><b>Escríbenos</b><span>WhatsApp ${DATOS.whatsapp}<br>Instagram ${DATOS.instagram}</span></p></div></div>${pie(8)}`)}
+  <div>${svg('qr-whatsapp.svg')}<p><b>Escríbenos</b><span>WhatsApp ${DATOS.whatsapp}<br>Instagram ${DATOS.instagram}</span></p></div></div>${pie(9)}`)}
 </body></html>`
 
 // ---------------------------------------------------------------- Fichas
@@ -183,30 +190,34 @@ const historia = (img, kicker, titulo, texto, pill) => ficha(img, kicker, titulo
 // [archivo, foto, kicker, título, texto, pill]
 const FICHAS = [
   ['00-arriendo-casa-completa', '02-salon-principal', 'Arriendo', 'La casa completa, solo para tu evento', `Hasta ${DATOS.capacidad} invitados · bloque de 3,5 h`, DATOS.precio],
-  ['01-bloque-manana', '01-fachada', 'Bloque mañana', '11:00 – 14:30', 'Todos los días · casa completa', DATOS.precio],
-  ['02-bloque-tarde', '03-salon-celebracion', 'Bloque tarde', '16:00 – 19:30', 'Todos los días · casa completa', DATOS.precio],
+  ['01-bloque-manana', 'p2/19-entrada', 'Bloque mañana', '11:00 – 14:30', 'Todos los días · casa completa', DATOS.precio],
+  ['02-bloque-tarde', 'p2/05-galpon-juegos', 'Bloque tarde', '16:00 – 19:30', 'Todos los días · casa completa', DATOS.precio],
   ['03-bloque-noche', '17-decoracion', 'Bloque noche', '20:30 – 00:30', 'Jueves a sábado · casa completa', DATOS.precio],
-  ['10-salon-principal', '02-salon-principal', 'Salón principal', 'Un espacio para celebrar', 'Cielo de madera, pasto sintético y luz natural'],
-  ['11-salon-celebracion', '03-salon-celebracion', 'Montaje', 'Mesas y sillas para todos', 'Armas el salón a tu manera'],
-  ['12-galpon-juegos', '07-galpon-inflable', 'Juegos', 'Galpón techado', 'Inflable y cama elástica, aunque llueva'],
-  ['13-juegos-madera', '08-juegos-madera', 'Juegos', 'Juegos de madera', 'Para trepar y explorar'],
-  ['14-bloques-gigantes', '09-bloques-gigantes', 'Juegos', 'Bloques gigantes', 'Para construir en grande'],
-  ['15-taca-taca', '10-taca-taca', 'Juegos', 'Taca-taca', 'Para grandes y chicos'],
-  ['16-air-hockey', '11-air-hockey', 'Juegos', 'Air hockey', 'Partidas rápidas entre amigos'],
-  ['17-patio', '12-patio', 'Patio', 'Ping pong al aire libre', 'Más espacio para jugar'],
-  ['18-basquetbol', '13-basquetbol', 'Patio', 'Básquetbol', 'Aro en el patio'],
-  ['19-cocina', '14-cocina', 'Áreas de apoyo', 'Cocina equipada', 'Refrigerador, cocina y mesón'],
-  ['20-sala-multiuso', '15-sala-multiuso', 'Áreas de apoyo', 'Sala multiuso', 'Regalos, torta o rincón para adultos'],
-  ['21-banos', '16-banos', 'Comodidad', 'Baños', 'Limpios y listos para tus invitados'],
-  ['22-mesa-celebracion', '04-mesa-celebracion', 'Ideas', 'Mesa de celebración', 'Globos y decoración a tu estilo'],
-  ['23-mesa-tematica', '05-mesa-tematica', 'Ideas', 'Mesa temática', 'Una ambientación hecha en la casa'],
-  ['24-mesa-dulce', '06-mesa-dulces', 'Ideas', 'Mesa dulce', 'Donas, cupcakes y más'],
-  ['25-la-casa', '01-fachada', 'La casa', 'Casa privada en Chiguayante', DATOS.lugar],
+  ['10-la-casa', 'p2/01-fachada', 'La casa', 'Casa privada en Chiguayante', DATOS.lugar],
+  ['11-salon-principal', 'p2/02-salon', 'Salón principal', 'Un espacio para celebrar', 'Cielo de madera, pasto sintético y luz natural'],
+  ['12-rincon-sillones', 'p2/03-sala-estar', 'Salón principal', 'Rincón con sillones', 'Para los adultos, con aire acondicionado'],
+  ['13-salon-celebracion', '03-salon-celebracion', 'Montaje', 'Mesas y sillas para todos', 'Armas el salón a tu manera'],
+  ['14-galpon-juegos', 'p2/05-galpon-juegos', 'Juegos', 'Galpón techado', 'Inflable y juegos, aunque llueva'],
+  ['15-cama-elastica', 'p2/06-cama-elastica', 'Juegos', 'Cama elástica', 'Con malla de seguridad'],
+  ['16-zona-trepar', 'p2/07-estructura-tobogan', 'Zona de trepar', 'Tobogán y columpio', 'Estructura de madera sobre pasto'],
+  ['17-muro-escalada', 'p2/09-muro-escalada', 'Zona de trepar', 'Muro de escalada', 'Agarres de colores para los peques'],
+  ['18-bloques-gigantes', 'p2/10-bloques-gigantes', 'Juegos', 'Bloques gigantes', 'Para construir en grande'],
+  ['19-taca-taca', 'p2/11-taca-taca', 'Juegos', 'Taca-taca', 'Para grandes y chicos'],
+  ['20-air-hockey', 'p2/12-air-hockey', 'Juegos', 'Air hockey', 'Partidas rápidas entre amigos'],
+  ['21-patio', 'p2/13-patio-ping-pong', 'Patio', 'Ping pong al aire libre', 'Más espacio para jugar'],
+  ['22-basquetbol', 'p2/14-basquetbol', 'Patio', 'Básquetbol', 'Aro en el patio'],
+  ['23-cocina', 'p2/17-cocina-meson', 'Áreas de apoyo', 'Cocina equipada', 'Refrigerador, cocina, horno y mesón'],
+  ['24-sala-multiuso', 'p2/15-sala-multiuso', 'Áreas de apoyo', 'Sala multiuso', 'Regalos, torta o rincón para adultos'],
+  ['25-bano', 'p2/18-bano', 'Comodidad', 'Baños', 'Limpios y listos para tus invitados'],
+  ['26-mesa-celebracion', '04-mesa-celebracion', 'Ideas', 'Mesa de celebración', 'Globos y decoración a tu estilo'],
+  ['27-mesa-tematica', '05-mesa-tematica', 'Ideas', 'Mesa temática', 'Una ambientación hecha en la casa'],
+  ['28-mesa-dulce', '06-mesa-dulces', 'Ideas', 'Mesa dulce', 'Donas, cupcakes y más'],
 ]
 const HISTORIAS = [
-  ['01-portada', '18-portada-vertical', 'Casa de eventos · Chiguayante', 'Celebra en una casa solo para ti', `Casa completa · hasta ${DATOS.capacidad} invitados`, `Arriendo ${DATOS.precio}`],
-  ['02-juegos', '07-galpon-inflable', 'Juegos techados', 'Diversión aunque llueva', 'Inflable, cama elástica, taca-taca y más', 'Reserva por WhatsApp'],
-  ['03-salon', '02-salon-principal', 'Salón principal', 'Tu fiesta, a tu estilo', 'Trae tu comida, torta y decoración', 'Ver fechas libres'],
+  ['01-portada', 'p2/19-entrada', 'Casa de eventos · Chiguayante', 'Celebra en una casa solo para ti', `Casa completa · hasta ${DATOS.capacidad} invitados`, `Arriendo ${DATOS.precio}`],
+  ['02-juegos', 'p2/05-galpon-juegos', 'Juegos techados', 'Diversión aunque llueva', 'Inflable, cama elástica, taca-taca y más', 'Reserva por WhatsApp'],
+  ['03-salon', 'p2/02-salon', 'Salón principal', 'Tu fiesta, a tu estilo', 'Trae tu comida, torta y decoración', 'Ver fechas libres'],
+  ['04-zona-trepar', 'p2/07-estructura-tobogan', 'Zona de trepar', 'Trepar, colgarse y deslizarse', 'Tobogán, columpio y muro de escalada', 'Agenda tu fecha'],
 ]
 
 mkdirSync(join(SALIDA, 'whatsapp'), { recursive: true })

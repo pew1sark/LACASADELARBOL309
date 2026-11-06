@@ -27,7 +27,7 @@ export function Spaces() {
               src={asset(s.image)}
               alt={s.title}
               loading="lazy"
-              className="fade-up aspect-[4/3] size-full object-cover lg:aspect-auto lg:min-h-[28rem]"
+              className="fade-up aspect-[4/5] size-full object-cover sm:aspect-[4/3] lg:aspect-auto lg:min-h-[32rem]"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-leaf-950/95 via-leaf-950/60 to-transparent p-5 pt-16 md:p-7 md:pt-24">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-lime-300">{s.kicker}</p>
