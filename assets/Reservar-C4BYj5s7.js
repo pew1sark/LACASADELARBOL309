@@ -1,1 +1,0 @@
-import{j as e,d as a}from"./index-n1P73wHT.js";import{b as r}from"./react-CpGy36L5.js";import"./supabase-C0Z0FS3K.js";function i(){return r.useEffect(()=>(document.title="Consultar disponibilidad — La Casa del Árbol 309",()=>{document.title="La Casa del Árbol 309 — Casa de eventos para cumpleaños y celebraciones"}),[]),e.jsx(a,{})}export{i as default};
