@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://pew1sark.github.io/LACASADELARBOL309/sitemap.xml
+Sitemap: https://lacasadelarbol309.cl/sitemap.xml
