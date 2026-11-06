@@ -1,0 +1,21 @@
+# Pack 2 (06-11-2026): fotogramas de los videos del Drive del dueño, editados en Higgsfield
+# (nano_banana_2_1, 2k). Solo luz, color, nitidez y perspectiva; nada agregado ni quitado.
+01-fachada https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003916_55e81d3c-2949-4661-b204-97893eb2d5e7.png
+02-salon https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003915_b550854c-397a-4ac7-8fc4-15a2b92b1bd3.png
+03-sala-estar https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003916_630bdaa9-2923-409a-82b7-32d892e14fb1.png
+04-puertas-galpon https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003916_0be7075c-212c-46e6-9265-ad5dc31703e4.png
+05-galpon-juegos https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003916_45feccff-f082-4892-96d9-630fffc51d23.png
+06-cama-elastica https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003917_e22feaab-5b1a-4f31-bb4e-6578c36b1ee1.png
+07-estructura-tobogan https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004023_33ae19dc-f6a5-4e5c-aa47-969fc8bc274e.png
+08-estructura-trepar https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003946_575e6f8d-42e3-48a1-8d4b-5c6d098662d2.png
+09-muro-escalada https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003947_6dc01b6e-e7dd-450b-8d74-89432fa7e21f.png
+10-bloques-gigantes https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004022_81e3ad45-3947-43cb-bb84-aeb9352ec704.png
+11-taca-taca https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004022_b6a94ba7-4706-4a64-9b76-7a65f749a786.png
+12-air-hockey https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_003947_cd3e2aa9-67bd-46ec-af61-fcbfdd338262.png
+13-patio-ping-pong https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004022_b29a61bd-01b2-4898-8792-91d051c92d9c.png
+14-basquetbol https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004023_c8b0d918-23b1-44e9-b60e-8e7e775c2b36.png
+15-sala-multiuso https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004053_2a0cc35b-d7ab-4786-abec-5d0391ca21f0.png
+16-cocina https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004052_333e1e50-30eb-4a63-91c3-efe485722175.png
+17-cocina-meson https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004053_553735b5-08cc-4083-9a44-83e263afb77a.png
+18-bano https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004119_b0ef0d6d-7167-44e0-85be-c6b13f9d7da1.png
+19-entrada https://d8j0ntlcm91z4.cloudfront.net/user_3JxZohvAxikw4wQRUROwOTURiFb/hf_20261106_004120_b2575aea-57bb-44a6-998b-782dd79c7536.png

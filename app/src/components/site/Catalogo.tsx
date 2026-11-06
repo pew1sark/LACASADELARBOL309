@@ -5,7 +5,7 @@ import { miniatura } from '../../lib/fallback'
 import { CATALOGO } from '../../lib/spaces'
 import { Icon } from '../ui/Icon'
 
-/** Catálogo fotográfico completo del espacio (pack 1) con visor y descarga
+/** Catálogo fotográfico completo del espacio (pack 2 + celebraciones del pack 1) con visor y descarga
  *  del catálogo en PDF. Fotos reales editadas: nada agregado ni quitado. */
 export function Catalogo() {
   const [active, setActive] = useState<number | null>(null)
@@ -49,7 +49,7 @@ export function Catalogo() {
                 src={asset(i === 0 ? f.image : miniatura(f.image))}
                 alt={f.title}
                 loading="lazy"
-                className="aspect-square size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="aspect-[3/4] size-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-leaf-950/80 to-transparent p-3 pt-10 text-sm font-semibold text-cream-50">
                 {f.title}
