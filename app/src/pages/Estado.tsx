@@ -7,7 +7,7 @@ import { track } from '../lib/analytics'
 import { asset } from '../lib/asset'
 import { longDate, money } from '../lib/format'
 import { supabase } from '../lib/supabase'
-import { animaActivo, reservaAnima } from '../lib/anima'
+import { animaActivo, irAPagar, reservaAnima, verificarPagoAnima, type ResultadoPago } from '../lib/anima'
 import { STATUS_LABEL, STATUS_TONE, type PublicReservation } from '../lib/types'
 import { openWhatsApp } from '../lib/whatsapp'
 
@@ -32,9 +32,10 @@ export default function Estado() {
     if (!value.trim()) return
     setLoading(true)
     setNotFound(false)
-    const { data: res } = animaActivo()
-      ? await reservaAnima(value.trim())
-      : await supabase.rpc('get_reservation_public', { p_code: value.trim() })
+    // ANIMA primero, aunque el catálogo todavía no haya cargado (p. ej. al volver
+    // de Mercado Pago); la base anterior solo si ANIMA no conoce el código.
+    let { data: res } = await reservaAnima(value.trim())
+    if (!res && !animaActivo()) res = (await supabase.rpc('get_reservation_public', { p_code: value.trim() })).data
     setLoading(false)
     track('status_checked')
     if (!res) {
@@ -42,13 +43,56 @@ export default function Estado() {
       setNotFound(true)
       return
     }
-    setData(res as PublicReservation)
+    setData(res as unknown as PublicReservation)
     setParams({ codigo: value.trim().toUpperCase() }, { replace: true })
+  }
+
+  // ---- Pago en línea (Mercado Pago) ----
+  const [pago, setPago] = useState<ResultadoPago | null>(null)
+  const [verificando, setVerificando] = useState(false)
+  const [pagando, setPagando] = useState<'abono' | 'total' | null>(null)
+  const [errorPago, setErrorPago] = useState<string | null>(null)
+
+  const pagar = async (tipo: 'abono' | 'total') => {
+    if (!data) return
+    setPagando(tipo)
+    setErrorPago(null)
+    track('reservation_started', { source: 'mercadopago', tipo })
+    const e = await irAPagar(data.code, tipo)
+    if (e) {
+      setErrorPago(e)
+      setPagando(null)
+    }
+  }
+
+  /** Vuelta desde Mercado Pago: se verifica contra ANIMA (que pregunta a Mercado Pago). */
+  const verificar = async (codigo: string) => {
+    setVerificando(true)
+    let r: ResultadoPago | null = null
+    for (let i = 0; i < 5; i++) {
+      r = (await verificarPagoAnima(codigo)).data
+      if (r && r.estado !== 'creada' && r.estado !== 'pendiente') break
+      await new Promise((ok) => setTimeout(ok, 3000))
+    }
+    setPago(r)
+    setVerificando(false)
+    if (r?.estado === 'aprobada' && r.event_id) {
+      // Venta a Meta desde el navegador con el mismo id que la del servidor: Meta la cuenta una vez.
+      const clave = `lca309-compra-${r.event_id}`
+      let ya = false
+      try { ya = !!localStorage.getItem(clave); localStorage.setItem(clave, '1') } catch { /* sin almacenamiento */ }
+      if (!ya) {
+        window.fbq?.('track', 'Purchase', { value: r.monto, currency: 'CLP', content_name: `Reserva ${codigo}` }, { eventID: r.event_id })
+        track('reservation_confirmed', { value: r.monto, currency: 'CLP' })
+      }
+    }
+    await search(codigo)
   }
 
   useEffect(() => {
     const initial = params.get('codigo')
-    if (initial) void search(initial)
+    if (initial && params.get('pago')) void verificar(initial)
+    else if (initial) void search(initial)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -96,6 +140,11 @@ export default function Estado() {
           </Card>
         )}
 
+        {(verificando || pago) && (
+          <ResultadoDePago pago={pago} verificando={verificando} codigo={data?.code ?? params.get('codigo') ?? ''}
+                           whatsapp={settings?.whatsapp} negocio={settings?.business_name ?? 'La Casa del Árbol 309'} />
+        )}
+
         {data && (
           <div className="mt-8 fade-up">
             <Card className="overflow-hidden">
@@ -124,7 +173,35 @@ export default function Estado() {
                 {data.paid_amount > 0 && <Row label="Abonado" value={money(data.paid_amount)} />}
               </dl>
 
-              {data.payment && data.status === 'AWAITING_PAYMENT' && (
+              {data.pago_online && ['PENDING', 'AWAITING_PAYMENT', 'CONFIRMED'].includes(data.status) && (data.deposit_due ?? 0) + (data.balance_due ?? 0) > 0 && (
+                <div className="border-t border-bark-900/8 bg-leaf-50 px-5 py-5">
+                  <h2 className="flex items-center gap-2 text-lg">
+                    <Icon name="lock" className="size-5 text-leaf-700" />
+                    {(data.deposit_due ?? 0) > 0 ? 'Paga el abono y tu fecha queda reservada' : 'Paga el saldo en línea'}
+                  </h2>
+                  <p className="mt-1 text-sm text-bark-700">
+                    {(data.deposit_due ?? 0) > 0
+                      ? 'Con tarjeta de crédito, débito o saldo de Mercado Pago. Apenas se aprueba, tu reserva queda confirmada al instante.'
+                      : 'Puedes pagar lo que falta ahora o el día del evento.'}
+                  </p>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    {(data.deposit_due ?? 0) > 0 && (
+                      <Button size="lg" onClick={() => void pagar('abono')} disabled={!!pagando}>
+                        {pagando === 'abono' ? 'Abriendo Mercado Pago…' : `Pagar abono ${money(data.deposit_due ?? 0)}`}
+                      </Button>
+                    )}
+                    {(data.balance_due ?? 0) > 0 && (data.balance_due ?? 0) !== (data.deposit_due ?? 0) && (
+                      <Button size="lg" variant={(data.deposit_due ?? 0) > 0 ? 'outline' : 'primary'} onClick={() => void pagar('total')} disabled={!!pagando}>
+                        {pagando === 'total' ? 'Abriendo Mercado Pago…' : `Pagar el total ${money(data.balance_due ?? 0)}`}
+                      </Button>
+                    )}
+                  </div>
+                  {errorPago && <p className="mt-3 text-sm font-semibold text-terra-500" role="alert">{errorPago}</p>}
+                  <p className="mt-3 flex items-center gap-1.5 text-xs text-bark-500"><Icon name="shield" className="size-3.5" /> Pago seguro procesado por Mercado Pago. No guardamos los datos de tu tarjeta.</p>
+                </div>
+              )}
+
+              {data.payment && data.status === 'AWAITING_PAYMENT' && !data.pago_online && (
                 <div className="border-t border-bark-900/8 bg-leaf-50 px-5 py-5">
                   <h2 className="flex items-center gap-2 text-lg">
                     <Icon name="money" className="size-5 text-leaf-700" /> Datos para el abono
@@ -222,6 +299,59 @@ function Gracias({ instagram }: { instagram?: string | null }) {
         <a href={`${import.meta.env.BASE_URL}#agendar`} className="inline-flex items-center gap-1.5 rounded-full bg-leaf-700 px-4 py-2 text-sm font-bold text-white">
           <Icon name="calendar" className="size-4" /> Reservar otra fecha
         </a>
+      </div>
+    </Card>
+  )
+}
+
+/** Lo que pasó con el pago en Mercado Pago, en palabras de la persona. */
+function ResultadoDePago({ pago, verificando, codigo, whatsapp, negocio }: {
+  pago: ResultadoPago | null; verificando: boolean; codigo: string; whatsapp?: string | null; negocio: string
+}) {
+  if (verificando) {
+    return (
+      <Card className="mt-6 flex items-center gap-3 p-5" aria-live="polite">
+        <span className="size-5 shrink-0 animate-spin rounded-full border-2 border-leaf-600 border-t-transparent" />
+        <p className="text-sm font-semibold">Confirmando tu pago con Mercado Pago…</p>
+      </Card>
+    )
+  }
+  if (!pago) return null
+  if (pago.estado === 'aprobada') {
+    const texto = pago.sin_cupo
+      ? `Hola ${negocio} 👋 Pagué ${money(pago.monto)} con Mercado Pago por la reserva ${codigo}, pero la página dice que el horario ya se había tomado. ¿Me ayudan con otra fecha?`
+      : `Hola ${negocio} 👋 Acabo de pagar ${pago.tipo === 'abono' ? 'el abono' : 'mi reserva'} con Mercado Pago (${money(pago.monto)}). Mi código es ${codigo}. ¡Nos vemos en la fiesta! 🎉`
+    return (
+      <Card className={`mt-6 p-5 ${pago.sin_cupo ? 'border-sun-400' : 'border-leaf-500'}`} aria-live="polite">
+        <div className="flex items-start gap-3">
+          <span className={`grid size-10 shrink-0 place-items-center rounded-full ${pago.sin_cupo ? 'bg-sun-100 text-sun-600' : 'bg-leaf-100 text-leaf-700'}`}>
+            <Icon name={pago.sin_cupo ? 'alert' : 'check'} className="size-5" />
+          </span>
+          <div>
+            <p className="font-display text-xl">{pago.sin_cupo ? 'Recibimos tu pago' : '¡Pago aprobado! Tu fecha está reservada 🎉'}</p>
+            <p className="mt-1 text-sm text-bark-500">
+              {pago.sin_cupo
+                ? 'Justo antes otra persona tomó ese horario. Tu pago está registrado: escríbenos y te ofrecemos otra fecha o te lo devolvemos.'
+                : `Recibimos ${money(pago.monto)}. Te enviamos el comprobante de Mercado Pago a tu correo.`}
+            </p>
+          </div>
+        </div>
+        <Button full size="lg" variant="whatsapp" className="mt-4" onClick={() => openWhatsApp(whatsapp, texto, 'pago_aprobado')}>
+          <WhatsAppIcon /> {pago.sin_cupo ? 'Escribir por WhatsApp' : 'Avisar por WhatsApp que pagué'}
+        </Button>
+      </Card>
+    )
+  }
+  return (
+    <Card className="mt-6 flex items-start gap-3 p-5" aria-live="polite">
+      <Icon name="alert" className="mt-0.5 size-5 shrink-0 text-sun-600" />
+      <div>
+        <p className="font-semibold">{pago.estado === 'rechazada' ? 'El pago no se aprobó' : 'Tu pago todavía no se confirma'}</p>
+        <p className="mt-1 text-sm text-bark-500">
+          {pago.estado === 'rechazada'
+            ? 'No se hizo ningún cargo. Puedes intentarlo otra vez con otro medio de pago.'
+            : 'Si ya pagaste, en unos minutos esta página lo mostrará. No es necesario pagar de nuevo.'}
+        </p>
       </div>
     </Card>
   )

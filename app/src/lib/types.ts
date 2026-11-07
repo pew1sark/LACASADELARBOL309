@@ -250,6 +250,11 @@ export interface PublicReservation {
   paid_amount: number
   deposit_percent: number
   created_at: string
+  /** ANIMA: pago en línea con Mercado Pago disponible para esta reserva. */
+  pago_online?: boolean
+  deposit_amount?: number
+  deposit_due?: number
+  balance_due?: number
   addons: { name: string; quantity: number; subtotal: number }[]
   payment?: {
     instructions: string | null
