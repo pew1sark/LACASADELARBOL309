@@ -29,11 +29,14 @@ export interface Resultado<T> {
   error: { message: string } | null
 }
 
-async function llamar<T>(cuerpo: Record<string, unknown>, ms = 6000): Promise<Resultado<T>> {
+/** Pago en línea (Mercado Pago): Edge Function hermana de eventos-publico. */
+const PAGOS = ENDPOINT.replace(/eventos-publico$/, 'eventos-pagos')
+
+async function llamar<T>(cuerpo: Record<string, unknown>, ms = 6000, url = ENDPOINT): Promise<Resultado<T>> {
   const ctrl = new AbortController()
   const t = setTimeout(() => ctrl.abort(), ms)
   try {
-    const r = await fetch(ENDPOINT, {
+    const r = await fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json', apikey: KEY },
       body: JSON.stringify({ empresa: EMPRESA, ...cuerpo }),
@@ -72,6 +75,37 @@ export const disponibilidadAnima = (desde: string, hasta: string) =>
 export const solicitarAnima = (payload: Record<string, unknown>) => llamar<Record<string, unknown>>({ accion: 'solicitar', payload }, 8000)
 
 export const reservaAnima = (codigo: string) => llamar<Record<string, unknown> | null>({ accion: 'reserva', codigo })
+
+/* ------------------------------------------------------------------ pago en línea
+   El monto lo calcula ANIMA (abono = % de la reserva), nunca la web. Mercado
+   Pago devuelve a /estado?codigo=…&pago=ok|error|pendiente y ahí se verifica. */
+export interface ResultadoPago {
+  estado: 'creada' | 'pendiente' | 'aprobada' | 'rechazada' | 'reembolsada'
+  monto: number
+  tipo: 'abono' | 'total' | 'saldo'
+  sin_cupo: boolean
+  event_id: string | null
+  reserva: { estado: string; pagado: number; total: number }
+}
+export const pagarAnima = (codigo: string, tipo: 'abono' | 'total' = 'abono') =>
+  llamar<{ url: string; monto: number; tipo: string }>({ accion: 'pagar', codigo, tipo }, 12000, PAGOS)
+export const verificarPagoAnima = (codigo: string) =>
+  llamar<ResultadoPago | null>({ accion: 'verificar', codigo }, 12000, PAGOS)
+
+/** Lleva a Mercado Pago. Devuelve un mensaje de error si no se pudo. */
+export async function irAPagar(codigo: string, tipo: 'abono' | 'total' = 'abono'): Promise<string | null> {
+  const r = await pagarAnima(codigo, tipo)
+  if (r.data?.url) {
+    window.location.href = r.data.url
+    return null
+  }
+  const e = r.error?.message ?? ''
+  if (e.includes('HORARIO_NO_DISPONIBLE')) return 'Ese horario se acaba de tomar. Escríbenos por WhatsApp y buscamos otra fecha.'
+  if (e.includes('NADA_POR_PAGAR')) return 'Esta reserva ya está pagada.'
+  if (e.includes('PAGO_NO_DISPONIBLE')) return 'El pago en línea no está disponible ahora. Escríbenos por WhatsApp.'
+  if (e.includes('DEMASIADAS_SOLICITUDES')) return 'Demasiados intentos seguidos. Espera unos minutos.'
+  return 'No pudimos abrir Mercado Pago. Inténtalo otra vez o escríbenos por WhatsApp.'
+}
 
 /* ------------------------------------------------------------------ medición
    Lo que la pestaña «Web» de ANIMA COMPANY muestra: visitas, el embudo de

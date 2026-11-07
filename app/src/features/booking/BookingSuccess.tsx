@@ -6,6 +6,8 @@ import { useSiteData } from '../../hooks/useSiteData'
 import { useToast } from '../../hooks/useToast'
 import { longDate, money } from '../../lib/format'
 import { goToWhatsApp, requestMessage, waLink } from '../../lib/whatsapp'
+import { irAPagar, reservaAnima } from '../../lib/anima'
+import { track } from '../../lib/analytics'
 
 export interface SubmittedReservation {
   code: string
@@ -45,6 +47,24 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
   const [seconds, setSeconds] = useState(AUTO_SECONDS)
   const [cancelled, setCancelled] = useState(false)
   const [sent, setSent] = useState(false)
+  // Pago en línea: si ANIMA lo ofrece para esta reserva, es el camino principal
+  // (la fecha queda tomada al instante) y WhatsApp pasa a ser la alternativa.
+  const [online, setOnline] = useState<{ abono: number } | null>(null)
+  const [pagando, setPagando] = useState(false)
+  const [errorPago, setErrorPago] = useState<string | null>(null)
+  useEffect(() => {
+    if (!r.registered) return
+    void reservaAnima(r.code).then(({ data }) => {
+      const d = data as { pago_online?: boolean; deposit_due?: number } | null
+      if (d?.pago_online && (d.deposit_due ?? 0) > 0) { setOnline({ abono: d.deposit_due! }); setCancelled(true) }
+    })
+  }, [r.code, r.registered])
+  const pagar = async () => {
+    setPagando(true); setErrorPago(null)
+    track('reservation_started', { source: 'mercadopago', tipo: 'abono' })
+    const e = await irAPagar(r.code, 'abono')
+    if (e) { setErrorPago(e); setPagando(false) }
+  }
 
   const message = useMemo(
     () =>
@@ -142,7 +162,24 @@ export function BookingSuccess({ reservation: r, embedded = false }: { reservati
           </div>
         </div>
 
+        {online && (
+          <div className="mt-6 rounded-3xl border-2 border-leaf-600 bg-leaf-50 p-5">
+            <p className="font-display text-xl">Asegura tu fecha ahora</p>
+            <p className="mt-1 text-sm text-bark-700">Paga el abono con Mercado Pago (tarjeta, débito o saldo) y tu reserva queda <strong>confirmada al instante</strong>, sin esperar respuesta.</p>
+            <button
+              onClick={() => void pagar()}
+              disabled={pagando}
+              className="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-leaf-700 text-base font-bold text-white shadow-lift transition hover:bg-leaf-900 disabled:opacity-60"
+            >
+              <Icon name="lock" className="size-5" /> {pagando ? 'Abriendo Mercado Pago…' : `Pagar abono ${money(online.abono)}`}
+            </button>
+            {errorPago && <p className="mt-2 text-sm font-semibold text-terra-500" role="alert">{errorPago}</p>}
+            <p className="mt-2 text-center text-xs text-bark-500">Pago seguro procesado por Mercado Pago.</p>
+          </div>
+        )}
+
         <div className="mt-6 space-y-3">
+          {online && <p className="text-center text-sm font-semibold text-bark-500">¿Prefieres coordinar primero?</p>}
           <button
             onClick={send}
             className="relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-[#25D366] text-base font-bold text-white shadow-lift transition hover:bg-[#1EBE5B] active:scale-[0.99]"
