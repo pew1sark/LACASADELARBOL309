@@ -59,6 +59,8 @@ export interface CatalogoAnima {
   packages: (Record<string, unknown> & { package_services: Record<string, unknown>[] })[]
   addons: Record<string, unknown>[]
   faqs: Record<string, unknown>[]
+  /** Fotos subidas en ANIMA (vacío = la web usa su galería de siempre). */
+  gallery?: { id: string; url: string; alt: string | null; caption: string | null; sort_order: number }[]
 }
 
 /** Pide el catálogo y, si llega, deja esta visita en modo ANIMA. */
