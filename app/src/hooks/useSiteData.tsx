@@ -71,8 +71,8 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     let alive = true
     ;(async () => {
       setState((s) => ({ ...s, loading: true }))
-      // ANIMA COMPANY primero: si responde, el catálogo (y las reservas) salen de ahí.
-      // La galería sigue siendo contenido de la web.
+      // ANIMA COMPANY primero: si responde, el catálogo, los textos, la portada, la
+      // galería y las reservas salen de ahí (se editan en ANIMA → Web → Contenido).
       const [anima, galeria] = await Promise.all([
         catalogoAnima(),
         withTimeout(supabase.from('gallery_images').select('*').order('sort_order')),
@@ -83,7 +83,11 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
             { data: anima.event_types.map((e) => ({ long_description: null, active: true, ...e })), error: null },
             { data: anima.packages.map((p) => ({ active: true, ...p })), error: null },
             { data: anima.addons.map((a) => ({ active: true, ...a })), error: null },
-            galeria,
+            // Galería: la que se sube en ANIMA (pestaña Web → Contenido). Mientras
+            // esté vacía, la web sigue con su galería de siempre.
+            anima.gallery?.length
+              ? { data: anima.gallery.map((g) => ({ active: true, ...g })), error: null }
+              : galeria,
             { data: anima.faqs.map((f) => ({ active: true, ...f })), error: null },
             { data: anima.time_slots.map((t) => ({ active: true, ...t })), error: null },
           ]
